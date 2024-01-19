@@ -5,6 +5,7 @@ import uuid
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
     token = str(uuid.uuid4())
@@ -17,7 +18,7 @@ def index():
 
 # Страница /log вызывается тогда, когда пользователь завершил авторизацию
 
-@app.route('/log')
+@app.route('/page')
 def log():
     result = request.args.get('status')
     mail = request.args.get('mail')
@@ -25,13 +26,7 @@ def log():
     # status и mail - это аргументы, которые мы получаем из http
     # В них содержится инфомарция о статусе авторизации и о почте пользователя
 
-    if result == "Success":
-        return 'ok'
-    else:
+    return ''.join([mail, result])
 
-        # Если авторизация прошла неуспешно - снова генерируем UUID, чтобы пользователь смог повторно пройти авторизацию
-
-        token = str(uuid.uuid4())
-        return render_template('index.html', result=result, token=token)
 
 app.run()
