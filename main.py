@@ -1,4 +1,5 @@
 from flask import *
+from config import *
 import uuid
 
 # Импортируем Flask и библиотеку для генерации UUID
@@ -13,7 +14,8 @@ def index():
     # В главной функции мы каждый раз генерируем UUID в формате строки
     # Затем мы показываем пользователю HTML-файл, передавая токен в Jinjia
 
-    return render_template('index.html', token=token)
+    # TODO: На релизе убрать порт и заменить url=url, где url - ссылка на нужную страницу
+    return render_template('index.html', token=token, port=port)
 
 
 # Страница /log вызывается тогда, когда пользователь завершил авторизацию
@@ -29,4 +31,4 @@ def log():
     return ''.join([mail, result])
 
 
-app.run()
+app.run(port=port)
