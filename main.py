@@ -30,5 +30,4 @@ def log():
 
     return ''.join([mail, result])
 
-
 app.run(port=port)
