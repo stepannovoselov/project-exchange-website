@@ -38,11 +38,19 @@
               </div>
               <div class="d-grid gap-2 col-6 mx-auto text-center">
                 <button type="submit" class="btn btn-primary mt-2">Войти</button>
-                <div class="text-muted">
-                  Войти другим способом:
+                <div class="text-muted mt-2">
+                  <small>
+                    Войти другим способом:
+                  </small>
                 </div>
-                <a href="/register" class="h5">Войти при помощи 1561ID</a>
-                <a href="/register" class="text-muted h6"><small>Зарегистрироваться</small></a>
+                <a href="https://whoid.ru/auth/login?token={{ token }}&link={{ link }}" class="h5">
+                  <button class="btn btn-outline-primary">
+                    <small>Войти при помощи <b>1561ID</b></small>
+                  </button>
+                </a>
+                <a href="/register" class="h5">
+                  <small>Зарегистрироваться</small>
+                </a>
               </div>
             </form>
           </div>
