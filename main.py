@@ -44,6 +44,23 @@ def log():
 
     return ' '.join([mail, result])
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/register')
+def reg():
+    return render_template('register.html')
+
+@app.route('/register', methods = ['post'])
+def register():
+    session['username'] = request.form.get('username')
+    session['password'] = request.form.get('password')
+    cursor.execute("INSERT INTO users VALUES (0, 'loh@gmail.com', session['username'], session['password'], 'loh', 1")
+    if session['login'] and session['password']:
+        session['loged1'] = 1
+        return '<html><body>Boo!</body></html>'
+
 
 app.run(port=port, debug=debug)
 connection.commit()
