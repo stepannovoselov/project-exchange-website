@@ -22,10 +22,16 @@ def index():
 
     # TODO: На релизе убрать порт и заменить url=url, где url - ссылка на нужную страницу
     link = 'http://127.0.0.1:' + str(port) + '/page'
-    return render_template('login.html', token=token, link=link)
+    return render_template('register.html', token=token, link=link)
 
 
 # Страница /log вызывается тогда, когда пользователь завершил авторизацию
+
+
+@app.route('/test')
+def test():
+    return render_template('main.html')
+
 
 @app.route('/page')
 def log():
