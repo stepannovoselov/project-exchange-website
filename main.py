@@ -36,7 +36,7 @@ def log():
     # В них содержится инфомарция о статусе авторизации и о почте пользователя
     # cursor.execute('INSERT INTO users (mail) VALUE(?)', (mail))
 
-    return ''.join([mail, result])
+    return ' '.join([mail, result])
 
 
 app.run(port=port, debug=debug)
