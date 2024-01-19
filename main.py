@@ -15,7 +15,7 @@ def index():
     # Затем мы показываем пользователю HTML-файл, передавая токен в Jinjia
 
     # TODO: На релизе убрать порт и заменить url=url, где url - ссылка на нужную страницу
-    return render_template('index.html', token=token, port=port)
+    return render_template('account.html', token=token, port=port)
 
 
 # Страница /log вызывается тогда, когда пользователь завершил авторизацию
@@ -31,4 +31,4 @@ def log():
     return ''.join([mail, result])
 
 
-app.run(port=port)
+app.run(port=port, debug=debug)
