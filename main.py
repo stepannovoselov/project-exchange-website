@@ -11,15 +11,21 @@ connection = sqlite3.connect('itsallgoodman.db')
 cursor = connection.cursor()
 cursor.execute('''CREATE TABLE users
              (id INTEGER PRIMARY KEY, mail TEXT)''')
+
+
 @app.route('/')
 def index():
-    token = str(uuid.uuid4())
+    if session == False:  # TODO: Если сессия отсутствует, то переправлять пользователя на страницу регистрации
+        token = str(uuid.uuid4())
 
-    # В главной функции мы каждый раз генерируем UUID в формате строки
-    # Затем мы показываем пользователю HTML-файл, передавая токен в Jinjia
+        # В главной функции мы каждый раз генерируем UUID в формате строки
+        # Затем мы показываем пользователю HTML-файл, передавая токен в Jinjia
 
-    # TODO: На релизе убрать порт и заменить url=url, где url - ссылка на нужную страницу
-    return render_template('index.html', token=token, port=port)
+        # TODO: На релизе убрать порт и заменить url=url, где url - ссылка на нужную страницу
+        link = 'http://127.0.0.1:' + port + '/'
+        return render_template('login.html', token=token, link=link)
+    else:  # TODO: Если сессия существует, отправлять пользователю основную страницу
+        return 'else page'
 
 
 # Страница /log вызывается тогда, когда пользователь завершил авторизацию
