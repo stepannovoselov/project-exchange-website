@@ -1,4 +1,20 @@
 .header{
-    background-color: rgb(27, 255, 118);
+    background-color: rgb(86, 255, 154);
     width: 100%;
+}
+
+.account-panel{
+    width: 80%;
+    height: 100%;
+    margin: auto;
+    border: solid 1px black;
+}
+
+.account-panel .user-image img{
+    float: left;
+    border: solid 1px black;
+}
+
+.account-panel ul::marker{
+    marker: none;
 }
