@@ -1,16 +1,12 @@
 from flask import *
 from config import *
 import uuid
-import sqlite3
 
 # Импортируем Flask и библиотеку для генерации UUID
 
 app = Flask(__name__)
 
-connection = sqlite3.connect('itsallgoodman.db')
-cursor = connection.cursor()
-cursor.execute('''CREATE TABLE users
-             (id INTEGER PRIMARY KEY, mail TEXT)''')
+
 @app.route('/')
 def index():
     token = str(uuid.uuid4())
@@ -31,10 +27,7 @@ def log():
 
     # status и mail - это аргументы, которые мы получаем из http
     # В них содержится инфомарция о статусе авторизации и о почте пользователя
-    cursor.execute('INSERT INTO users (mail) VALUE(?)', (mail))
 
     return ''.join([mail, result])
 
 app.run(port=port)
-connection.commit()
-connection.close()
