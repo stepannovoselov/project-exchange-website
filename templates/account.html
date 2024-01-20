@@ -2,64 +2,170 @@
 <html lang="ru">
 
 <head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Профиль</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Профиль</title>
 </head>
 
 <body>
-    <header class="bg-dark text-white">
-        <div class="container py-3">
-          <div class="hstack gap-3">
-            <a href="/" class="navbar-brand text-white">// Название //</a>
-            |
-            <a href="/account" class="navbar-brand text-white" title="Перейти в профиль">
-              // Имя пользователя //
-            </a>
-            <a class="btn btn-outline-light btn-sm ms-auto" type="button" title="Открыть страницу с проектами">
-              Смотреть проекты
-            </a>
-            <a class="btn btn-outline-light btn-sm" type="button" title="Поиск по пользователям сайта">
-              Поиск пользователей
-            </a>
-            <a class="btn btn-outline-light btn-sm" type="button" title="Поиск по пользователям сайта" href="ideas-generator">
-              Генератор идей <sup><span class="badge bg-danger">NEW</span></sup>  <!-- Можно убрать sup для полного отображения -->
-            </a>
-            <a class="btn btn-outline-warning btn-sm" type="button" title="Поиск по пользователям сайта" href="bookmarks">
-              Избранное
-            </a>
-            |
-            <a type="button" class="btn btn-danger btn-sm" title="Выйти из аккаунта">
-              Выйти
-            </a>
-          </div>
-        </div>
-    </header>
-    
-    <div class="container mt-2">
-      <div class="row justify-content-center">
-        <div class="h2">
-          Профиль
-        </div>
+  <header class="bg-dark text-white">
+    <div class="container py-3">
+      <div class="hstack gap-3">
+        <a href="/" class="navbar-brand text-white">// Название //</a>
+        |
+        <a href="/account" class="navbar-brand text-white" title="Перейти в профиль">
+          // Имя пользователя //
+        </a>
+        <a class="btn btn-outline-light btn-sm ms-auto" type="button" title="Открыть страницу с проектами">
+          Смотреть проекты
+        </a>
+        <a class="btn btn-outline-light btn-sm" type="button" title="Поиск по пользователям сайта">
+          Поиск пользователей
+        </a>
+        <a class="btn btn-outline-light btn-sm" type="button" title="Поиск по пользователям сайта"
+          href="ideas-generator">
+          Генератор идей <sup><span class="badge bg-danger">NEW</span></sup>
+          <!-- Можно убрать sup для полного отображения -->
+        </a>
+        <a class="btn btn-outline-warning btn-sm" type="button" title="Поиск по пользователям сайта" href="bookmarks">
+          Избранное
+        </a>
+        |
+        <a type="button" class="btn btn-danger btn-sm" title="Выйти из аккаунта" href="/logout">
+          Выйти
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container mt-2">
+    <div class="row justify-content-center">
+      <div class="h2">
+        Профиль
+      </div>
+      <form action="" method="post">
         <div class="card mt-4">
           <div class="card-body">
-            <div class="card">
-              <div class="card-body">
-                // Имя //
+            <div class="row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">Отображаемое имя</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" value="// Имя //" id="inputEmail3">
               </div>
             </div>
           </div>
+          <div class="card-body">
+            <div class="row">
+              <label for="inputLogin" class="col-sm-2 col-form-label">Логин</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" value="// Логин //" id="inputLogin">
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <label for="inputPassword" class="col-sm-2 col-form-label">Пароль</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" value="// Пароль //" id="inputPassword">
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <label class="col-sm-2 col-form-label" for="inlineFormSelectPref">Статус</label>
+              <div class="col-sm-10">
+                <select class="form-select" id="inlineFormSelectPref">
+                  <option selected>// Выбранный статус //</option>
+                  <option value="1">// Статус 1 //</option>
+                  <option value="2">// Статус 2 //</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <label for="inputPassword" class="col-sm-2 col-form-label">О себе</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+              </div>
+            </div>
+          </div>
+          <a href="" class="btn btn-primary ms-auto mx-3 mb-4">
+            Сохранить изменения
+          </a>
+      </form>
+      <hr>
+      <div class="card-body mt-4">
+        <div class="row">
+          <div class="h2">
+            Ваши идеи:
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="card">
+                <div class="card-body">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      // Название идеи //
+                    </li>
+                    <li class="list-group-item">
+                      // Дата публикации //
+                    </li>
+                    <li class="list-group-item">
+                      // Рейтинг //
+                    </li>
+                    <li class="list-group-item mt-4">
+                      <a class="btn btn-sm btn-primary" href="">
+                        Открыть
+                      </a>
+                      <a class="btn btn-sm btn-outline-danger" href="">
+                        Удалить
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <ul class="list-group list-group-flush mt-4">
+            <li class="list-group-item">
+              <div class="card">
+                <div class="card-body">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      // Название идеи //
+                    </li>
+                    <li class="list-group-item">
+                      // Дата публикации //
+                    </li>
+                    <li class="list-group-item">
+                      // Рейтинг //
+                    </li>
+                    <li class="list-group-item mt-4">
+                      <a class="btn btn-sm btn-primary" href="">
+                        Открыть
+                      </a>
+                      <a class="btn btn-sm btn-outline-danger" href="">
+                        Удалить
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
+  </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
     crossorigin="anonymous"></script>
-    <script src="../static/script.js"></script>
+  <script src="../static/script.js"></script>
 </body>
 
 </html>
