@@ -101,9 +101,9 @@ def register():
 def account():
     if session['loged']:
         cursor.execute('SELECT login, password FROM users')
-        userdata = cursor.execute(f"SELECT * FROM users WHERE login='{session.get('login')}'").fetchall()
+        userdata = cursor.execute(f"SELECT * FROM users WHERE login='{session.get('login')}'").fetchall()[0]
         print(userdata)
-        return render_template('account.html', )
+        return render_template('account.html', description=userdata[6], status=userdata[5])
     else:
         return redirect('/login')
 
@@ -111,23 +111,22 @@ def account():
 @app.route('/account', methods=['post'])
 def account_me():
     opt = request.form.get('status')
-    id = request.form.get('about')
+    about = request.form.get('about')
 
-    print(opt, id)
+    print(1, opt, about)
 
-    if opt == "1" and id:
+    if opt == "1":
         cursor.execute('update users set status = ? where login = ?', ("Ищу команду", session['login']))
-        cursor.execute('update users set about = ? where login = ?', (opt, session['login']))
-    elif opt == "2" and id:
-        cursor.execute('update users set status = ? about = ? where login = ?', ("Ищу Проект", id, session['login']))
-        cursor.execute('update users set about = ? where login = ?', (opt, session['login']))
+    elif opt == "2":
+        cursor.execute('update users set status = ? where login = ?', ("Ищу Проект", session['login']))
+    cursor.execute('update users set about = ? where login = ?', (str(about), session['login']))
+
     connection.commit()
     return redirect('/account')
 
 
 @app.route('/search-projects')
 def projects():
-
     return render_template('find-projects.html')
 
 
@@ -135,7 +134,7 @@ def projects():
 def teammates():
     cursor.execute('SELECT login, status FROM users')
     maslog = cursor.fetchall()
-    return render_template('find-teammates.html', maslog = maslog, login = session.get('login'))
+    return render_template('find-teammates.html', maslog=maslog, login=session.get('login'))
 
 
 @app.route('/bookmarks')
@@ -152,8 +151,6 @@ def logout():
         return redirect('/')
     else:
         return redirect('/')
-
-
 
 
 @app.route('/create-project', methods=['post'])
@@ -176,7 +173,9 @@ def create_project():
 
     cursor.execute('''INSERT INTO projects (id, name, description, status, rank, theme, deadline, who_needs, public_date, likes, dislikes, author)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-                   (project_id, project_name, project_description, project_status, project_rank, project_theme, project_deadline, project_who_needs, project_public_date, project_likes, project_dislikes, project_author))
+                   (project_id, project_name, project_description, project_status, project_rank, project_theme,
+                    project_deadline, project_who_needs, project_public_date, project_likes, project_dislikes,
+                    project_author))
     connection.commit()
     return redirect('/account')
 

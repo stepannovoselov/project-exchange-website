@@ -52,7 +52,7 @@
             <div class="row">
               <label for="inputEmail3" class="col-sm-2 col-form-label">Отображаемое имя</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control"  id="inputEmail3" id = "name" disabled>
+                <input type="email" class="form-control"  id="inputEmail3" name = "name" disabled>
               </div>
             </div>
           </div>
@@ -77,9 +77,8 @@
               <label class="col-sm-2 col-form-label" for="inlineFormSelectPref">Статус</label>
               <div class="col-sm-10">
                 <select class="form-select" id="inlineFormSelectPref" name="status">
-                  <option selected name="status">{{ status }}</option>
-                  <option value="1" id="opt1">Ищу  команду</option>
-                  <option value="2" id="opt2">Ищу проект</option>
+                  <option value="1" id="opt1" {% if status == "Ищу команду" %}selected{% endif %}>Ищу команду</option>
+                  <option value="2" id="opt2" {% if status != "Ищу команду" %}selected{% endif %}>Ищу проект</option>
                 </select>
               </div>
             </div>
@@ -88,7 +87,7 @@
             <div class="row">
               <label for="inputPassword" class="col-sm-2 col-form-label">О себе</label>
               <div class="col-sm-10">
-                <textarea id="about" name="about" class="form-control" id="exampleFormControlTextarea1" rows="3">{{ about }}</textarea>
+                <textarea id="about" name="about" class="form-control" id="exampleFormControlTextarea1" rows="3">{{ description }}</textarea>
               </div>
             </div>
           </div>
