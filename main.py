@@ -103,7 +103,7 @@ def account():
         cursor.execute('SELECT login, password FROM users')
         userdata = cursor.execute(f"SELECT * FROM users WHERE login='{session.get('login')}'").fetchall()
         print(userdata)
-        return render_template('account.html', userdata=userdata)
+        return render_template('account.html', )
     else:
         return redirect('/login')
 
@@ -169,11 +169,23 @@ def create_project():
     project_dislikes = json.dumps([])
     project_author = session['login']
 
+    project_author = cursor.execute('''SELECT id FROM users WHERE login = ?''', (project_author,)).fetchone()[0]
+
     cursor.execute('''INSERT INTO projects (id, name, description, status, rank, theme, deadline, who_needs, public_date, likes, dislikes, author)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
                    (project_id, project_name, project_description, project_status, project_rank, project_theme, project_deadline, project_who_needs, project_public_date, project_likes, project_dislikes, project_author))
     connection.commit()
-    return redirect('/test')
+    return redirect('/account')
+
+
+@app.route('/create-project', methods=['get'])
+def create_project_page():
+    return render_template('create-project.html')
+
+
+@app.route('/ideas-generator')
+def ideas_generator():
+    return redirect('/')
 
 
 app.run(port=port + 5, debug=debug)
