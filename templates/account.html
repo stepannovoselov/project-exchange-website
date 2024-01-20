@@ -46,13 +46,13 @@
       <div class="h2">
         Профиль
       </div>
-      <form action="" method="post">
+      <form action="/account" method="post">
         <div class="card mt-4">
           <div class="card-body">
             <div class="row">
               <label for="inputEmail3" class="col-sm-2 col-form-label">Отображаемое имя</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" value="// Имя //" id="inputEmail3">
+                <input type="email" class="form-control"  id="inputEmail3" id = "name" disabled>
               </div>
             </div>
           </div>
@@ -60,7 +60,7 @@
             <div class="row">
               <label for="inputLogin" class="col-sm-2 col-form-label">Логин</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" value="// Логин //" id="inputLogin">
+                <input type="email" class="form-control" value="// Логин //" id="inputLogin" disabled>
               </div>
             </div>
           </div>
@@ -68,7 +68,7 @@
             <div class="row">
               <label for="inputPassword" class="col-sm-2 col-form-label">Пароль</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" value="// Пароль //" id="inputPassword">
+                <input type="email" class="form-control" value="// Пароль //" id="inputPassword" disabled>
               </div>
             </div>
           </div>
@@ -77,9 +77,9 @@
               <label class="col-sm-2 col-form-label" for="inlineFormSelectPref">Статус</label>
               <div class="col-sm-10">
                 <select class="form-select" id="inlineFormSelectPref">
-                  <option selected>// Выбранный статус //</option>
-                  <option value="1">// Статус 1 //</option>
-                  <option value="2">// Статус 2 //</option>
+                  <option selected>{{ status }}</option>
+                  <option value="1" id="opt1">Ищу  команду</option>
+                  <option value="2" id="opt2">Ищу проект</option>
                 </select>
               </div>
             </div>
@@ -88,14 +88,14 @@
             <div class="row">
               <label for="inputPassword" class="col-sm-2 col-form-label">О себе</label>
               <div class="col-sm-10">
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea id="about" class="form-control" id="exampleFormControlTextarea1" rows="3">{{ about }}</textarea>
               </div>
             </div>
           </div>
           <button type="submit" class="btn btn-primary ms-auto mx-3 mb-4">
             Сохранить изменения
           </button>
-      </form>
+        </form>
       <hr>
       <div class="card-body mt-4">
         <div class="row">

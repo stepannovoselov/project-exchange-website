@@ -11,7 +11,7 @@ app.secret_key = 'secret_key'
 connection = sqlite3.connect('itsallgoodman.db', check_same_thread=False)
 cursor = connection.cursor()
 cursor.execute('''CREATE TABLE IF NOT EXISTS users
-             (id INTEGER PRIMARY KEY, login TEXT, auth_type TEXT, username TEXT, password TEXT, status TEXT, rank REAL, about TEXT)''')
+             (id INTEGER PRIMARY KEY, login TEXT, auth_type TEXT, username TEXT, password TEXT, status TEXT, about TEXT)''')
 
 
 @app.route('/')
@@ -50,9 +50,10 @@ def login1():
     username = request.form.get('username')
     password = request.form.get('password')
     cursor.execute('SELECT login, password FROM users')
-    a = cursor.execute('SELECT * from users where login = "' + username + '"').fetchall()
+    a = cursor.execute('SELECT * from users where login = "' + username + '" and password = "' + password + '"').fetchall()
     if a:
         session['loged'] = True
+        session['login'] = username
         session['password'] = password
         return redirect('/')
     if not a:
@@ -88,7 +89,21 @@ def register():
 
 @app.route('/account')
 def account():
-    return render_template('account.html')
+    cursor.execute('SELECT login, password FROM users')
+    status = cursor.execute('SELECT status from users where login = "' + session.get('login') + '" and password = "' + session.get('password') + '"').fetchall()
+    about = cursor.execute('SELECT about from users where login = "' + session.get('login') + '" and password = "' + session.get('password') + '"').fetchall()
+    return render_template('account.html', status = status, about = about)
+
+@app.route('/account', methods = ['post'])
+def account_me():
+    opt = request.form.get('inlineFormSelectPref')
+    id = request.form.get('about')
+    if opt == "1" and id:
+        cursor.execute('insert into users (status, about) values(?,?)', ("Ищу команду", id))
+    elif opt == "2" and id:
+        cursor.execute('insert into users (status, about) values(?,?)', ("Ищу проект", id))
+    return redirect('/account')
+
 
 @app.route('/search-projects')
 def projects():
@@ -104,10 +119,13 @@ def marks():
 
 @app.route('/logout')
 def logout():
-    session['loged'] = False
-    del session['login']
-    del session['password']
-    return redirect('/')
+    if session['loged'] == True:
+        session['loged'] = False
+        del session['login']
+        del session['password']
+        return redirect('/')
+    else:
+        return redirect('/')
 
 # ID
 # Login
