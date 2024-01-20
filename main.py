@@ -2,7 +2,7 @@ from flask import *
 from config import *
 import uuid
 import sqlite3
-
+from random import *
 # Импортируем Flask и библиотеку для генерации UUID
 
 app = Flask(__name__)
@@ -18,7 +18,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS users
 def index():
     token = str(uuid.uuid4())
     if session.get('loged', False) == True:
-        return render_template('main.html')
+        return render_template('main.html', login = session.get('login'))
     elif not session:
         return render_template('register.html')
     elif session.get('loged', False) == False:
@@ -35,23 +35,6 @@ def index():
 # Страница /log вызывается тогда, когда пользователь завершил авторизацию
 
 
-@app.route('/test')
-def test():
-    return render_template('bookmarks.html')
-
-
-@app.route('/page')
-def log():
-    result = request.args.get('status')
-    mail = request.args.get('mail')
-
-    # status и mail - это аргументы, которые мы получаем из http
-    # В них содержится инфомарция о статусе авторизации и о почте пользователя
-    # cursor.execute('INSERT INTO users (mail) VALUE(?)', (mail))
-
-    return ' '.join([mail, result])
-
-
 @app.route('/login')
 def login():
     return render_template('login.html')
@@ -61,9 +44,15 @@ def login():
 def login1():
     username = request.form.get('username')
     password = request.form.get('password')
-    if username == username and password == password:
-        session['loged1'] = 1
-        return render_template('main.html')
+    cursor.execute('SELECT login, password FROM users')
+    a = cursor.execute('SELECT * from users where login = "' + username + '"').fetchall()
+    if a:
+        session['loged'] = True
+        session['password'] = password
+        return redirect('/')
+    if not a:
+        session['loged'] = False
+        return redirect('/')
 
 
 @app.route('/register')
@@ -75,12 +64,19 @@ def reg():
 def register():
     login = request.form.get('username')
     password = request.form.get('password')
-    cursor.execute('SELECT login FROM users')
-    a = len(cursor.fetchall())
-    cursor.execute("INSERT INTO users VALUES ('" + str(a) + "', 'login', 'our', '" + str(login) + "', '" + str(password) + "', '', '', '') ")
-    # TODO:сделать потом с помощью вопросов
+    # cursor.execute('SELECT login FROM users')
+    # a = len(cursor.fetchall())
+    b = randint(1, 18446744073)
+    cursor.execute("INSERT INTO users VALUES ('" + str(b) + "','" + str(login) + "', 'our', '" + str(login) + "', '" + str(password) + "', '', '', '') ")
+    connection.commit()
+    session['login'] = login
+    session['password'] = password
+    # TODO:сделать потом с помощью вопросов а также сделать проверку нет ли такого же логина
     if session.get('login') and session.get('password'):
-        session['loged1'] = 1
+        session['loged'] = True
+        cursor.execute('SELECT login, password FROM users')
+        maslog = cursor.fetchall()
+        print(maslog)
         return redirect('/')
     else:
         return redirect('/test')
