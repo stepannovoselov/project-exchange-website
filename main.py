@@ -127,12 +127,15 @@ def account_me():
 
 @app.route('/search-projects')
 def projects():
+
     return render_template('find-projects.html')
 
 
 @app.route('/search-users')
 def teammates():
-    return render_template('find-teammates.html')
+    cursor.execute('SELECT login, status FROM users')
+    maslog = cursor.fetchall()
+    return render_template('find-teammates.html', maslog = maslog, login = session.get('login'))
 
 
 @app.route('/bookmarks')
