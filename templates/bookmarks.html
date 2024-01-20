@@ -16,15 +16,21 @@
       <div class="hstack gap-3">
         <a href="/" class="navbar-brand text-white">// Название //</a>
         |
-        <a href="/account" class="navbar-brand text-white" title="Перейти в профиль">
+        <a href="/account" class="navbar-brand text-white" title="Перейти в профиль" href="account">
           // Имя пользователя //
         </a>
-        <button class="btn btn-outline-light btn-sm ms-auto" type="button" title="Открыть страницу с проектами">
-          Смотреть проекты
-        </button>
-        <button class="btn btn-light btn-sm" type="button" title="Поиск по пользователям сайта">
+        <a class="btn btn-outline-light btn-sm ms-auto" type="button" title="Открыть страницу с проектами" href="search-projects">
+          Поиск проектов
+        </a>
+        <a class="btn btn-outline-light btn-sm" type="button" title="Поиск по пользователям сайта" href="search-users">
           Поиск пользователей
-        </button>
+        </a>
+        <a class="btn btn-outline-light btn-sm" type="button" title="Поиск по пользователям сайта" href="ideas-generator">
+          Генератор идей <sup><span class="badge bg-danger">NEW</span></sup>  <!-- Можно убрать sup для полного отображения -->
+        </a>
+        <a class="btn btn-outline-warning btn-sm" type="button" title="Поиск по пользователям сайта" href="bookmarks">
+          Избранное
+        </a>
       </div>
     </div>
   </header>
@@ -49,16 +55,16 @@
               <div class="h5 mt-4">Фильтры поиска:</div>
               <div class="row">
                 <div class="col">
-                  <input class="form-check-input" checked type="checkbox" value="" id="flexCheckDefault">
-                  <label class="form-check-label" for="flexCheckDefault">
+                  <input class="form-check-input" checked type="checkbox" value="" id="find-users-checkbox">
+                  <label class="form-check-label" for="find-users-checkbox">
                     Искать пользователей
                   </label>
                 </div>
               </div>
               <div class="row">
                 <div class="col">
-                  <input class="form-check-input" checked type="checkbox" value="" id="flexCheckDefault">
-                  <label class="form-check-label" for="flexCheckDefault">
+                  <input class="form-check-input" checked type="checkbox" value="" id="find-projects-checkbox">
+                  <label class="form-check-label" for="find-projects-checkbox">
                     Искать проекты
                   </label>
                 </div>
