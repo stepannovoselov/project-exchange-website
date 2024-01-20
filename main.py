@@ -81,6 +81,21 @@ def register():
     else:
         return redirect('/test')
 
+@app.route('/account')
+def account():
+    return render_template('account.html')
+
+@app.route('/search-projects')
+def projects():
+    return render_template('find-projects.html')
+
+@app.route('/search-users')
+def teammates():
+    return render_template('find-teammates.html')
+
+@app.route('/bookmarks')
+def marks():
+    return render_template('bookmarks.html')
 
 # ID
 # Login
