@@ -3,6 +3,7 @@ from config import *
 import uuid
 import sqlite3
 from random import *
+
 # Импортируем Flask и библиотеку для генерации UUID
 
 app = Flask(__name__)
@@ -18,7 +19,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS users
 def index():
     token = str(uuid.uuid4())
     if session.get('loged', False) == True:
-        return render_template('main.html', login = session.get('login'))
+        return render_template('main.html', login=session.get('login'))
     elif not session:
         return render_template('register.html')
     elif session.get('loged', False) == False:
@@ -37,7 +38,7 @@ def index():
 
 @app.route('/test')
 def test():
-    return render_template('project.html')
+    return render_template('create-project.html')
 
 
 @app.route('/login')
@@ -72,7 +73,9 @@ def register():
     # cursor.execute('SELECT login FROM users')
     # a = len(cursor.fetchall())
     b = randint(1, 18446744073)
-    cursor.execute("INSERT INTO users VALUES ('" + str(b) + "','" + str(login) + "', 'our', '" + str(login) + "', '" + str(password) + "', '', '', '') ")
+    cursor.execute(
+        "INSERT INTO users VALUES ('" + str(b) + "','" + str(login) + "', 'our', '" + str(login) + "', '" + str(
+            password) + "', '', '', '') ")
     connection.commit()
     session['login'] = login
     session['password'] = password
@@ -86,21 +89,26 @@ def register():
     else:
         return redirect('/test')
 
+
 @app.route('/account')
 def account():
     return render_template('account.html')
+
 
 @app.route('/search-projects')
 def projects():
     return render_template('find-projects.html')
 
+
 @app.route('/search-users')
 def teammates():
     return render_template('find-teammates.html')
 
+
 @app.route('/bookmarks')
 def marks():
     return render_template('bookmarks.html')
+
 
 @app.route('/logout')
 def logout():
@@ -108,6 +116,7 @@ def logout():
     del session['login']
     del session['password']
     return redirect('/')
+
 
 # ID
 # Login
