@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" >
 
 <head>
   <meta charset="UTF-8">
@@ -46,13 +46,13 @@
       <div class="h2">
         Профиль
       </div>
-      <form action="/account" method="post">
+      <form action="" method="post">
         <div class="card mt-4">
           <div class="card-body">
             <div class="row">
-              <label for="inputEmail3" class="col-sm-2 col-form-label">Отображаемое имя</label>
+              <label for="inputName" class="col-sm-2 col-form-label">Отображаемое имя</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control"  id="inputEmail3" id = "name" disabled>
+                <input type="email" class="form-control" value="// Имя //" id="inputName">
               </div>
             </div>
           </div>
@@ -60,7 +60,7 @@
             <div class="row">
               <label for="inputLogin" class="col-sm-2 col-form-label">Логин</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" value="// Логин //" id="inputLogin" disabled>
+                <input type="email" class="form-control" value="// Логин //" id="inputLogin">
               </div>
             </div>
           </div>
@@ -68,34 +68,34 @@
             <div class="row">
               <label for="inputPassword" class="col-sm-2 col-form-label">Пароль</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" value="// Пароль //" id="inputPassword" disabled>
+                <input type="email" class="form-control" value="// Пароль //" id="inputPassword">
               </div>
             </div>
           </div>
           <div class="card-body">
             <div class="row">
-              <label class="col-sm-2 col-form-label" for="inlineFormSelectPref">Статус</label>
+              <label class="col-sm-2 col-form-label" for="selectStatus">Статус</label>
               <div class="col-sm-10">
-                <select class="form-select" id="inlineFormSelectPref">
-                  <option selected>{{ status }}</option>
-                  <option value="1" id="opt1">Ищу  команду</option>
-                  <option value="2" id="opt2">Ищу проект</option>
+                <select class="form-select" id="selectStatus">
+                  <option selected>// Выбранный статус //</option>
+                  <option value="1">// Статус 1 //</option>
+                  <option value="2">// Статус 2 //</option>
                 </select>
               </div>
             </div>
           </div>
           <div class="card-body">
             <div class="row">
-              <label for="inputPassword" class="col-sm-2 col-form-label">О себе</label>
+              <label for="aboutYou" class="col-sm-2 col-form-label">О себе</label>
               <div class="col-sm-10">
-                <textarea id="about" class="form-control" id="exampleFormControlTextarea1" rows="3">{{ about }}</textarea>
+                <textarea class="form-control" id="aboutYou" rows="3"></textarea>
               </div>
             </div>
           </div>
           <button type="submit" class="btn btn-primary ms-auto mx-3 mb-4">
             Сохранить изменения
           </button>
-        </form>
+      </form>
       <hr>
       <div class="card-body mt-4">
         <div class="row">
@@ -161,6 +161,7 @@
     </div>
   </div>
   </div>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
