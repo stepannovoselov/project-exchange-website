@@ -51,32 +51,40 @@ def log():
 
     return ' '.join([mail, result])
 
+
 @app.route('/login')
 def login():
     return render_template('login.html')
-@app.route('/login', methods = ['post'])
+
+
+@app.route('/login', methods=['post'])
 def login1():
     username = request.form.get('username')
     password = request.form.get('password')
     if username == username and password == password:
         session['loged1'] = 1
         return render_template('main.html')
+
+
 @app.route('/register')
 def reg():
     return render_template('register.html')
 
-@app.route('/register', methods = ['post'])
+
+@app.route('/register', methods=['post'])
 def register():
     login = request.form.get('username')
     password = request.form.get('password')
-    a = len()
-    cursor.execute("INSERT INTO users VALUES (len(id), 'login', 'our', 'login', 'password', '', '', '') ")
-    #TODO:сделать потом с помощью вопросов
+    cursor.execute('SELECT login FROM users')
+    a = len(cursor.fetchall())
+    cursor.execute("INSERT INTO users VALUES ('" + str(a) + "', 'login', 'our', '" + str(login) + "', '" + str(password) + "', '', '', '') ")
+    # TODO:сделать потом с помощью вопросов
     if session.get('login') and session.get('password'):
         session['loged1'] = 1
         return redirect('/')
     else:
         return redirect('/test')
+
 
 # ID
 # Login
@@ -88,6 +96,6 @@ def register():
 # Описание профиля
 # Список id принадлежащих проектов
 
-app.run(port=port+1, debug=debug)
+app.run(port=port + 5, debug=debug)
 connection.commit()
 connection.close()
