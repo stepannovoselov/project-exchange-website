@@ -37,7 +37,7 @@ def index():
 
 @app.route('/test')
 def test():
-    return render_template('main.html')
+    return render_template('bookmarks.html')
 
 
 @app.route('/page')
@@ -67,9 +67,10 @@ def reg():
 
 @app.route('/register', methods = ['post'])
 def register():
-    username = request.form.get('username')
+    login = request.form.get('username')
     password = request.form.get('password')
-    cursor.execute("INSERT INTO users VALUES (0, 'login', 'our', " + str(username) + "," + str(password) + ", 'finder', 1, 'люблю какашки кушать') ")
+    a = len()
+    cursor.execute("INSERT INTO users VALUES (len(id), 'login', 'our', 'login', 'password', '', '', '') ")
     #TODO:сделать потом с помощью вопросов
     if session.get('login') and session.get('password'):
         session['loged1'] = 1
