@@ -44,98 +44,70 @@
       </div>
       <div class="card mt-4">
         <div class="card-body">
-          <div>
+          <form action="" method="post">
             <div class="card-body">
               <div class="row">
-                <label class="col-sm-2 col-form-label">Название</label>
+                <label for="name" class="col-sm-2 col-form-label">Название</label>
                 <div class="col-sm-10">
-                  // Название //
+                  <input type="text" class="form-control" value="// Название //" id="name">
                 </div>
               </div>
             </div>
             <div class="card-body">
               <div class="row">
-                <label class="col-sm-2 col-form-label">Статус</label>
+                <label for="status" class="col-sm-2 col-form-label">Статус</label>
                 <div class="col-sm-10">
-                  // Статус //
+                  <select class="form-select" id="status">
+                    <option value="1" id="opt1">Ищу команду</option>
+                    <option value="2" id="opt2">Команда набрана</option>
+                  </select>
                 </div>
               </div>
             </div>
             <div class="card-body">
               <div class="row">
-                <label class="col-sm-2 col-form-label">Рейтинг</label>
+                <label for="theme" class="col-sm-2 col-form-label">Тема, категория</label>
                 <div class="col-sm-10">
-                  // Рейтинг //
+                  <input type="text" class="form-control" value="// Тема //" id="theme">
                 </div>
               </div>
             </div>
             <div class="card-body">
               <div class="row">
-                <label class="col-sm-2 col-form-label">Хештеги</label>
+                <label for='deadline' class="col-sm-2 col-form-label">Срок выполнения</label>
                 <div class="col-sm-10">
-                  // Хештеги //
+                  <input type="text" class="form-control" value="// Срок выполнения //" id="deadline">
                 </div>
               </div>
             </div>
             <div class="card-body">
               <div class="row">
-                <label class="col-sm-2 col-form-label">Срок выполнения</label>
+                <label for="search-to" class="col-sm-2 col-form-label">Нам нужны</label>
                 <div class="col-sm-10">
-                  // Срок выполнения //
+                  <input type="text" class="form-control" value="// Кого ищем //" id="search-to">
                 </div>
               </div>
             </div>
             <div class="card-body">
               <div class="row">
-                <label class="col-sm-2 col-form-label">Нам нужны</label>
+                <label for="description" class="col-sm-2 col-form-label">Описание</label>
                 <div class="col-sm-10">
-                  // Кого ищем //
+                  <textarea type="text" class="form-control" id="description">// Описание //</textarea>
                 </div>
               </div>
             </div>
-            <div class="card-body">
-              <div class="row">
-                <label class="col-sm-2 col-form-label">Описание</label>
-                <div class="col-sm-10">
-                  // Описание //
-                </div>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <label class="col-sm-2 col-form-label">Автор</label>
-                <div class="col-sm-10">
-                  <a href="">// Автор //</a>
-                </div>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <label class="col-sm-2 col-form-label">Дата публикации</label>
-                <div class="col-sm-10">
-                  // Дата публикации //
-                </div>
-              </div>
-            </div>
-            <hr>
-            <div class="card-body">
-              <label class="col-sm-2 col-form-label">Оценить проект:</label>
-              <div class="btn-group btn-group-sm">
-                <a type="button" class="btn btn-outline-success" href="/like">+</a>
-                <a type="button" class="btn btn-outline-danger" href="/dislike">–</a>
-              </div>
-            </div>
-          </div>
+            <button type="submit" class="btn btn-primary mt-4">Сохранить и опубликовать</button>
+          </form>
         </div>
       </div>
     </div>
   </div>
   <br>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-          crossorigin="anonymous"></script>
-        <script src="../static/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <script src="../static/script.js"></script>
 </body>
 
 </html>

@@ -51,7 +51,8 @@ def login1():
     username = request.form.get('username')
     password = request.form.get('password')
     cursor.execute('SELECT login, password FROM users')
-    a = cursor.execute('SELECT * from users where login = "' + username + '" and password = "' + password + '"').fetchall()
+    a = cursor.execute(
+        'SELECT * from users where login = "' + username + '" and password = "' + password + '"').fetchall()
     if a:
         session['loged'] = True
         session['login'] = username
@@ -93,12 +94,16 @@ def register():
 
 @app.route('/account')
 def account():
-    cursor.execute('SELECT login, password FROM users')
-    status = cursor.execute('SELECT status from users where login = "' + session.get('login') + '" and password = "' + session.get('password') + '"').fetchall()
-    about = cursor.execute('SELECT about from users where login = "' + session.get('login') + '" and password = "' + session.get('password') + '"').fetchall()
-    return render_template('account.html', status = status, about = about)
+    if session['loged']:
+        cursor.execute('SELECT login, password FROM users')
+        userdata = cursor.execute(f"SELECT * FROM users WHERE login='{session.get('login')}'").fetchall()
+        print(userdata)
+        return render_template('account.html', userdata=userdata)
+    else:
+        return redirect('/login')
 
-@app.route('/account', methods = ['post'])
+
+@app.route('/account', methods=['post'])
 def account_me():
     opt = request.form.get('inlineFormSelectPref')
     id = request.form.get('about')
@@ -107,7 +112,6 @@ def account_me():
     elif opt == "2" and id:
         cursor.execute('insert into users (status, about) values(?,?)', ("Ищу проект", id))
     return redirect('/account')
-
 
 
 @app.route('/search-projects')
