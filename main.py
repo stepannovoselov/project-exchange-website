@@ -30,7 +30,7 @@ def index():
 
 @app.route('/test')
 def test():
-    return render_template('main.html')
+    return render_template('bookmarks.html')
 
 
 @app.route('/page')
@@ -44,15 +44,18 @@ def log():
 
     return ' '.join([mail, result])
 
+
 @app.route('/login')
 def login():
     return render_template('login.html')
+
 
 @app.route('/register')
 def reg():
     return render_template('register.html')
 
-@app.route('/register', methods = ['post'])
+
+@app.route('/register', methods=['post'])
 def register():
     session['username'] = request.form.get('username')
     session['password'] = request.form.get('password')

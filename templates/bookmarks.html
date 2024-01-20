@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="../static/find-projects.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ИЗбранное</title>
+</head>
+
+<body>
+  <header class="bg-dark text-white">
+    <div class="container py-3">
+      <div class="hstack gap-3">
+        <a href="/" class="navbar-brand text-white">// Название //</a>
+        |
+        <a href="/account" class="navbar-brand text-white" title="Перейти в профиль">
+          // Имя пользователя //
+        </a>
+        <button class="btn btn-outline-light btn-sm ms-auto" type="button" title="Открыть страницу с проектами">
+          Смотреть проекты
+        </button>
+        <button class="btn btn-light btn-sm" type="button" title="Поиск по пользователям сайта">
+          Поиск пользователей
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container mt-2">
+    <div class="row justify-content-center">
+      <div class="h2">
+        Избранное
+      </div>
+      <div class="col-md-12 mt-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <form class="input-group-lg">
+              <div class="row g-3">
+                <div class="col-11">
+                  <input class="form-control me-2" type="search" placeholder="Введите запрос..." aria-label="Search">
+                </div>
+                <div class="col">
+                  <button class="btn btn-outline-primary" type="submit">Искать</button>
+                </div>
+              </div>
+              <div class="h5 mt-4">Фильтры поиска:</div>
+              <div class="row">
+                <div class="col">
+                  <input class="form-check-input" checked type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Искать пользователей
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <input class="form-check-input" checked type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Искать проекты
+                  </label>
+                </div>
+              </div>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="col">
+      <div class="card shadow mb-3 bg-body rounded">
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">// Тип //</li>
+            <li class="list-group-item">// Краткое описание проекта (или начало описания
+              проекта) // <br></li>
+            <li class="list-group-item">// Статус //</li>
+            <li class="list-group-item">// Рейтинг //</li>
+            <li class="list-group-item">// Хештеги, категория, тема //</li>
+            <li class="list-group-item">// Срок выполнения //</li>
+            <li class="list-group-item">// Кого ищут (если статус соответствует) //</li>
+            <li class="list-group-item">// Автор //</li>
+            <li class="list-group-item">// Дата публикации //</li>
+          </ul>
+          <div class="hstack mt-4 gap-2">
+            <a type="button" class="btn btn-sm btn-primary">Открыть страницу проекта</a>
+            <a type="button" class="btn btn-sm btn-outline-danger">Удалить из избранного</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <script src="../static/script.js"></script>
+</body>
+
+</html>
