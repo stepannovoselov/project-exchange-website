@@ -102,6 +102,13 @@ def teammates():
 def marks():
     return render_template('bookmarks.html')
 
+@app.route('/logout')
+def logout():
+    session['loged'] = False
+    del session['login']
+    del session['password']
+    return redirect('/')
+
 # ID
 # Login
 # Auth_type
