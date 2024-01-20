@@ -35,6 +35,11 @@ def index():
 # Страница /log вызывается тогда, когда пользователь завершил авторизацию
 
 
+@app.route('/test')
+def test():
+    return render_template('project.html')
+
+
 @app.route('/login')
 def login():
     return render_template('login.html')
