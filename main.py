@@ -103,8 +103,7 @@ def account():
         cursor.execute('SELECT login, password FROM users')
         userdata = cursor.execute(f"SELECT * FROM users WHERE login='{session.get('login')}'").fetchall()[0]
         print(userdata)
-        return render_template('account.html', description=userdata[6], status=userdata[5], username=userdata[1],
-                               projects=[])
+        return render_template('account.html', description=userdata[6], status=userdata[5], username=userdata[1], projects=[])
     else:
         return redirect('/login')
 
@@ -192,6 +191,20 @@ def create_project_page():
 @app.route('/ideas-generator')
 def ideas_generator():
     return redirect('/')
+
+
+@app.route('/projects/<int:project_id>')
+def show_project(project_id):
+    projectdata = cursor.execute('''SELECT * FROM projects WHERE id = ?''', (project_id,)).fetchone()
+    print(projectdata)
+    return render_template('project.html', projectdata=projectdata)
+
+
+@app.route('/users/<int:user_id>')
+def show_user(user_id):
+    userdata = cursor.execute('''SELECT * FROM users WHERE id = ?''', (user_id,)).fetchone()
+    print(userdata)
+    return render_template('account.html', userdata=userdata, self_auth=False)
 
 
 app.run(port=port + 5, debug=debug)
