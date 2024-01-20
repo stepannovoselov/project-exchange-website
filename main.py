@@ -6,16 +6,23 @@ import sqlite3
 # Импортируем Flask и библиотеку для генерации UUID
 
 app = Flask(__name__)
+app.secret_key = 'secret_key'
 
-connection = sqlite3.connect('itsallgoodman.db')
+connection = sqlite3.connect('itsallgoodman.db', check_same_thread=False)
 cursor = connection.cursor()
 cursor.execute('''CREATE TABLE IF NOT EXISTS users
-             (id INTEGER PRIMARY KEY, mail TEXT)''')
+             (id INTEGER PRIMARY KEY, login TEXT, auth_type TEXT, username TEXT, password TEXT, status TEXT, rank REAL, about TEXT)''')
 
 
 @app.route('/')
 def index():
     token = str(uuid.uuid4())
+    if session.get('loged', False) == True:
+        return render_template('main.html')
+    elif not session:
+        return render_template('register.html')
+    elif session.get('loged', False) == False:
+        return render_template('login.html')
 
     # В главной функции мы каждый раз генерируем UUID в формате строки
     # Затем мы показываем пользователю HTML-файл, передавая токен в Jinjia
@@ -30,7 +37,7 @@ def index():
 
 @app.route('/test')
 def test():
-    return render_template('bookmarks.html')
+    return render_template('main.html')
 
 
 @app.route('/page')
@@ -44,27 +51,42 @@ def log():
 
     return ' '.join([mail, result])
 
-
 @app.route('/login')
 def login():
     return render_template('login.html')
-
-
+@app.route('/login', methods = ['post'])
+def login1():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    if username == username and password == password:
+        session['loged1'] = 1
+        return render_template('main.html')
 @app.route('/register')
 def reg():
     return render_template('register.html')
 
-
-@app.route('/register', methods=['post'])
+@app.route('/register', methods = ['post'])
 def register():
-    session['username'] = request.form.get('username')
-    session['password'] = request.form.get('password')
-    cursor.execute("INSERT INTO users VALUES (0, 'loh@gmail.com', session['username'], session['password'], 'loh', 1")
-    if session['login'] and session['password']:
+    username = request.form.get('username')
+    password = request.form.get('password')
+    cursor.execute("INSERT INTO users VALUES (0, 'login', 'our', " + str(username) + "," + str(password) + ", 'finder', 1, 'люблю какашки кушать') ")
+    #TODO:сделать потом с помощью вопросов
+    if session.get('login') and session.get('password'):
         session['loged1'] = 1
-        return '<html><body>Boo!</body></html>'
+        return redirect('/')
+    else:
+        return redirect('/test')
 
+# ID
+# Login
+# Auth_type
+# Username
+# Password (в соответствии с auth_type)
+# Status
+# Рейтинг
+# Описание профиля
+# Список id принадлежащих проектов
 
-app.run(port=port, debug=debug)
+app.run(port=port+1, debug=debug)
 connection.commit()
 connection.close()
