@@ -44,12 +44,12 @@
       </div>
       <div class="card mt-4">
         <div class="card-body">
-          <form action="" method="post">
+          <form action="/create-project" method="post">
             <div class="card-body">
               <div class="row">
                 <label for="name" class="col-sm-2 col-form-label">Название</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" value="// Название //" id="name">
+                  <input type="text" class="form-control" value="// Название //" id="name" name="name">
                 </div>
               </div>
             </div>
@@ -57,7 +57,7 @@
               <div class="row">
                 <label for="status" class="col-sm-2 col-form-label">Статус</label>
                 <div class="col-sm-10">
-                  <select class="form-select" id="status">
+                  <select class="form-select" id="status" name="status">
                     <option value="1" id="opt1">Ищу команду</option>
                     <option value="2" id="opt2">Команда набрана</option>
                   </select>
@@ -68,7 +68,7 @@
               <div class="row">
                 <label for="theme" class="col-sm-2 col-form-label">Тема, категория</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" value="// Тема //" id="theme">
+                  <input type="text" class="form-control" value="// Тема //" id="theme" name="theme">
                 </div>
               </div>
             </div>
@@ -76,7 +76,7 @@
               <div class="row">
                 <label for='deadline' class="col-sm-2 col-form-label">Срок выполнения</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" value="// Срок выполнения //" id="deadline">
+                  <input type="text" class="form-control" value="// Срок выполнения //" id="deadline" name="deadline">
                 </div>
               </div>
             </div>
@@ -84,7 +84,7 @@
               <div class="row">
                 <label for="search-to" class="col-sm-2 col-form-label">Нам нужны</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" value="// Кого ищем //" id="search-to">
+                  <input type="text" class="form-control" value="// Кого ищем //" id="search-to" name="search-to">
                 </div>
               </div>
             </div>
@@ -92,7 +92,7 @@
               <div class="row">
                 <label for="description" class="col-sm-2 col-form-label">Описание</label>
                 <div class="col-sm-10">
-                  <textarea type="text" class="form-control" id="description">// Описание //</textarea>
+                  <textarea type="text" class="form-control" id="description" name="description">// Описание //</textarea>
                 </div>
               </div>
             </div>

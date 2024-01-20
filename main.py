@@ -3,6 +3,8 @@ from config import *
 import uuid
 import sqlite3
 from random import *
+import json
+import datetime
 
 # Импортируем Flask и библиотеку для генерации UUID
 
@@ -13,6 +15,9 @@ connection = sqlite3.connect('itsallgoodman.db', check_same_thread=False)
 cursor = connection.cursor()
 cursor.execute('''CREATE TABLE IF NOT EXISTS users
              (id INTEGER PRIMARY KEY, login TEXT, auth_type TEXT, username TEXT, password TEXT, status TEXT, about TEXT)''')
+cursor.execute('''CREATE TABLE IF NOT EXISTS projects
+(id INTEGER PRIMARY KEY, name TEXT, description TEXT, status TEXT, rank REAL, theme TEXT, deadline TEXT, who_needs TEXT, public_date TEXT, likes TEXT, dislikes TEXT, author TEXT)''')
+connection.commit()
 
 
 @app.route('/')
@@ -146,16 +151,34 @@ def logout():
         return redirect('/')
 
 
-# ID
-# Login
-# Auth_type
-# Username
-# Password (в соответствии с auth_type)
-# Status
-# Рейтинг
-# Описание профиля
-# Список id принадлежащих проектов
+
+
+@app.route('/create-project', methods=['post'])
+def create_project():
+    project_name = request.form.get('name')
+    project_status = request.form.get('status')
+    project_theme = request.form.get('theme')
+    project_deadline = request.form.get('deadline')
+    project_who_needs = request.form.get('search-to')
+    project_description = request.form.get('description')
+    project_description = request.form.get('description')
+    project_id = randint(1, 18446744073)
+    project_rank = 0.0
+    project_public_date = datetime.datetime.now().date().strftime("%Y-%m-%d")
+    project_likes = json.dumps([])
+    project_dislikes = json.dumps([])
+    project_author = session['login']
+
+    cursor.execute('''INSERT INTO projects (id, name, description, status, rank, theme, deadline, who_needs, public_date, likes, dislikes, author)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                   (project_id, project_name, project_description, project_status, project_rank, project_theme, project_deadline, project_who_needs, project_public_date, project_likes, project_dislikes, project_author))
+    connection.commit()
+    return redirect('/test')
+
 
 app.run(port=port + 5, debug=debug)
 connection.commit()
 connection.close()
+
+# json.dumps([1, 2, 3])
+# json.loads('[1, 2, 3]')
