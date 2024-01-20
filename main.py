@@ -23,11 +23,11 @@ connection.commit()
 @app.route('/')
 def index():
     token = str(uuid.uuid4())
-    if session.get('loged', False) == True:
+    if session.get('loged', False):
         return render_template('main.html', login=session.get('login'))
     elif not session:
         return render_template('register.html')
-    elif session.get('loged', False) == False:
+    elif not session.get('loged', False):
         return render_template('login.html')
 
     # В главной функции мы каждый раз генерируем UUID в формате строки
@@ -103,7 +103,8 @@ def account():
         cursor.execute('SELECT login, password FROM users')
         userdata = cursor.execute(f"SELECT * FROM users WHERE login='{session.get('login')}'").fetchall()[0]
         print(userdata)
-        return render_template('account.html', description=userdata[6], status=userdata[5], username=userdata[1], projects=[])
+        return render_template('account.html', description=userdata[6], status=userdata[5], username=userdata[1],
+                               projects=[])
     else:
         return redirect('/login')
 
@@ -127,13 +128,16 @@ def account_me():
 
 @app.route('/search-projects')
 def projects():
-    return render_template('find-projects.html')
+    projects = cursor.execute('''SELECT * FROM projects''').fetchall()
+    print(projects)
+    return render_template('find-projects.html', projects=projects, l=len(projects))
 
 
 @app.route('/search-users')
 def teammates():
     cursor.execute('SELECT login, status FROM users')
     maslog = cursor.fetchall()
+    print(maslog)
     return render_template('find-teammates.html', maslog=maslog, login=session.get('login'))
 
 
@@ -156,7 +160,7 @@ def logout():
 @app.route('/create-project', methods=['post'])
 def create_project():
     project_name = request.form.get('name')
-    project_status = request.form.get('status')
+    project_status = "Ищу команду" if request.form.get('status') == '1' else "Команда набрана"
     project_theme = request.form.get('theme')
     project_deadline = request.form.get('deadline')
     project_who_needs = request.form.get('search-to')

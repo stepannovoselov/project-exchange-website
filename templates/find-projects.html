@@ -67,75 +67,31 @@
       </div>
     </div>
     <hr>
+    <!-- [(15313836102, '// Название //', '// Описание //', 'Ищу команду', 0.0, '// Тема //', '// Срок выполнения //', '// Кого ищем //', '2024-01-20', '[]', '[]', '7129514941')] -->
     <div class="row">
+      {% for project_card in projects %}
       <div class="col-md-6">
         <div class="card shadow mb-3 bg-body rounded">
           <div class="card-body">
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">// Название проекта // <br></li>
-              <li class="list-group-item">// Краткое описание проекта (или начало описания
-                проекта) // <br></li>
-              <li class="list-group-item">// Статус // <br></li>
-              <li class="list-group-item">// Рейтинг // <br></li>
-              <li class="list-group-item">// Хештеги, категория, тема // <br></li>
-              <li class="list-group-item">// Срок выполнения // <br></li>
-              <li class="list-group-item">// Кого ищут (если статус соответствует) // <br></li>
-              <li class="list-group-item">// Автор //<br></li>
-              <li class="list-group-item">// Дата публикации // <br></li>
+              <li class="list-group-item">{{ project_card[1] }}</li>
+              <li class="list-group-item">{{ project_card[2] }}</li>
+              <li class="list-group-item">{{ project_card[3] }}</li>
+              <li class="list-group-item">{{ project_card[4] }}</li>
+              <li class="list-group-item">{{ project_card[5] }}</li>
+              <li class="list-group-item">{{ project_card[6] }}</li>
+              <li class="list-group-item">{{ project_card[7] }}</li>
+              <li class="list-group-item">{{ project_card[11] }}</li>
+              <li class="list-group-item">{{ project_card[8] }}</li>
             </ul>
             <div class="hstack mt-4 gap-2">
-              <a type="button" class="btn btn-sm btn-primary">Открыть страницу проекта</a>
+              <a type="button" class="btn btn-sm btn-primary" href="/projects/{{ project_card[0] }}">Открыть страницу проекта</a>
               <a type="button" class="btn btn-sm btn-outline-warning">Добавить в избранное</a>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="card shadow mb-3 bg-body rounded">
-          <div class="card-body">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">// Название проекта // <br></li>
-              <li class="list-group-item">// Краткое описание проекта (или начало описания
-                проекта) // <br></li>
-              <li class="list-group-item">// Статус // <br></li>
-              <li class="list-group-item">// Рейтинг // <br></li>
-              <li class="list-group-item">// Хештеги, категория, тема // <br></li>
-              <li class="list-group-item">// Срок выполнения // <br></li>
-              <li class="list-group-item">// Кого ищут (если статус соответствует) // <br></li>
-              <li class="list-group-item">// Автор //<br></li>
-              <li class="list-group-item">// Дата публикации // <br></li>
-            </ul>
-            <div class="hstack mt-4 gap-2">
-              <a type="button" class="btn btn-sm btn-primary">Открыть страницу проекта</a>
-              <a type="button" class="btn btn-sm btn-outline-warning">Добавить в избранное</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card shadow mb-3 bg-body rounded">
-          <div class="card-body">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">// Название проекта // <br></li>
-              <li class="list-group-item">// Краткое описание проекта (или начало описания
-                проекта) // <br></li>
-              <li class="list-group-item">// Статус // <br></li>
-              <li class="list-group-item">// Рейтинг // <br></li>
-              <li class="list-group-item">// Хештеги, категория, тема // <br></li>
-              <li class="list-group-item">// Срок выполнения // <br></li>
-              <li class="list-group-item">// Кого ищут (если статус соответствует) // <br></li>
-              <li class="list-group-item">// Автор //<br></li>
-              <li class="list-group-item">// Дата публикации // <br></li>
-            </ul>
-            <div class="hstack mt-4 gap-2">
-              <a type="button" class="btn btn-sm btn-primary">Открыть страницу проекта</a>
-              <a type="button" class="btn btn-sm btn-outline-warning">Добавить в избранное</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
   </div>
