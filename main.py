@@ -77,7 +77,7 @@ def register():
     b = randint(1, 18446744073)
     cursor.execute(
         "INSERT INTO users VALUES ('" + str(b) + "','" + str(login) + "', 'our', '" + str(login) + "', '" + str(
-            password) + "', '', '', '') ")
+            password) + "', '', '') ")
     connection.commit()
     session['login'] = login
     session['password'] = password
@@ -105,12 +105,18 @@ def account():
 
 @app.route('/account', methods=['post'])
 def account_me():
-    opt = request.form.get('inlineFormSelectPref')
+    opt = request.form.get('status')
     id = request.form.get('about')
+
+    print(opt, id)
+
     if opt == "1" and id:
-        cursor.execute('insert into users (status, about) values(?,?)', ("Ищу команду", id))
+        cursor.execute('update users set status = ? where login = ?', ("Ищу команду", session['login']))
+        cursor.execute('update users set about = ? where login = ?', (opt, session['login']))
     elif opt == "2" and id:
-        cursor.execute('insert into users (status, about) values(?,?)', ("Ищу проект", id))
+        cursor.execute('update users set status = ? about = ? where login = ?', ("Ищу Проект", id, session['login']))
+        cursor.execute('update users set about = ? where login = ?', (opt, session['login']))
+    connection.commit()
     return redirect('/account')
 
 
