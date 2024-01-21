@@ -15,6 +15,8 @@ connection = sqlite3.connect('itsallgoodman.db', check_same_thread=False)
 cursor = connection.cursor()
 cursor.execute('''CREATE TABLE IF NOT EXISTS users
              (id INTEGER PRIMARY KEY, login TEXT, auth_type TEXT, username TEXT, password TEXT, status TEXT, about TEXT)''')
+cursor.execute('''CREATE TABLE IF NOT EXISTS bookmarks
+(id_user INTEGER PRIMARY KEY)''')
 cursor.execute('''CREATE TABLE IF NOT EXISTS projects
 (id INTEGER PRIMARY KEY, name TEXT, description TEXT, status TEXT, rank REAL, theme TEXT, deadline TEXT, who_needs TEXT, public_date TEXT, likes TEXT, dislikes TEXT, author TEXT)''')
 connection.commit()
@@ -80,6 +82,7 @@ def register():
     # cursor.execute('SELECT login FROM users')
     # a = len(cursor.fetchall())
     b = randint(1, 18446744073)
+    session['id'] = b
     cursor.execute(
         "INSERT INTO users VALUES ('" + str(b) + "','" + str(login) + "', 'our', '" + str(login) + "', '" + str(
             password) + "', '', '') ")
@@ -142,8 +145,14 @@ def teammates():
 
 
 @app.route('/bookmarks')
-def marks():
+def bookmarks():
     return render_template('bookmarks.html')
+
+@app.route('/mark', methods = ['post', 'get'])
+def mark():
+    cursor.execute("ALTER TABLE bookmarks ADD COLUMN bookmark REAL")
+    cursor.execute("INSERT INTO bookmarks VALUES ('" + str(session.get('id')) + "')")
+    return redirect('/search-projects')
 
 
 @app.route('/logout')
@@ -194,7 +203,7 @@ def ideas_generator():
     return redirect('/')
 
 
-app.run(port=port + 5, debug=debug)
+app.run(port=port, debug=debug)
 connection.commit()
 connection.close()
 
