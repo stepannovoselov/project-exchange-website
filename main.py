@@ -104,10 +104,11 @@ def register():
 def account():
     if session['loged']:
         cursor.execute('SELECT login, password FROM users')
+        cursor.execute('SELECT * FROM projects')
         userdata = cursor.execute(f"SELECT * FROM users WHERE login='{session.get('login')}'").fetchall()[0]
-        print(userdata)
-        return render_template('account.html', description=userdata[6], status=userdata[5], username=userdata[1],
-                               projects=[])
+        id_proj = cursor.execute(f"SELECT * FROM projects WHERE author='{session['id']}'").fetchall()
+        print(id_proj)
+        return render_template('account.html', description=userdata[6], status=userdata[5], username=userdata[1], projects=[], pro = id_proj)
     else:
         return redirect('/login')
 
@@ -116,6 +117,8 @@ def account():
 def account_me():
     opt = request.form.get('status')
     about = request.form.get('about')
+
+
 
     print(1, opt, about)
 
@@ -169,7 +172,7 @@ def logout():
 @app.route('/create-project', methods=['post'])
 def create_project():
     project_name = request.form.get('name')
-    project_status = "Ищу команду" if request.form.get('status') == '1' else "Команда набрана"
+    project_status = "Ищу команду" if request.form.get('status') == '1' else "Команда проект"
     project_theme = request.form.get('theme')
     project_deadline = request.form.get('deadline')
     project_who_needs = request.form.get('search-to')
@@ -202,8 +205,21 @@ def create_project_page():
 def ideas_generator():
     return redirect('/')
 
+@app.route('/projects/<int:project_id>')
+def show_project(project_id):
+    projectdata = cursor.execute('''SELECT * FROM projects WHERE id = ?''', (project_id,)).fetchone()
+    print(projectdata)
+    return render_template('project.html', projectdata=projectdata)
 
-app.run(port=port, debug=debug)
+
+@app.route('/users/<int:user_id>')
+def show_user(user_id):
+    userdata = cursor.execute('''SELECT * FROM users WHERE id = ?''', (user_id,)).fetchone()
+    print(userdata)
+    return render_template('account.html', userdata=userdata, self_auth=False)
+
+
+app.run(port=port + 5, debug=debug)
 connection.commit()
 connection.close()
 
