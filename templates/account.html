@@ -100,6 +100,7 @@
         <div class="row">
           <div class="h2">
             Ваши идеи:
+          {% for projects in pro %}
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
@@ -107,16 +108,16 @@
                 <div class="card-body">
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                      // Название идеи //
+                      {{ projects[1] }}
                     </li>
                     <li class="list-group-item">
-                      // Дата публикации //
+                      {{ projects[4] }}
                     </li>
                     <li class="list-group-item">
-                      // Рейтинг //
+                      {{ projects[8] }}
                     </li>
                     <li class="list-group-item mt-4">
-                      <a class="btn btn-sm btn-primary" href="">
+                      <a class="btn btn-sm btn-primary" href="/projects/{{ project_card[0] }}">
                         Открыть
                       </a>
                       <a class="btn btn-sm btn-outline-danger" href="">
@@ -129,6 +130,7 @@
             </li>
           </ul>
         </div>
+        {% endfor %}
         <a href="/create-project" class="btn btn-sm btn-primary mt-4">
           Создать проект
         </a>
