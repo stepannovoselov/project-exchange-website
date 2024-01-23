@@ -2,102 +2,279 @@ from flask import *
 from config import *
 import uuid
 import sqlite3
-from random import *
+import random
 import json
 import datetime
-
-# Импортируем Flask и библиотеку для генерации UUID
+import hashlib
+import os
 
 app = Flask(__name__)
-app.secret_key = 'secret_key'
+# app.permanent_session_lifetime = datetime.timedelta(hours=1)
+app.secret_key = 'c996d1f4-870d-420a-94d0-70625aed9f53'
 
-connection = sqlite3.connect('itsallgoodman.db', check_same_thread=False)
+connection = sqlite3.connect('database.db', check_same_thread=False)
 cursor = connection.cursor()
-cursor.execute('''CREATE TABLE IF NOT EXISTS users
-             (id INTEGER PRIMARY KEY, login TEXT, auth_type TEXT, username TEXT, password TEXT, status TEXT, about TEXT)''')
-cursor.execute('''CREATE TABLE IF NOT EXISTS bookmarks
-(id_user INTEGER PRIMARY KEY)''')
-cursor.execute('''CREATE TABLE IF NOT EXISTS projects
-(id INTEGER PRIMARY KEY, name TEXT, description TEXT, status TEXT, rank REAL, theme TEXT, deadline TEXT, who_needs TEXT, public_date TEXT, likes TEXT, dislikes TEXT, author TEXT)''')
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS users 
+(id INTEGER PRIMARY KEY,
+login TEXT,
+password TEXT,
+salt TEXT,
+iterations INT,
+auth_type TEXT,
+username TEXT,
+status TEXT,
+about TEXT)''')
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS projects
+(id INTEGER PRIMARY KEY,
+name TEXT,
+description TEXT,
+status TEXT,
+rank REAL,
+theme TEXT,
+deadline TEXT,
+who_needs TEXT,
+public_date TEXT,
+likes TEXT,
+dislikes TEXT,
+author TEXT)
+''')
 connection.commit()
+
+
+class User:
+    def __init__(self, user_id=None, user_login=None):
+        if user_id:
+            userdata = cursor.execute('''SELECT * FROM users WHERE id = ?''', (user_id,)).fetchone()
+        else:
+            userdata = cursor.execute('''SELECT * FROM users WHERE login = ?''', (user_login,)).fetchone()
+
+        if not userdata:
+            self._id = None
+            self._login = None
+            self._password = None
+            self._salt = None
+            self._iterations = None
+            self._auth_type = None
+            self._username = None
+            self._status = None
+            self._about = None
+        else:
+            self._id = userdata[0]
+            self._login = userdata[1]
+            self._password = userdata[2]
+            self._salt = userdata[3]
+            self._iterations = userdata[4]
+            self._auth_type = userdata[5]
+            self._username = userdata[6]
+            self._status = userdata[7]
+            self._about = userdata[8]
+
+    def __str__(self):
+        return (
+            f"User ID: {self._id}, "
+            f"Login: {self._login}, "
+            f"Password: {self._password}, "
+            f"Auth Type: {self._auth_type}, "
+            f"Username: {self._username}, "
+            f"Status: {self._status}, "
+            f"About: {self._about}"
+        )
+
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, value):
+        raise AttributeError("You can't change user's id")
+
+    @property
+    def login(self):
+        return self._login
+
+    @login.setter
+    def login(self, value):
+        cursor.execute('''UPDATE users SET login = ? WHERE id = ?''', (value, self._id))
+        connection.commit()
+        self._login = value
+
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, value):
+        cursor.execute('''UPDATE users SET password = ? WHERE id = ?''', (value, self._id))
+        connection.commit()
+        self._password = value
+
+    @property
+    def salt(self):
+        return self._salt
+
+    @salt.setter
+    def salt(self, value):
+        raise AttributeError("You can't change user's salt")
+
+    @property
+    def iterations(self):
+        return self._iterations
+
+    @iterations.setter
+    def iterations(self, value):
+        raise AttributeError("You can't change user's iterations")
+
+    @property
+    def auth_type(self):
+        return self._auth_type
+
+    @auth_type.setter
+    def auth_type(self, value):
+        raise AttributeError("You can't change user's auth type")
+
+    @property
+    def username(self):
+        return self._username
+
+    @username.setter
+    def username(self, value):
+        cursor.execute('''UPDATE users SET username = ? WHERE id = ?''', (value, self._id))
+        connection.commit()
+        self._username = value
+
+    @property
+    def status(self):
+        return self._status
+
+    @status.setter
+    def status(self, value):
+        cursor.execute('''UPDATE users SET status = ? WHERE id = ?''', (value, self._id))
+        connection.commit()
+        self._status = value
+
+    @property
+    def about(self):
+        return self._about
+
+    @about.setter
+    def about(self, value):
+        cursor.execute('''UPDATE users SET about = ? WHERE id = ?''', (value, self._id))
+        connection.commit()
+        self._about = value
+
+    @staticmethod
+    def hash_password(password, salt=None, iterations=None):
+        if not salt:
+            salt = os.urandom(32)
+        if not iterations:
+            iterations = 10000
+
+        hashed_password = hashlib.pbkdf2_hmac(
+            hash_name='sha256',
+            password=password.encode('UTF-8'),
+            salt=salt,
+            iterations=iterations
+        )
+
+        return hashed_password, salt, iterations
+
+    @staticmethod
+    def create_user(login, password, auth_type, username, status, about):
+        if cursor.execute('SELECT * FROM users WHERE login = ?', (login,)).fetchone():  # Проверка уникальности логина
+            raise ValueError('This login already exists')
+
+        while True:  # Проверка уникальности айди
+            user_id = random.randint(2 ** 8, 2 ** 32 - 1)
+            if not cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone():
+                break
+
+        if auth_type == '1561PROJECTS':
+            password, salt, iterations = User.hash_password(password)
+        else:
+            password = ""
+            salt = ""
+            iterations = ""
+
+        cursor.execute(
+            '''
+            INSERT INTO users
+            (id, login, password, salt, iterations, auth_type, username, status, about)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''',
+            (user_id, login, password, salt, iterations, auth_type, username, status, about)
+        )
+
+        connection.commit()
+
+        return User(user_id)
 
 
 @app.route('/')
 def index():
-    token = str(uuid.uuid4())
-    if session.get('loged', False):
-        return render_template('main.html', login=session.get('login'))
-    elif not session:
-        return render_template('register.html')
-    elif not session.get('loged', False):
-        return render_template('login.html')
-
-    # В главной функции мы каждый раз генерируем UUID в формате строки
-    # Затем мы показываем пользователю HTML-файл, передавая токен в Jinjia
-
-    # TODO: На релизе убрать порт и заменить url=url, где url - ссылка на нужную страницу
-    link = 'http://127.0.0.1:' + str(port) + '/page'
-    return render_template('register.html', token=token, link=link)
+    if 'logged_in' not in session:
+        session['logged_in'] = False
+    return render_template('main.html', user_logged_in=session['logged_in'])
 
 
-# Страница /log вызывается тогда, когда пользователь завершил авторизацию
-
-
-@app.route('/test')
-def test():
-    return render_template('create-project.html')
-
-
-@app.route('/login')
+@app.route('/login', methods=['POST', 'GET'])
 def login():
-    return render_template('login.html')
+    if request.method == 'POST':
+        user = User(user_login=request.form.get('login'))
+
+        if user.id:
+            hashed_password = User.hash_password(
+                password=request.form.get('password'),
+                salt=user.salt,
+                iterations=user.iterations
+            )[0]
+
+            if hashed_password == user.password:
+                session['logged_in'] = True
+
+                return redirect('/')
+
+    return render_template('login.html', token=uuid.uuid4())
 
 
-@app.route('/login', methods=['post'])
-def login1():
-    username = request.form.get('username')
-    password = request.form.get('password')
-    cursor.execute('SELECT login, password FROM users')
-    a = cursor.execute(
-        'SELECT * from users where login = "' + username + '" and password = "' + password + '"').fetchall()
-    if a:
-        session['loged'] = True
-        session['login'] = username
-        session['password'] = password
-        return redirect('/')
-    if not a:
-        session['loged'] = False
-        return redirect('/')
-
-
-@app.route('/register')
-def reg():
-    return render_template('register.html')
-
-
-@app.route('/register', methods=['post'])
+@app.route('/register', methods=['POST', 'GET'])
 def register():
-    login = request.form.get('username')
-    password = request.form.get('password')
-    # cursor.execute('SELECT login FROM users')
-    # a = len(cursor.fetchall())
-    b = randint(1, 18446744073)
-    session['id'] = b
-    cursor.execute(
-        "INSERT INTO users VALUES ('" + str(b) + "','" + str(login) + "', 'our', '" + str(login) + "', '" + str(
-            password) + "', '', '') ")
-    connection.commit()
-    session['login'] = login
-    session['password'] = password
-    # TODO:сделать потом с помощью вопросов а также сделать проверку нет ли такого же логина
-    if session.get('login') and session.get('password'):
-        session['loged'] = True
-        cursor.execute('SELECT login, password FROM users')
-        maslog = cursor.fetchall()
-        print(maslog)
+    if request.method == 'POST':
+        User.create_user(
+            login=request.form.get('login'),
+            password=request.form.get('password'),
+            auth_type='1561PROJECTS',
+            username='',
+            status='',
+            about=''
+        )
+
+        session['logged_in'] = True
         return redirect('/')
+
     else:
-        return redirect('/test')
+        if request.args:  # В теории - работает
+            status = request.args.get('status')
+            login = request.args.get('mail')
+
+            if status == 'Success':
+                User.create_user(
+                    login=login,
+                    password='',
+                    auth_type='1561ID',
+                    username='',
+                    status='',
+                    about=''
+                )
+
+                session['logged_in'] = True
+                return redirect('/')
+            else:
+                return redirect('/register')
+
+    return render_template('register.html', token=uuid.uuid4())
 
 
 @app.route('/account')
@@ -108,7 +285,8 @@ def account():
         userdata = cursor.execute(f"SELECT * FROM users WHERE login='{session.get('login')}'").fetchall()[0]
         id_proj = cursor.execute(f"SELECT * FROM projects WHERE author='{session['id']}'").fetchall()
         print(id_proj)
-        return render_template('account.html', description=userdata[6], status=userdata[5], username=userdata[1], projects=[], pro = id_proj)
+        return render_template('account.html', description=userdata[6], status=userdata[5], username=userdata[1],
+                               projects=[], pro=id_proj)
     else:
         return redirect('/login')
 
@@ -117,8 +295,6 @@ def account():
 def account_me():
     opt = request.form.get('status')
     about = request.form.get('about')
-
-
 
     print(1, opt, about)
 
@@ -151,7 +327,8 @@ def teammates():
 def bookmarks():
     return render_template('bookmarks.html')
 
-@app.route('/mark', methods = ['post', 'get'])
+
+@app.route('/mark', methods=['post', 'get'])
 def mark():
     cursor.execute("ALTER TABLE bookmarks ADD COLUMN bookmark REAL")
     cursor.execute("INSERT INTO bookmarks VALUES ('" + str(session.get('id')) + "')")
@@ -160,13 +337,10 @@ def mark():
 
 @app.route('/logout')
 def logout():
-    if session['loged'] == True:
-        session['loged'] = False
-        del session['login']
-        del session['password']
-        return redirect('/')
-    else:
-        return redirect('/')
+    if 'logged_in' in session:
+        session['logged_in'] = False
+
+    return redirect('/')
 
 
 @app.route('/create-project', methods=['post'])
@@ -178,7 +352,7 @@ def create_project():
     project_who_needs = request.form.get('search-to')
     project_description = request.form.get('description')
     project_description = request.form.get('description')
-    project_id = randint(1, 18446744073)
+    project_id = random.randint(1, 18446744073)
     project_rank = 0.0
     project_public_date = datetime.datetime.now().date().strftime("%Y-%m-%d")
     project_likes = json.dumps([])
@@ -205,6 +379,7 @@ def create_project_page():
 def ideas_generator():
     return redirect('/')
 
+
 @app.route('/projects/<int:project_id>')
 def show_project(project_id):
     projectdata = cursor.execute('''SELECT * FROM projects WHERE id = ?''', (project_id,)).fetchone()
@@ -219,7 +394,7 @@ def show_user(user_id):
     return render_template('account.html', userdata=userdata, self_auth=False)
 
 
-app.run(port=port + 5, debug=debug)
+app.run(port=port, debug=debug)
 connection.commit()
 connection.close()
 

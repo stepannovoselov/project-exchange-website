@@ -14,7 +14,7 @@
   <header class="bg-dark text-white">
     <div class="container py-3">
       <div class="hstack gap-3">
-        <a href="#" class="navbar-brand text-white">// Название //</a>
+        <a href="/" class="navbar-brand text-white">// Название //</a>
       </div>
     </div>
   </header>
@@ -29,8 +29,8 @@
           <div class="card-body h5 ">
             <form action="/login" method="post">
               <div class="form-group mb-3">
-                <label for="username" class="mb-2">Имя пользователя:</label>
-                <input type="text" class="form-control" id="username" name="username" required>
+                <label for="login" class="mb-2">Имя пользователя:</label>
+                <input type="text" class="form-control" id="login" name="login" required>
               </div>
               <div class="form-group mb-3">
                 <label for="password" class="mb-2">Пароль:</label>
@@ -38,27 +38,29 @@
               </div>
               <div class="d-grid gap-2 mx-auto text-center">
                 <button type="submit" class="btn btn-primary mt-2">Войти</button>
-                <hr>
-                <div class="text-muted mt-2">
-                  <small>
-                    Войти другим способом:
-                  </small>
-                </div>
-              </div>
-              <div class="d-grid gap-2 mx-auto justify-content-md-center mt-2">
-                <button class="btn btn-outline-primary btn-sm">
-                  <u href="https://whoid.ru/auth/login?token={{ token }}&link={{ link }}" class="h5">
-                    <small>Войти при помощи <b>1561ID</b></small>
-                  </u>
-                </button>
-                <small class="text-center mt-4">
-                  Ещё нет аккаунта? 
-                  <a href="/register">
-                    Зарегистрироваться
-                  </a>
-                </small>
               </div>
             </form>
+            <hr>
+            <div class="d-grid gap-2 mx-auto text-center">
+              <div class="text-muted mt-2">
+                <small>
+                  Войти другим способом:
+                </small>
+              </div>
+            </div>
+            <div class="d-grid gap-2 mx-auto justify-content-md-center mt-2">
+              <button class="btn btn-outline-primary btn-sm">
+                <a href="https://whoid.ru/auth/login?token={{ token }}&link=http://127.0.0.1:1900/login" class="h5">
+                  <small>Войти при помощи <b>1561ID</b></small>
+                </a>
+              </button>
+              <small class="text-center mt-4">
+                Ещё нет аккаунта?
+                <a href="/register">
+                  Зарегистрироваться
+                </a>
+              </small>
+            </div>
           </div>
         </div>
       </div>
