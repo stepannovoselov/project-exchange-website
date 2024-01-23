@@ -216,7 +216,8 @@ class User:
 def index():
     if 'logged_in' not in session:
         session['logged_in'] = False
-    return render_template('main.html', user_logged_in=session['logged_in'])
+        return render_template('main.html', user_logged_in=session['logged_in'])
+    return render_template('main.html', user_logged_in=session['logged_in'], login=session['login'])
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -233,6 +234,8 @@ def login():
 
             if hashed_password == user.password:
                 session['logged_in'] = True
+                session['id'] = user.id
+                session['login'] = user.login
 
                 return redirect('/')
 
@@ -242,7 +245,7 @@ def login():
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
-        User.create_user(
+        user = User.create_user(
             login=request.form.get('login'),
             password=request.form.get('password'),
             auth_type='1561PROJECTS',
@@ -252,6 +255,8 @@ def register():
         )
 
         session['logged_in'] = True
+        session['id'] = user.id
+        session['login'] = user.login
         return redirect('/')
 
     else:
@@ -260,7 +265,7 @@ def register():
             login = request.args.get('mail')
 
             if status == 'Success':
-                User.create_user(
+                user = User.create_user(
                     login=login,
                     password='',
                     auth_type='1561ID',
@@ -270,42 +275,48 @@ def register():
                 )
 
                 session['logged_in'] = True
+                session['id'] = user.id
+                session['login'] = user.login
                 return redirect('/')
+
             else:
                 return redirect('/register')
 
     return render_template('register.html', token=uuid.uuid4())
 
 
-@app.route('/account')
+@app.route('/account', methods=['POST', 'GET'])
 def account():
-    if session['loged']:
-        cursor.execute('SELECT login, password FROM users')
-        cursor.execute('SELECT * FROM projects')
-        userdata = cursor.execute(f"SELECT * FROM users WHERE login='{session.get('login')}'").fetchall()[0]
-        id_proj = cursor.execute(f"SELECT * FROM projects WHERE author='{session['id']}'").fetchall()
-        print(id_proj)
-        return render_template('account.html', description=userdata[6], status=userdata[5], username=userdata[1],
-                               projects=[], pro=id_proj)
-    else:
-        return redirect('/login')
+    if request.method == 'POST':
+        username = request.form.get('name')
+        login = request.form.get('login')
+        # password = request.form.get('password')
+        status = request.form.get('status')
+        about = request.form.get('about')
 
+        user = User(user_id=session['id'])
+        user.username = username
+        user.login = login
+        user.status = status
+        user.about = about
 
-@app.route('/account', methods=['post'])
-def account_me():
-    opt = request.form.get('status')
-    about = request.form.get('about')
+        return redirect('/account')
 
-    print(1, opt, about)
+    else:  # wait for it...
+        if 'logged_in' in session:
+            if session['logged_in']:
+                user = User(user_id=session['id'])
+                id_proj = cursor.execute(f"SELECT * FROM projects WHERE author='{session['id']}'").fetchall()
+                print(id_proj)
+                return render_template(
+                    'account.html',
+                    username=user.username,
+                    login=user.login,
+                    status=user.status,
+                    about=user.about
+                )
 
-    if opt == "1":
-        cursor.execute('update users set status = ? where login = ?', ("Ищу команду", session['login']))
-    elif opt == "2":
-        cursor.execute('update users set status = ? where login = ?', ("Ищу Проект", session['login']))
-    cursor.execute('update users set about = ? where login = ?', (str(about), session['login']))
-
-    connection.commit()
-    return redirect('/account')
+        return redirect('/')
 
 
 @app.route('/search-projects')

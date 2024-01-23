@@ -46,13 +46,13 @@
       <div class="h2">
         Профиль
       </div>
-      <form action="/account" method="post">
         <div class="card mt-4">
+      <form action="/account" method="post">
           <div class="card-body">
             <div class="row">
-              <label for="inputEmail3" class="col-sm-2 col-form-label">Отображаемое имя</label>
+              <label for="inputName" class="col-sm-2 col-form-label">Отображаемое имя</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" value="{{ username }}"  id="inputEmail3" name = "name" disabled>
+                <input type="text" class="form-control" value="{{ username }}" id="inputName" name = "name">
               </div>
             </div>
           </div>
@@ -60,7 +60,7 @@
             <div class="row">
               <label for="inputLogin" class="col-sm-2 col-form-label">Логин</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" value="// Логин //" id="inputLogin" disabled>
+                <input type="text" class="form-control" value="{{ login }}" id="inputLogin" name="login">
               </div>
             </div>
           </div>
@@ -68,30 +68,31 @@
             <div class="row">
               <label for="inputPassword" class="col-sm-2 col-form-label">Пароль</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" value="// Пароль //" id="inputPassword" disabled>
+                <input type="text" class="form-control" value="Пароль хеширован" id="inputPassword" name="password" disabled>
               </div>
             </div>
           </div>
           <div class="card-body">
             <div class="row">
-              <label class="col-sm-2 col-form-label" for="inlineFormSelectPref">Статус</label>
+              <label class="col-sm-2 col-form-label" for="selectStatus">Статус</label>
               <div class="col-sm-10">
-                <select class="form-select" id="inlineFormSelectPref" name="status">
-                  <option value="1" id="opt1" {% if status == "Ищу команду" %}selected{% endif %}>Ищу команду</option>
-                  <option value="2" id="opt2" {% if status != "Ищу команду" %}selected{% endif %}>Ищу проект</option>
+                <select class="form-select" id="selectStatus" name="status">
+                  <option value=""></option>
+                  <option value="Ищу команду" id="opt1" {% if status == "Ищу команду" %}selected{% endif %}>Ищу команду</option>
+                  <option value="Ищу проект" id="opt2" {% if status == "Ищу проект" %}selected{% endif %}>Ищу проект</option>
                 </select>
               </div>
             </div>
           </div>
           <div class="card-body">
             <div class="row">
-              <label for="inputPassword" class="col-sm-2 col-form-label">О себе</label>
+              <label for="inputAbout" class="col-sm-2 col-form-label">О себе</label>
               <div class="col-sm-10">
-                <textarea id="about" name="about" class="form-control" id="exampleFormControlTextarea1" rows="3">{{ description }}</textarea>
+                <textarea id="about" name="about" class="form-control" id="inputAbout" rows="3">{{ about }}</textarea>
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary ms-auto mx-3 mb-4">
+          <button type="submit" class="btn btn-primary ms-auto mx-3 mb-4 float-end">
             Сохранить изменения
           </button>
         </form>
@@ -100,8 +101,8 @@
         <div class="row">
           <div class="h2">
             Ваши идеи:
-          {% for projects in pro %}
           </div>
+          {% for project in projects %}
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <div class="card">
