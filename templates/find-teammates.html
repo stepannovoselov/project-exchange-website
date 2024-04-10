@@ -2,104 +2,111 @@
 <html lang="ru">
 
 <head>
-  <meta charset="UTF-8">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-  <link rel="stylesheet" href="../static/find-teammates.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Поиск по пользователям</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/find-teammates.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Поиск по пользователям</title>
 </head>
 
 <div>
-  <header class="bg-dark text-white">
-    <div class="container py-3">
-      <div class="hstack gap-3">
-        <a href="/" class="navbar-brand text-white" style="border-bottom: 2px solid white;">// 1561 PROJECTS //</a>
-        |
-        <a href="/account" class="navbar-brand text-white" title="Перейти в профиль">
-          // Имя пользователя //
-        </a>
-        <a class="btn btn-outline-light btn-sm ms-auto" type="button" title="Открыть страницу с проектами" href="/search-projects">
-          Поиск проектов
-        </a>
-        <a class="btn btn-light btn-sm" disabled type="button" title="Поиск по пользователям сайта">
-          Поиск пользователей
-        </a>
-        <a class="btn btn-outline-light btn-sm" type="button" title="Поиск по пользователям сайта" href="ideas-generator">
-          Генератор идей <sup><span class="badge bg-danger">NEW</span></sup>  <!-- Можно убрать sup для полного отображения -->
-        </a>
-        <a class="btn btn-outline-warning btn-sm" type="button" title="Поиск по пользователям сайта" href="bookmarks">
-          Избранное
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <div class="container mt-2">
-    <div class="row justify-content-center">
-      <div class="h2">
-          Поиск по пользователям
-      </div>
-      <div class="col-md-12 mt-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <form class="input-group-lg">
-              <div class="row g-3">
-                <div class="col-11">
-                  <input class="form-control me-2" type="search" placeholder="Введите запрос..." aria-label="Search">
-                </div>
-                <div class="col">
-                  <button class="btn btn-outline-primary" type="submit">Искать</button>
-                </div>
-              </div>
-              <div class="h5 mt-4">Фильтры поиска:</div>
-              <div class="row">
-                <div class="col">
-                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                  <label class="form-check-label" for="flexCheckDefault">
-                    Полное совпадение
-                  </label>
-                </div>
-              </div>
-          </div>
-          </form>
-        </div>
-        </div>
-        <hr>
-      <ul>
-        {% for log in maslog %}
-            <div class="card shadow mb-3 bg-body rounded">
-              <div class="card-body">
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">
-                    Имя: {{log[0]}}
-                  </li>
-                  <li class="list-group-item">
-                    Статус: {{log[1]}}
-                  </li>
-                </ul>
-              </div>
+    <header class="bg-dark text-white">
+        <div class="container py-3">
+            <div class="hstack gap-3">
+                <a href="/" class="navbar-brand text-white" style="border-bottom: 2px solid white;">// 1561 PROJECTS
+                    //</a>
+                |
+                <a href="/account" class="navbar-brand text-white" title="Перейти в профиль">
+                    // Имя пользователя //
+                </a>
+                <a class="btn btn-outline-light btn-sm ms-auto" type="button" title="Открыть страницу с проектами"
+                   href="/search-projects">
+                    Поиск проектов
+                </a>
+                <a class="btn btn-light btn-sm" disabled type="button" title="Поиск по пользователям сайта">
+                    Поиск пользователей
+                </a>
+                <a class="btn btn-outline-light btn-sm" type="button" title="Поиск по пользователям сайта"
+                   href="ideas-generator">
+                    Генератор идей <sup><span class="badge bg-danger">NEW</span></sup>
+                    <!-- Можно убрать sup для полного отображения -->
+                </a>
+                <a class="btn btn-outline-warning btn-sm" type="button" title="Поиск по пользователям сайта"
+                   href="bookmarks">
+                    Избранное
+                </a>
             </div>
-        {% endfor %}
-      </ul>
+        </div>
+    </header>
 
-        <!-- Начало карточек -->
-<!--        <div class="card shadow mb-3 bg-body rounded">-->
-<!--          <div class="card-body">-->
-<!--            // Имя пользователя // <br>-->
-<!--            // Статус // <br>-->
-<!--            // Количество проектов // <br>-->
-<!--            // Рейтинг // <br>-->
-<!--            // Описание профиля //-->
-<!--          </div>-->
-<!--      </div>-->
+    <div class="container mt-2">
+        <div class="row justify-content-center">
+            <div class="h2">
+                Поиск по пользователям
+            </div>
+            <div class="col-md-12 mt-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form class="input-group-lg">
+                            <div class="row g-3">
+                                <div class="col-11">
+                                    <input class="form-control me-2" type="search" placeholder="Введите запрос..."
+                                           aria-label="Search">
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-outline-primary" type="submit">Искать</button>
+                                </div>
+                            </div>
+                            <div class="h5 mt-4">Фильтры поиска:</div>
+                            <div class="row">
+                                <div class="col">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        Полное совпадение
+                                    </label>
+                                </div>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <ul>
+                {% for log in maslog %}
+                <div class="card shadow mb-3 bg-body rounded">
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                Имя: {{log[0]}}
+                            </li>
+                            <li class="list-group-item">
+                                Статус: {{log[1]}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                {% endfor %}
+            </ul>
+
+            <!-- Начало карточек -->
+            <!--        <div class="card shadow mb-3 bg-body rounded">-->
+            <!--          <div class="card-body">-->
+            <!--            // Имя пользователя // <br>-->
+            <!--            // Статус // <br>-->
+            <!--            // Количество проектов // <br>-->
+            <!--            // Рейтинг // <br>-->
+            <!--            // Описание профиля //-->
+            <!--          </div>-->
+            <!--      </div>-->
+        </div>
     </div>
-  </div>
 </div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
 <script src="../static/script.js"></script>
 </body>
 

@@ -1,0 +1,56 @@
+{% extends 'base_template.html' %}
+
+{% block title %}Создать проект{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+    <div class="row justify-content-center">
+        <div class="h2">
+            Форма создания проекта
+        </div>
+        <div class="card mt-4">
+            <div class="card-body">
+                <form action="/project/create" method="post">
+                    <div class="form-group mb-5">
+                        <div class="row">
+                            <label for="name" class="col-sm-2 col-form-label custom-required-mark">Название</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="name" name="name" required>
+                                <div class="form-text">Как вы назвали ваш проект?</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-5">
+                        <div class="row">
+                            <label for="theme" class="col-sm-2 col-form-label">Тема</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="theme" name="theme">
+                                <div class="form-text">Что из себя представляет ваш проект?</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-5">
+                        <div class="row">
+                            <label for="goal" class="col-sm-2 col-form-label">Цель</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="goal" name="goal">
+                                <div class="form-text">Напишите, какую цель вы перед собой поставили в рамках этого проекта. Какую проблему вы решите или какое новое знание получите? Цель должна отражать тему проекта.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-5">
+                        <div class="row">
+                            <label for="description" class="col-sm-2 col-form-label">Описание</label>
+                            <div class="col-sm-10">
+                                <textarea type="text" class="form-control" id="description" name="description"></textarea>
+                                <div class="form-text">Опишите свой проект максимально подробно. Это поможет пользователям сайта узнать ваш проект лучше и предложить лучшее решение сразу.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-4">Сохранить и опубликовать</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+.custom-error-block{
+    color: red;
+    font-weight: normal;
+    font-size: medium;
+}
+
+.custom-font-weight-normal{
+    font-weight: normal;
+}
+
+a{
+    text-decoration: none;
+}
+
+
+.custom-underline-hover:hover{
+    border-bottom: solid 2px white;
+}
+
+.custom-blue-text{
+    color: blue;
+}
+
+.custom-required-mark::after{
+    content: ' *';
+    color: red;
+}

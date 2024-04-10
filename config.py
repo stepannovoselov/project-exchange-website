@@ -1,14 +1,23 @@
-port = 1900
-debug = True
+from os import getenv
+from dotenv import load_dotenv
+from datetime import timedelta
 
-if __name__ == '__main__':
-    import sqlite3
 
-    connection = sqlite3.connect('itsallgoodman.db', check_same_thread=False)
-    cursor = connection.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users
-                 (id INTEGER PRIMARY KEY, login TEXT, auth_type TEXT, username TEXT, password TEXT, status TEXT, rank REAL, about TEXT)''')
-    login = 'patriot228'
-    password = '961413'
-    a = cursor.execute('SELECT * from users where login = "' + login + '" and password = "' + str(password) + '"')
-    print(a.fetchall())
+load_dotenv(dotenv_path='.env')
+
+FLASK_PORT = getenv('FLASK_PORT')
+FLASK_DEBUG_MODE = getenv('FLASK_DEBUG_MODE')
+FLASK_APP_SECRET_KEY = getenv('FLASK_APP_SECRET_KEY')
+
+DEFAULT_SESSION_TIME = timedelta(
+    minutes=10
+)
+LONG_SESSION_TIME = timedelta(
+    minutes=20
+)  # Если пользователь при входе нажал "Запомнить меня"
+
+POSTGRES_USERNAME = getenv('POSTGRES_USERNAME')
+POSTGRES_PASSWORD = getenv('POSTGRES_PASSWORD')
+POSTGRES_HOST = getenv('POSTGRES_HOST')
+POSTGRES_PORT = getenv('POSTGRES_PORT')
+POSTGRES_DATABASE = getenv('POSTGRES_DATABASE')
