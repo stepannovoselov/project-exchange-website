@@ -1,0 +1,70 @@
+{% extends 'base_template.html' %}
+
+{% block title %}Проекты @{{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+    <div class="row justify-content-center">
+        <div class="h2">
+            {{ user.surname }} {{ user.name }}
+        </div>
+        <ul class="col nav nav-tabs mt-4">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/account/@{{ user.username }}">Профиль</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Проекты</a>
+            </li>
+        </ul>
+        <div class="card rounded-0 py-2" style="border-top: none;">
+            <div class="row">
+                {% for project in projects %}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="card">
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        Название: {{ project.name }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        Тема: {{ project.theme }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        Цель: {{ project.goal }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        Описание: {{ project.goal }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        Рейтинг: {{ project.rank }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        Дата и время создания: {{ project.public_date.strftime("%Y-%m-%d %H:%M:%S") }}
+                                    </li>
+                                    <li class="list-group-item mt-4">
+                                        <a class="btn btn-sm btn-primary" href="/projects/{{ project.id }}">
+                                            Открыть
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-danger" href="">
+                                            Удалить
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                {% endfor %}
+            </div>
+            {% if current_user.id == user.id %}
+            <a href="/project/create" class="btn btn-sm btn-primary mt-4">
+                Создать проект
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+</div>
+
+{% endblock %}

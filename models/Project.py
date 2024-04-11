@@ -7,6 +7,7 @@ class Project(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False)
+    type = db.Column(db.String, nullable=False)
     theme = db.Column(db.String)
     goal = db.Column(db.String)
     description = db.Column(db.String)

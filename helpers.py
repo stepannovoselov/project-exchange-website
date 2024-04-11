@@ -85,11 +85,13 @@ def validate_request_data(schema: SchemaMeta):
             errors = translate_errors(errors)
 
             try:
-                print(errors)
+                if session.get('user_id', None) is not None:
+                    user = User.query.filter_by(id=session['user_id']).first()
+                    return render_template(schema.unsuccessful_redirect_template, errors=errors, values=request.form, current_user=user)
+
                 return render_template(schema.unsuccessful_redirect_template, errors=errors, values=request.form)
-            except AttributeError:
-                return render_template('/')
-            except TemplateNotFound:
+
+            except (AttributeError, TemplateNotFound):
                 return render_template('/')
 
         return decorated_function
@@ -108,6 +110,9 @@ def translate_errors(errors_dict: dict) -> dict:
 
             elif error == 'Missing data for required field.':
                 errors_dict[field][i] = 'Не удалось получить данные для этого поля.'
+
+            elif error == 'Invalid value.':
+                errors_dict[field][i] = 'Неверное значение поля.'
 
     return errors_dict
 

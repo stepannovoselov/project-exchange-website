@@ -17,6 +17,27 @@
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="name" name="name" required>
                                 <div class="form-text">Как вы назвали ваш проект?</div>
+                                <div class="form-text custom-error-block">
+                                    {% if errors is defined %}
+                                    {{ errors.get('name', '')[0] }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-5">
+                        <div class="row">
+                            <label for="type" class="col-sm-2 col-form-label custom-required-mark">Тип</label>
+                            <div class="col-sm-10">
+                                <select class="form-select" id="type" name="type">
+                                    <option value="Проект" id="opt1" selected>Проект</option>
+                                    <option value="Исследование" id="opt2">Исследование</option>
+                                </select>
+                                <div class="form-text custom-error-block">
+                                    {% if errors is defined %}
+                                    {{ errors.get('type', '')[0] }}
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>

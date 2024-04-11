@@ -1,0 +1,81 @@
+{% extends 'base_template.html' %}
+
+{% block title %}Профиль @{{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+    <div class="row justify-content-center">
+        <h2 class="my-0 mt-2">
+            {{ user.surname }} {{ user.name }}
+        </h2>
+        <ul class="col nav nav-tabs mt-4">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Профиль</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/account/@{{ user.username }}/projects">Проекты</a>
+            </li>
+        </ul>
+        <div class="card rounded-0" style="border-top: none;">
+            <div class="card-body mt-4">
+                {% if current_user.id == user.id %}
+                <form action="/account/@{{ user.username }}" method="post" id="account-profile-form">
+                {% endif %}
+                {% if current_user.id == user.id %}
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Фамилия</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" contenteditable="true" name="username" onblur="submitForm()">{{ user.surname }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Имя</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" contenteditable="true" name="name" onblur="submitForm()">{{ user.name }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                {% endif %}
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Имя пользователя</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" contenteditable="true" name="username" onblur="submitForm()">@{{ user.username }}</p>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    {% if current_user.id == user.id %}
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Адрес электронной почты</p>
+                            <small class="text-muted"><i>(Скрыт)</i></small>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" contenteditable="true" name="email" onblur="submitForm()">{{ user.email }}</p>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    {% endif %}
+                {% if current_user.id == user.id %}
+                </form>
+                {% endif %}
+            </div>
+            <ol>
+                <<<< temporary view>>>>
+                    {% for key, value in user.__dict__.items() %}
+                    <li>
+                        {{ key }} : {{ value }} <br>
+                    </li>
+                    {% endfor %}
+                    <<<<< -->>>>
+            </ol>
+        </div>
+    </div>
+
+    {% endblock %}

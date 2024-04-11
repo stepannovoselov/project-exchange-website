@@ -16,6 +16,7 @@ def create_project_page(current_user):
 def create_project(current_user):
     project = Project(
         name=request.form.get('name'),
+        type=request.form.get('type'),
         theme=request.form.get('theme', None),
         goal=request.form.get('goal', None),
         description=request.form.get('description', None),
@@ -23,8 +24,6 @@ def create_project(current_user):
     )
     db.session.add(project)
     return redirect(f'/account/@{current_user.username}')
-
-
 
 
 @project_bp.route('/<int:project_id>')
