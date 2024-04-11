@@ -16,10 +16,10 @@ def get_register_form():
 def register():
     hashed_password, salt, iterations = hash_password(request.form.get('password'))
     user = User(
-        surname=request.form.get('surname'),
-        name=request.form.get('name'),
-        email=request.form.get('email'),
-        username=request.form.get('username'),
+        surname=request.form.get('surname').strip().capitalize(),
+        name=request.form.get('name').strip().capitalize(),
+        email=request.form.get('email').strip(),
+        username=request.form.get('username').strip(),
         password=hashed_password,
         salt=salt,
         iterations=iterations,

@@ -25,3 +25,17 @@ a{
     content: ' *';
     color: red;
 }
+
+.custom-username-symbol::before{
+    content: "@";
+}
+
+.custom-empty-box-img-size{
+    max-width: 256px;
+    max-height: 256px;
+}
+
+.custom-textarea-resize-none-hidden-overflow{
+    resize: none;
+    overflow-y: hidden;
+}

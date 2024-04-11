@@ -1,4 +1,4 @@
-from flask import session, redirect, request, render_template
+from flask import session, redirect, request, render_template, jsonify
 from flask.templating import TemplateNotFound
 from functools import wraps
 from marshmallow.schema import SchemaMeta
@@ -8,7 +8,7 @@ from hashlib import pbkdf2_hmac
 from random import randint
 
 from models import db, User
-from schemas import RegisterUserRequest, LoginUserRequest
+from schemas import *
 from config import DEFAULT_SESSION_TIME, LONG_SESSION_TIME
 
 
@@ -55,7 +55,7 @@ def validate_request_data(schema: SchemaMeta):
                             errors['email'] = []
                         errors['email'].append('Пользователь с такой почтой уже существует.')
 
-            if schema == LoginUserRequest:
+            elif schema == LoginUserRequest:
                 if data.get('username_or_email', None) is not None:
                     username_or_email = data['username_or_email']
                     if "@" in username_or_email:
@@ -78,6 +78,21 @@ def validate_request_data(schema: SchemaMeta):
                         if errors.get('username_or_email', None) is None:
                             errors['username_or_email'] = []
                         errors['username_or_email'].append('Пользователь с такими данными не существует.')
+
+            elif schema == EditProfileUserRequest:
+                if len(errors) > 0:
+                    errors = translate_errors(errors)
+                    user = User.query.filter_by(id=session['user_id']).first()
+                    return jsonify({'status': 'error', 'errors': errors,
+                                    'current_values': user.json_editable_except_password()}), 404
+            elif schema == ChangePasswordUserRequest:
+                user = User.query.filter_by(id=session['user_id']).first()
+                if errors.get('oldPassword', None) is None and errors.get('newPassword', None) is None:
+                    if hash_password(data['oldPassword'], salt=user.salt, iterations=user.iterations)[0] != user.password:
+                        errors['oldPassword'] = ['Неверный пароль.']
+
+                if len(errors) > 0:
+                    return jsonify({'status': 'error', 'errors': errors}), 404
 
             if len(errors) == 0:
                 return f(*args, **kwargs)

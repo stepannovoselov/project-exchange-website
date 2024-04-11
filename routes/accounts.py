@@ -18,11 +18,29 @@ def get_account(current_user, username):
 
 @accounts_bp.route('/@<username>', methods=['POST'])
 @login_required
+@validate_request_data(schema=EditProfileUserRequest)
+@transaction
 def edit_account(current_user, username):
-    print(username, current_user)
-    print(request.form)
+    if current_user.username == username:
+        for key, value in request.form.items():
+            if key in ['name', 'surname']:
+                value = value.capitalize()
+            setattr(current_user, key, value.strip())
+        return jsonify({'status': 'ok', 'current_values': current_user.json_editable_except_password()}), 200
 
-    return {}
+    return jsonify({'status': 'error', 'errors': {''}}), 404
+
+
+@accounts_bp.route('/@<username>/password', methods=['POST'])
+@login_required
+@validate_request_data(schema=ChangePasswordUserRequest)
+@transaction
+def change_password(current_user, username):
+    if current_user.username == username:
+        current_user.password, current_user.salt, current_user.iterations = hash_password(request.form['newPassword'])
+        return jsonify({'status': 'ok'}), 200
+
+    return jsonify({'status': 'error'}), 403
 
 
 @accounts_bp.route('/@<username>/projects', methods=['GET'])
@@ -36,5 +54,4 @@ def get_account_projects(current_user, username):
         user=user,
         projects=user.projects
     )
-
 

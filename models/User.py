@@ -19,3 +19,15 @@ class User(db.Model):
     about = db.Column(db.String)
 
     projects = db.relationship('Project', back_populates='author')
+
+    editable_values_by_user_except_password = ['surname', 'name', 'email', 'username', 'status', 'about']
+
+    def json_editable_except_password(self):
+        return {
+            'surname': self.surname,
+            'name': self.name,
+            'email': self.email,
+            'username': self.username,
+            'status': self.status,
+            'about': self.about
+        }

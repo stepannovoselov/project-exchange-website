@@ -1,3 +1,5 @@
 from .RegisterUserRequest import RegisterUserRequest
 from .LoginUserRequest import LoginUserRequest
 from .CreateProjectUserRequest import CreateProjectUserRequest
+from .EditProfileUserRequest import EditProfileUserRequest
+from .ChangePasswordUserRequest import ChangePasswordUserRequest

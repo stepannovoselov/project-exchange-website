@@ -15,7 +15,7 @@
                         <div class="row">
                             <label for="name" class="col-sm-2 col-form-label custom-required-mark">Название</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="name" name="name" required>
+                                <textarea type="text" class="form-control custom-textarea-resize-none-hidden-overflow" id="name" name="name" required></textarea>
                                 <div class="form-text">Как вы назвали ваш проект?</div>
                                 <div class="form-text custom-error-block">
                                     {% if errors is defined %}
@@ -45,7 +45,7 @@
                         <div class="row">
                             <label for="theme" class="col-sm-2 col-form-label">Тема</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="theme" name="theme">
+                                <textarea type="text" class="form-control custom-textarea-resize-none-hidden-overflow" id="theme" name="theme"></textarea>
                                 <div class="form-text">Что из себя представляет ваш проект?</div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                         <div class="row">
                             <label for="goal" class="col-sm-2 col-form-label">Цель</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="goal" name="goal">
+                                <textarea type="text" class="form-control custom-textarea-resize-none-hidden-overflow" id="goal" name="goal"></textarea>
                                 <div class="form-text">Напишите, какую цель вы перед собой поставили в рамках этого проекта. Какую проблему вы решите или какое новое знание получите? Цель должна отражать тему проекта.</div>
                             </div>
                         </div>
@@ -63,8 +63,8 @@
                         <div class="row">
                             <label for="description" class="col-sm-2 col-form-label">Описание</label>
                             <div class="col-sm-10">
-                                <textarea type="text" class="form-control" id="description" name="description"></textarea>
-                                <div class="form-text">Опишите свой проект максимально подробно. Это поможет пользователям сайта узнать ваш проект лучше и предложить лучшее решение сразу.</div>
+                                <textarea type="text" class="form-control custom-textarea-resize-none-hidden-overflow" id="description" name="description" oninput="textarea_auto_resize()"></textarea>
+                                <div class="form-text">Опишите свой проект максимально подробно. Это поможет пользователям сайта узнать ваш проект лучше.</div>
                             </div>
                         </div>
                     </div>
