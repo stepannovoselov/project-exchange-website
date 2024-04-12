@@ -5,8 +5,8 @@
 {% block content %}
 <div class="container mt-2">
     <div class="row justify-content-center">
-        <div class="h2">
-            Форма создания проекта
+        <div class="h2 mt-2">
+            Создание проекта
         </div>
         <div class="card mt-4">
             <div class="card-body">
@@ -32,7 +32,9 @@
                                 <select class="form-select" id="type" name="type">
                                     <option value="Проект" id="opt1" selected>Проект</option>
                                     <option value="Исследование" id="opt2">Исследование</option>
+                                    <option value="Идея" id="opt3">Идея</option>
                                 </select>
+                                <div class="form-text">Тип определяет направление работы.<br>Тип «Идея» позволяет использовать вашу идею любому пользователю и создавать на её основе свой проект.</div>
                                 <div class="form-text custom-error-block">
                                     {% if errors is defined %}
                                     {{ errors.get('type', '')[0] }}
@@ -68,7 +70,14 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-4">Сохранить и опубликовать</button>
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary mt-4">Сохранить и опубликовать</button>
+                        </div>
+                        <div class="col-sm-auto">
+                            <button type="button" class="btn btn-dark mt-4">Открыть ИИ функции</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

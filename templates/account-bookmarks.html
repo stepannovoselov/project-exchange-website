@@ -1,41 +1,34 @@
 {% extends 'base_template.html' %}
 
-{% block title %}Проекты @{{ user.username }}{% endblock %}
+{% block title %}Избранное @{{ current_user.username }}{% endblock %}
 
 {% block content %}
 <div class="container mt-2">
     <div class="row justify-content-center">
         <div class="h2">
-            {{ user.surname }} {{ user.name }}
+            {{ current_user.surname }} {{ current_user.name }}
         </div>
         <ul class="col nav nav-tabs mt-4">
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/account/@{{ user.username }}">Профиль</a>
+                <a class="nav-link" aria-current="page" href="/account/@{{ current_user.username }}">Профиль</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="#">Деятельность</a>
+                <a class="nav-link" href="/account/@{{ current_user.username }}/projects">Деятельность</a>
             </li>
-            {% if current_user.username == user.username %}
             <li class="nav-item">
-                <a class="nav-link" href="/account/@{{ user.username }}/bookmarks">Избранное</a>
+                <a class="nav-link active" href="#">Избранное</a>
             </li>
-            {% endif %}
         </ul>
         <div class="card rounded-0 py-2" style="border-top: none;">
             {% if projects|length == 0 %}
                 <div class="row">
-                    <svg class="mt-4" fill="#565656" width="150px" height="150px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m15.66 7-.91-2.68L8.62.85a1.28 1.28 0 0 0-1.24 0L1.25 4.32.34 7a1.24 1.24 0 0 0 .58 1.5l.33.18V11a1.25 1.25 0 0 0 .63 1l5.5 3.11a1.28 1.28 0 0 0 1.24 0l5.5-3.11a1.25 1.25 0 0 0 .63-1V8.68l.33-.18a1.24 1.24 0 0 0 .58-1.5zM10 9.87l-.48-1.28L14 6.13l.44 1.28zM8 1.94 13.46 5 8 8 2.54 5zM1.52 7.41 2 6.13l4.48 2.46L6 9.87zm1 1.95 4.25 2.32.62-1.84v3.87L2.5 11zM13.5 11l-4.88 2.71V9.84l.63 1.84 4.25-2.32z"/></svg>
-                    <p class="text-center text-muted mt-2">{{ user.surname }} {{ user.name }} ещё не создал ни один проект.</p>
+                    <svg viewBox="0 0 24 24" width="150px" height="150px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5 6.2C5 5.07989 5 4.51984 5.21799 4.09202C5.40973 3.71569 5.71569 3.40973 6.09202 3.21799C6.51984 3 7.07989 3 8.2 3H15.8C16.9201 3 17.4802 3 17.908 3.21799C18.2843 3.40973 18.5903 3.71569 18.782 4.09202C19 4.51984 19 5.07989 19 6.2V21L12 16L5 21V6.2Z" stroke="#565656" stroke-width="2" stroke-linejoin="round"></path> </g></svg>
+                    <p class="text-center text-muted mt-2">У вас ещё ничего нет в избранных.</p>
                 </div>
-                {% if current_user.id == user.id %}
-                    <a href="/project/create" class="btn btn-sm btn-primary mt-4">
-                        Создать проект
-                    </a>
-                {% endif %}
             {% else %}
             <div class="row">
                 <div class="container">
-                {% for project in projects %}
+                {% for project in bookmarks %}
                     <div class="card">
                         <div class="card-header fs-6">
                             <div class="row">
@@ -65,11 +58,6 @@
                                     <a class="btn btn-sm btn-primary col-2" href="/projects/{{ project.id }}">
                                         Открыть
                                     </a>
-                                    {% if current_user.username == user.username %}
-                                        <a class="btn btn-sm btn-outline-danger col-2 mx-3" onclick="if(confirm('Подтвердите удаление проекта {{ project.name }}')){delelte_project_request({{ project.id }})}">
-                                            Удалить
-                                        </a>
-                                    {% endif %}
                                 </div>
                             </div>
                         </div>

@@ -14,7 +14,7 @@ class Project(db.Model):
     status = db.Column(db.String)
     rank = db.Column(db.FLOAT, default=0)
     vacancies = db.Column(db.JSON)
-    public_date = db.Column(db.DateTime, default=datetime.now)
+    public_date = db.Column(db.DateTime, default=datetime.utcnow)
     todo_list = db.Column(db.JSON)
     tags_json = db.Column(db.String)
 

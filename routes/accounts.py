@@ -55,3 +55,11 @@ def get_account_projects(current_user, username):
         projects=user.projects
     )
 
+
+@accounts_bp.route('/@<username>/bookmarks', methods=['GET'])
+@login_required
+def get_account_bookmarks(current_user, username):
+    if current_user.username == username:
+        return render_template('account-bookmarks.html', current_user=current_user, bookmarks=[])
+
+    return redirect(f'/account/@{username}')

@@ -20,9 +20,7 @@
             <a href="/account/@{{ current_user.username }}" class="navbar-brand text-white custom-underline-hover" title="Перейти в профиль">{{ current_user.surname }} {{ current_user.name }}</a>
             <a class="btn btn-outline-light btn-sm ms-auto" type="button" href="/search/projects">Поиск проектов</a>
             <a class="btn btn-outline-light btn-sm" type="button" href="/search/users">Поиск пользователей</a>
-            <a class="btn btn-outline-light btn-sm" type="button" href="/ideas-generator">Генератор идей <sup><span
-                    class="badge bg-danger">NEW</span></sup></a>
-            <a class="btn btn-outline-warning btn-sm" type="button" href="/bookmarks">Избранное</a>
+            <a href="/project/create" class="btn btn-warning btn-sm">Создать проект</a>
             |
             <a type="button" class="btn btn-danger btn-sm" title="Выйти из аккаунта" href="/logout">Выйти</a>
             {% else %}

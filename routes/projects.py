@@ -23,11 +23,17 @@ def create_project(current_user):
         author=current_user
     )
     db.session.add(project)
-    return redirect(f'/account/@{current_user.username}')
+    return redirect(f'/account/@{current_user.username}/projects')
 
 
-@project_bp.route('/<int:project_id>')
-def show_project(project_id):
-    projectdata = cursor.execute('''SELECT * FROM projects WHERE id = ?''', (project_id,)).fetchone()
-    print(projectdata)
-    return render_template('project.html', projectdata=projectdata)
+@project_bp.route('/<int:project_id>/delete', methods=['POST'])
+@login_required
+@transaction
+def delete_project(current_user, project_id):
+    if project_id in [p.id for p in current_user.projects]:
+        project = Project.query.filter_by(id=project_id).first_or_404()
+        db.session.delete(project)
+
+        return jsonify({'status': 'ok'}), 200
+    else:
+        return jsonify({'status': 'error'}), 403

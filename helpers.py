@@ -158,7 +158,7 @@ def hash_password(password, salt=None, iterations=None):
     return hashed_password, salt, iterations
 
 
-def login_user(user_id: int, long_session: bool =True) -> None:
+def login_user(user_id: int, long_session: bool = False) -> None:
     session['user_id'] = user_id
 
     if long_session:

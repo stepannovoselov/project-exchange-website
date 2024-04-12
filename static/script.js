@@ -126,3 +126,43 @@ function textarea_auto_resize(){  // for create-project-form.html
     textarea.style.height = 'auto';
     textarea.style.height = textarea.scrollHeight + 'px';
 }
+
+
+
+function change_description_vision(n){  // for account-projects.html
+    var selection = window.getSelection().toString();
+
+    if (!selection) {
+        let short_description = document.getElementById('short_description ' + n)
+        let all_description = document.getElementById('all_description ' + n)
+
+        if (short_description.hidden){
+            short_description.hidden = false
+            all_description.hidden = true
+        }
+        else{
+            short_description.hidden = true
+            all_description.hidden = false
+        }
+    }
+}
+
+
+function delelte_project_request(project_id){  // for account-projects.html
+    let form = new FormData();
+    form.append('project_id', project_id)
+
+    fetch('/project/' + project_id + '/delete', {
+        method: 'POST',
+        body: form
+    })
+    .then(respone => {
+        return respone.json()
+    })
+    .then(data => {
+        if (data.status == 'ok'){
+            window.location.reload()
+        }
+    })
+
+}
