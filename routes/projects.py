@@ -37,3 +37,53 @@ def delete_project(current_user, project_id):
         return jsonify({'status': 'ok'}), 200
     else:
         return jsonify({'status': 'error'}), 403
+
+
+@project_bp.route('/<int:project_id>', methods=['GET'])
+@login_required
+def get_project(current_user, project_id):
+    project = Project.query.filter_by(id=project_id).first_or_404()
+
+    actions = UserAction.query.filter_by(user=current_user, project=project).all()
+    if actions:
+        actions = [act.action for act in actions]
+
+    return render_template('project.html', current_user=current_user, project=project, actions=actions)
+
+
+@project_bp.route('/<int:project_id>/<action>', methods=['POST'])
+@login_required
+@transaction
+def make_project_action(current_user, project_id, action):
+    if action in ['mark', 'like', 'dislike']:
+        project = Project.query.filter_by(id=project_id).first_or_404()
+
+        action_ = UserAction.query.filter_by(user=current_user, project=project, action=action).first()
+
+        opposite_action = UserAction.query.filter_by(user=current_user, project=project, action='like' if action == 'dislike' else 'dislike').first()
+        if opposite_action:
+            db.session.delete(opposite_action)
+
+        if not action_:
+            if action == 'like' or action == 'dislike':
+                action_ = UserAction(user=current_user, project=project, action=action)
+                db.session.add(action_)
+
+            elif action == 'mark':
+                if not UserAction.query.filter_by(user=current_user, project=project, action='mark').first():
+                    action_ = UserAction(
+                        user=current_user,
+                        project=project,
+                        action=action
+                    )
+                    db.session.add(action_)
+                else:
+                    db.session.delete(action_)
+            else:
+                return jsonify({'status': 'error'}), 403
+        else:
+            db.session.delete(action_)
+
+        return jsonify({'status': 'ok'}), 200
+
+    return jsonify({'status': 'error'}), 404

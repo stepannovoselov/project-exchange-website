@@ -12,11 +12,11 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <form method="get" action="" class="input-group-lg">
-                        <div class="row g-3">
+                        <div class="row g-2">
                             <div class="col-11">
-                                <input class="form-control me-2" type="search" name="query" placeholder="Введите запрос..." aria-label="Search">
+                                <input class="form-control me-2" type="search" name="query" placeholder="Введите запрос..." aria-label="Search" value="{% if values is defined and values.get('query') %}{{ values.get('query') }}{% endif %}">
                             </div>
-                            <div class="col">
+                            <div class="col-1">
                                 <button class="btn btn-outline-primary" type="submit">Искать</button>
                             </div>
                         </div>
@@ -25,7 +25,7 @@
                                 Фильтры поиска
                             </a>
                         </div>
-                        <div class="collapse" id="filters">
+                        <div class="collapse show" id="filters">
                             <div class="card">
                                 <div class="card-body">
                                     <div>
@@ -33,21 +33,21 @@
                                             Тип
                                         </a>
                                     </div>
-                                    <div class="collapse mt-2" id="choose_project_type">
+                                    <div class="collapse mt-2 show" id="choose_project_type">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="project_type_project" name="project_type_project" checked>
+                                            <input class="form-check-input" type="checkbox" id="project_type_project" name="project_type_project" {% if (values is defined and values.get('project_type_project') in ['on']) or not values %}checked{% endif %}>
                                             <label class="form-check-label" for="project_type_project">
                                               Проект
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="project_type_science" name="project_type_science" checked>
+                                            <input class="form-check-input" type="checkbox" id="project_type_science" name="project_type_science" {% if (values is defined and values.get('project_type_science') in ['on']) or not values %}checked{% endif %}>
                                             <label class="form-check-label" for="project_type_science">
                                               Исследование
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="project_type_idea" name="project_type_idea" checked>
+                                            <input class="form-check-input" type="checkbox" id="project_type_idea" name="project_type_idea" {% if (values is defined and values.get('project_type_idea') in ['on']) or not values %}checked{% endif %}>
                                             <label class="form-check-label" for="project_type_idea">
                                               Идея
                                             </label>
@@ -62,9 +62,9 @@
                                             Поиск по ...
                                         </a>
                                     </div>
-                                    <div class="collapse mt-2" id="choose_project_search_by">
+                                    <div class="collapse mt-2 show" id="choose_project_search_by">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="search_name" name="search_name" checked>
+                                            <input class="form-check-input" type="checkbox" id="search_name" name="search_name" {% if (values is defined and values.get('search_name') in ['on']) or not values %}checked{% endif %}>
                                             <label class="form-check-label" for="search_name">
                                               Названию
                                             </label>
@@ -76,19 +76,19 @@
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="search_theme" name="search_theme" checked>
+                                            <input class="form-check-input" type="checkbox" id="search_theme" name="search_theme" {% if (values is defined and values.get('search_theme') in ['on']) or not values %}checked{% endif %}>
                                             <label class="form-check-label" for="search_theme">
                                               Теме
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="search_goal" name="search_goal" checked>
+                                            <input class="form-check-input" type="checkbox" id="search_goal" name="search_goal" {% if (values is defined and values.get('search_goal') in ['on']) or not values %}checked{% endif %}>
                                             <label class="form-check-label" for="search_goal">
                                               Цели
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="search_description" name="search_description" checked>
+                                            <input class="form-check-input" type="checkbox" id="search_description" name="search_description" {% if (values is defined and values.get('search_description') in ['on']) or not values %}checked{% endif %}>
                                             <label class="form-check-label" for="search_description">
                                               Описанию
                                             </label>
@@ -112,7 +112,7 @@
                 </div>
                 <div class="card-body pt-2  ">
                     <div class="text-muted fs-6 mb-2">
-                        Автор: <a href="/account/{{ project.author.username }}">{{ project.author.surname }} {{ project.author.name }} <sup><i>(@{{ project.author.username }})</i></sup></a>
+                        Автор: <a href="/account/@{{ project.author.username }}">{{ project.author.surname }} {{ project.author.name }} <sup><i>(@{{ project.author.username }})</i></sup></a>
                     </div>
                     <div class="card-title h3 m-0">
                         {{ project.name }}
@@ -129,10 +129,20 @@
                             <span id="short_description {{ loop.index }}">{{ project.description | truncate(300, false, ' ...') }}</span>
                             <span id="all_description {{ loop.index }}" hidden>{{ project.description }}</span>
                         </p>
+                        <p>
+                            <small>
+                                {% if actions[project.id]['likes'] > 0 %}
+                                    <strong>Положительных оценок:</strong> <span class="badge bg-success">{{ actions[project.id]['likes'] }}</span><br>
+                                {% endif %}
+                                {% if actions[project.id]['mark'] > 0 %}
+                                    <strong>Добавили в избранное:</strong> <span class="badge bg-warning">{{ actions[project.id]['mark'] }}</span>
+                                {% endif %}
+                            </small>
+                        </p>
                     </div>
                     <div class="mt-5 mx-2">
                         <div class="row">
-                            <a class="btn btn-sm btn-primary col-2" href="/projects/{{ project.id }}">
+                            <a class="btn btn-sm btn-primary col-2" href="/project/{{ project.id }}">
                                 Открыть
                             </a>
                         </div>

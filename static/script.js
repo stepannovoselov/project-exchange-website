@@ -5,12 +5,25 @@ function change_values(){  // for account-profile.html
     let name = document.getElementById('name').innerHTML
     let username = document.getElementById('username').innerHTML
     let email = document.getElementById('email').innerHTML
+    let vk_link = document.getElementById('vk_link').innerHTML
+    let telegram_link = document.getElementById('telegram_link').innerHTML
+    let github_link = document.getElementById('github_link').innerHTML
+    let email_link = document.getElementById('email_link').innerHTML
+    let education = document.getElementById('education').innerHTML
+    let skills = document.getElementById('skills').innerHTML
+    let hobbies = document.getElementById('hobbies').innerHTML
 
     form.append('surname', surname)
     form.append('name', name)
     form.append('username', username)
     form.append('email', email)
-
+    form.append('vk_link', vk_link)
+    form.append('telegram_link', telegram_link)
+    form.append('github_link', github_link)
+    form.append('email_link', email_link)
+    form.append('education', education)
+    form.append('skills', skills)
+    form.append('hobbies', hobbies)
 
 
     fetch(window.location.href, {
@@ -165,4 +178,17 @@ function delelte_project_request(project_id){  // for account-projects.html
         }
     })
 
+}
+
+
+function make_project_action(project_id, action){  // for project.html
+    fetch('/project/' + project_id + '/' + action, {
+        method: 'POST',
+    })
+    .then(respone => {
+        return respone.json()
+    })
+    .then(data => {
+        window.location.reload()
+    })
 }

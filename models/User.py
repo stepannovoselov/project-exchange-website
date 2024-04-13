@@ -16,9 +16,11 @@ class User(db.Model):
 
     auth_type = db.Column(db.String, default='1561PROJECTS')
     status = db.Column(db.String)
-    about = db.Column(db.String)
+    about = db.Column(db.JSON)
 
     projects = db.relationship('Project', back_populates='author')
+
+    actions = db.relationship('UserAction', back_populates='user')
 
     editable_values_by_user_except_password = ['surname', 'name', 'email', 'username', 'status', 'about']
 

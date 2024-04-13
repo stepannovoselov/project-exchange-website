@@ -105,6 +105,70 @@
                         </div>
                     </div>
                     {% endif %}
+                    <hr class="my-2">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Ссылки</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="mx-2">
+                                <div class="row">
+                                    <div class="col-2">
+                                        VK:
+                                    </div>
+                                    <{% if user.about.vk_link %}a target='_blank' class='col mb-0 p-2' href='https://{{ user.about.vk_link }}'{% else %}p class="col text-muted mb-0 p-2"{% endif %} {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="vk_link" onblur="change_values()"{% endif %}>{% if user.about.vk_link %}{{ user.about.vk_link }}{% else %}Не указано{% endif %}</{% if user.about.vk_link %}a{% else %}p{% endif %}>
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                        Telegram:
+                                    </div>
+                                    <{% if user.about.telegram_link %}a target='_blank' class='col mb-0 p-2' href='https://{{ user.about.telegram_link }}'{% else %}p class="col text-muted mb-0 p-2"{% endif %} {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="telegram_link" onblur="change_values()"{% endif %}>{% if user.about.telegram_link %}{{ user.about.telegram_link }}{% else %}Не указано{% endif %}</{% if user.about.telegram_link %}a{% else %}p{% endif %}>
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                        GitHub:
+                                    </div>
+                                    <{% if user.about.github_link %}a target='_blank' class='col mb-0 p-2' href='https://{{ user.about.github_link }}'{% else %}p class="col text-muted mb-0 p-2"{% endif %} {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="github_link" onblur="change_values()"{% endif %}>{% if user.about.github_link %}{{ user.about.github_link }}{% else %}Не указано{% endif %}</{% if user.about.github_link %}a{% else %}p{% endif %}>
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                        Email:
+                                    </div>
+                                    <p class="col text-muted mb-0 p-2" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="email_link" onblur="change_values()"{% endif %}>{% if user.about.email_link %}{{ user.about.email_link }}{% else %}Не указано{% endif %}</p>
+                                </div>
+                                {% if current_user.uername == user.username %}
+                                    <p class="form-text mt-2">Указывайте полную ссылку без `http://` и `https://`, чтобы она отображалась корректно.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-2">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Образование</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0 p-2" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="education" onblur="change_values()"{% endif %}>{% if user.about.education %}{{ user.about.education }}{% else %}Не указано{% endif %}</p>
+                        </div>
+                    </div>
+                    <hr class="my-2">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Технологические интересы, навыки</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0 p-2" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="skills" onblur="change_values()"{% endif %}>{% if user.about.skills %}{{ user.about.skills }}{% else %}Не указано{% endif %}</p>
+                        </div>
+                    </div>
+                    <hr class="my-2">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Увлечения</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0 p-2" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="hobbies" onblur="change_values()"{% endif %}>{% if user.about.hobbies %}{{ user.about.hobbies }}{% else %}Не указано{% endif %}</p>
+                        </div>
+                    </div>
                 {% if current_user.id == user.id %}
                 </form>
                 {% endif %}

@@ -1,5 +1,5 @@
 from .User import *
 from .Project import *
-from .UserActions import *
+from .UserAction import *
 from .alchemy import *
 

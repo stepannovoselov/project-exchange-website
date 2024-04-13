@@ -12,9 +12,9 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <form method="get" action="" class="input-group-lg">
-                        <div class="row g-3">
+                        <div class="row g-2">
                             <div class="col-11">
-                                <input class="form-control me-2" type="search" name="query" placeholder="Введите запрос..." aria-label="Search">
+                                <input class="form-control me-2" type="search" name="query" placeholder="Введите запрос..." aria-label="Search" value="{% if values is defined and values.get('query') %}{{ values.get('query') }}{% endif %}">
                             </div>
                             <div class="col">
                                 <button class="btn btn-outline-primary" type="submit">Искать</button>
@@ -25,8 +25,48 @@
                                 Фильтры поиска
                             </a>
                         </div>
-                        <div class="collapse" id="filters">
-
+                        <div class="collapse show" id="filters">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div>
+                                        <a class="link-dark h5" data-bs-toggle="collapse" href="#choose_search_by" role="button" aria-expanded="false" aria-controls="choose_search_by">
+                                            Поиск по ...
+                                        </a>
+                                    </div>
+                                    <div class="collapse mt-2 show" id="choose_search_by">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="users_search_by_name_and_surname" name="users_search_by_name_and_surname" {% if (values is defined and values.get('users_search_by_name_and_surname') in ['on']) or not values %}checked{% endif %}>
+                                            <label class="form-check-label" for="users_search_by_name_and_surname">
+                                              Имени и фамилии
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="users_search_by_username" name="users_search_by_username" {% if (values is defined and values.get('users_search_by_username') in ['on']) or not values %}checked{% endif %}>
+                                            <label class="form-check-label" for="users_search_by_username">
+                                              Имени пользователя
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="users_search_by_education" name="users_search_by_education" {% if (values is defined and values.get('users_search_by_education') in ['on']) or not values %}checked{% endif %}>
+                                            <label class="form-check-label" for="users_search_by_education">
+                                              Образованию
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="users_search_by_skills" name="users_search_by_skills" {% if (values is defined and values.get('users_search_by_skills') in ['on']) or not values %}checked{% endif %}>
+                                            <label class="form-check-label" for="users_search_by_skills">
+                                              Технологическим интересам и навыкам
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="users_search_by_hobbies" name="users_search_by_hobbies" {% if (values is defined and values.get('users_search_by_hobbies') in ['on']) or not values %}checked{% endif %}>
+                                            <label class="form-check-label" for="users_search_by_hobbies">
+                                              Увлечениям
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -36,7 +76,33 @@
         {% for user in users %}
             <div class="card mb-3">
                 <div class="card-body">
-                    {{ user.surname }} {{ user.name }} <a href="/users/@{{ user.username }}">@{{ user.username }}</a>
+                    <div class="fs-5">
+                        <strong>{{ user.surname }} {{ user.name }}</strong> <a href="/account/@{{ user.username }}">@{{ user.username }}</a>
+                    </div>
+                    <div>
+                        {% if user.projects | length > 0 %}
+                            <a href="/account/@{{ user.username }}/projects" class="link-danger">Проектов: {{ user.projects | length }}</a>
+                        {% endif %}
+                    </div>
+                    {% if user.about.get('education') or user.about.get('skills') or user.about.get('hobbies') %}
+                        <div class="mt-4"></div>
+                    {% endif %}
+                    
+                    {% if user.about.get('education') %}
+                    <div>
+                        <strong>Образование:</strong> {{ user.about.education }}
+                    </div>
+                    {% endif %}
+                    {% if user.about.get('skills') %}
+                    <div>
+                        <strong>Технологические интересы, навыки:</strong> {{ user.about.skills }}
+                    </div>
+                    {% endif %}
+                    {% if user.about.get('hobbies') %}
+                    <div>
+                        <strong>Увлечения:</strong> {{ user.about.hobbies }}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

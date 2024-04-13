@@ -25,7 +25,22 @@ def edit_account(current_user, username):
         for key, value in request.form.items():
             if key in ['name', 'surname']:
                 value = value.capitalize()
-            setattr(current_user, key, value.strip())
+
+            if key in ["vk_link", "telegram_link", "github_link", "email_link", "education", "skills", "hobbies"]:
+                if not current_user.about:
+                    current_user.about = {}
+
+                if value.strip() != '' and value.strip() != 'Не указано':
+                    current_user.about[key] = value.strip()
+                else:
+                    current_user.about[key] = ''
+
+                flag_modified(current_user, "about")
+                set_attribute(current_user, "about", current_user.about)
+
+            else:
+                setattr(current_user, key, value.strip())
+
         return jsonify({'status': 'ok', 'current_values': current_user.json_editable_except_password()}), 200
 
     return jsonify({'status': 'error', 'errors': {''}}), 404
@@ -60,6 +75,12 @@ def get_account_projects(current_user, username):
 @login_required
 def get_account_bookmarks(current_user, username):
     if current_user.username == username:
-        return render_template('account-bookmarks.html', current_user=current_user, bookmarks=[])
+        mark_actions = UserAction.query.filter_by(user=current_user, action='mark').all()
+        bookmarks = []
+        for action in mark_actions:
+            bookmarks.append(
+                Project.query.filter_by(id=action.project.id).first()
+            )
+        return render_template('account-bookmarks.html', current_user=current_user, bookmarks=bookmarks)
 
     return redirect(f'/account/@{username}')

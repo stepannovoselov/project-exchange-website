@@ -18,7 +18,7 @@ class Project(db.Model):
     todo_list = db.Column(db.JSON)
     tags_json = db.Column(db.String)
 
-    user_actions = db.relationship('UserAction')
+    actions = db.relationship('UserAction', back_populates='project')
 
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     author = db.relationship('User', back_populates='projects')

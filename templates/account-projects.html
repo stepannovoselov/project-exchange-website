@@ -62,11 +62,11 @@
                             </div>
                             <div class="mt-5 mx-2">
                                 <div class="row">
-                                    <a class="btn btn-sm btn-primary col-2" href="/projects/{{ project.id }}">
+                                    <a class="btn btn-sm btn-primary col-2" href="/project/{{ project.id }}">
                                         Открыть
                                     </a>
                                     {% if current_user.username == user.username %}
-                                        <a class="btn btn-sm btn-outline-danger col-2 mx-3" onclick="if(confirm('Подтвердите удаление проекта {{ project.name }}')){delelte_project_request({{ project.id }})}">
+                                        <a class="btn btn-sm btn-outline-danger col-2 mx-3" onclick="if(confirm('Подтвердите удаление проекта «{{ project.name }}»')){delelte_project_request({{ project.id }})}">
                                             Удалить
                                         </a>
                                     {% endif %}
