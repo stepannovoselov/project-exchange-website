@@ -28,7 +28,7 @@ def edit_account(current_user, username):
         for key, value in request.form.items():
             if key in ['name', 'surname']:
                 value = value.capitalize()
-            print(key)
+                
             if key in ["vk_link", "telegram_link", "github_link", "email_link", "education", "skills", "hobbies", 'tags']:
                 if not current_user.about:
                     current_user.about = {}

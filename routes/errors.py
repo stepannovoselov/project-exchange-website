@@ -1,4 +1,4 @@
-from route_imports import *
+from .route_imports import *
 
 error_bp = Blueprint('error', __name__)
 

@@ -1,5 +1,8 @@
 Flask==3.0.1
 marshmallow==3.21.1
 python-dotenv==1.0.0
+flask_sqlalchemy==3.1.1
+Flask-Migrate==4.0.7
+psycopg2-binary==2.9.9
 regex==2023.12.25
 g4f==0.2.9.8

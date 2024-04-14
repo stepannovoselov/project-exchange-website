@@ -2,6 +2,7 @@ import hashlib
 from datetime import datetime
 
 from .alchemy import db
+from config import SALT_FOR_PROJECTS_COLOR_GENERATOR
 
 
 class Project(db.Model):
@@ -26,7 +27,7 @@ class Project(db.Model):
 
     @staticmethod
     def string_to_color(string):
-        salt = "pull"  # 1 m 156 rct get
+        salt = SALT_FOR_PROJECTS_COLOR_GENERATOR
 
         salted_string = salt + string
 

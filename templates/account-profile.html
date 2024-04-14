@@ -70,7 +70,7 @@
                             <p class="mb-0">Фамилия</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0 p-2" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="surname" onblur="change_values()"{% endif %}>{{ user.surname }}</p>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="surname" onblur="change_values()" oninput="textarea_auto_resize('surname')"{% else %}disabled{% endif %}>{{ user.surname }}</textarea>
                         </div>
                     </div>
                     <hr class="my-2">
@@ -79,7 +79,7 @@
                             <p class="mb-0">Имя</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0 p-2" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="name" onblur="change_values()"{% endif %}>{{ user.name }}</p>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="name" onblur="change_values()" oninput="textarea_auto_resize('name')"{% else %}disabled{% endif %}>{{ user.name }}</textarea>
                         </div>
                     </div>
                     <hr class="my-2">
@@ -89,7 +89,7 @@
                             <p class="mb-0">Имя пользователя</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0 p-2 custom-username-symbol" {% if current_user.id == user.id %} spellcheck="false" contenteditable="true" id="username" onblur="change_values()"{% endif %}>{{ user.username }}</p>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-username-symbol custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %} spellcheck="false" contenteditable="true" id="username" onblur="change_values()" oninput="textarea_auto_resize('username')"{% else %}disabled{% endif %}>{{ user.username }}</textarea>
                         </div>
                     </div>
                     {% if current_user.id == user.id %}
@@ -99,7 +99,7 @@
                             <p class="mb-0">Адрес электронной почты</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0 p-2" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="email" onblur="change_values()"{% endif %}>{{ user.email }}</p>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="email" onblur="change_values()" oninput="textarea_auto_resize('email')"{% else %}disabled{% endif %}>{{ user.email }}</textarea>
                         </div>
                     </div>
                     <hr class="my-2">
@@ -119,29 +119,85 @@
                         </div>
                         <div class="col-sm-9">
                             <div class="mx-2">
-                                <div class="row">
+                                <div class="row mb-3">
                                     <div class="col-2">
                                         VK:
                                     </div>
-                                    <{% if user.about.vk_link %}a target='_blank' class='col mb-0 p-2' href='https://{{ user.about.vk_link }}'{% else %}p class="col text-muted mb-0 p-2"{% endif %} {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="vk_link" onblur="change_values()"{% endif %}>{% if user.about.vk_link %}{{ user.about.vk_link }}{% else %}Не указано{% endif %}</{% if user.about.vk_link %}a{% else %}p{% endif %}>
+                                    {% if current_user.username != user.username %}
+                                        {% if user.about.vk_link %}
+                                            <a target='_blank' class='col mb-0 p-2' href='https://{{ user.about.vk_link }}'>
+                                        {% else %}
+                                            <a target='_blank' class='col mb-0 p-2 text-muted'>
+                                        {% endif %}
+                                            {% if user.about.vk_link %}
+                                                {{ user.about.vk_link }}
+                                            {% else %}
+                                                Не указано
+                                            {% endif %}
+                                        </a>
+                                    {% else %}
+                                        <textarea oninput="textarea_auto_resize('vk_link')" class="form-control border-0 col text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" spellcheck="false" id="vk_link" onblur="change_values()">
+{% if user.about.vk_link %}{{ user.about.vk_link }}{% else %}Не указано{% endif %}</textarea>
+                                    {% endif %}
                                 </div>
-                                <div class="row">
+                                <div class="row mb-3">
                                     <div class="col-2">
                                         Telegram:
                                     </div>
-                                    <{% if user.about.telegram_link %}a target='_blank' class='col mb-0 p-2' href='https://{{ user.about.telegram_link }}'{% else %}p class="col text-muted mb-0 p-2"{% endif %} {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="telegram_link" onblur="change_values()"{% endif %}>{% if user.about.telegram_link %}{{ user.about.telegram_link }}{% else %}Не указано{% endif %}</{% if user.about.telegram_link %}a{% else %}p{% endif %}>
+                                    {% if current_user.username != user.username %}
+                                        {% if user.about.telegram_link %}
+                                            <a target='_blank' class='col mb-0 p-2' href='https://{{ user.about.telegram_link }}'>
+                                        {% else %}
+                                            <a target='_blank' class='col mb-0 p-2 text-muted'>
+                                        {% endif %}
+                                            {% if user.about.telegram_link %}
+                                                {{ user.about.telegram_link }}
+                                            {% else %}
+                                                Не указано
+                                            {% endif %}
+                                        </a>
+                                    {% else %}
+                                        <textarea oninput="textarea_auto_resize('telegram_link')" class="form-control border-0 col text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" spellcheck="false" id="telegram_link" onblur="change_values()">
+{% if user.about.telegram_link %}{{ user.about.telegram_link }}{% else %}Не указано{% endif %}</textarea>
+                                    {% endif %}
                                 </div>
-                                <div class="row">
+                                <div class="row mb-3">
                                     <div class="col-2">
                                         GitHub:
                                     </div>
-                                    <{% if user.about.github_link %}a target='_blank' class='col mb-0 p-2' href='https://{{ user.about.github_link }}'{% else %}p class="col text-muted mb-0 p-2"{% endif %} {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="github_link" onblur="change_values()"{% endif %}>{% if user.about.github_link %}{{ user.about.github_link }}{% else %}Не указано{% endif %}</{% if user.about.github_link %}a{% else %}p{% endif %}>
+                                    {% if current_user.username != user.username %}
+                                        {% if user.about.github_link %}
+                                            <a target='_blank' class='col mb-0 p-2' href='https://{{ user.about.github_link }}'>
+                                        {% else %}
+                                            <a target='_blank' class='col mb-0 p-2 text-muted'>
+                                        {% endif %}
+                                            {% if user.about.github_link %}
+                                                {{ user.about.github_link }}
+                                            {% else %}
+                                                Не указано
+                                            {% endif %}
+                                        </a>
+                                    {% else %}
+                                        <textarea oninput="textarea_auto_resize('github_link')" class="form-control border-0 col text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" spellcheck="false" id="github_link" onblur="change_values()">
+{% if user.about.github_link %}{{ user.about.github_link }}{% else %}Не указано{% endif %}</textarea>
+                                    {% endif %}
                                 </div>
                                 <div class="row">
                                     <div class="col-2">
                                         Email:
                                     </div>
-                                    <p class="col text-muted mb-0 p-2" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="email_link" onblur="change_values()"{% endif %}>{% if user.about.email_link %}{{ user.about.email_link }}{% else %}Не указано{% endif %}</p>
+                                    {% if current_user.id == user.id %}
+                                        <textarea class="form-control border-0 col text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" spellcheck="false" id="email_link" onblur="change_values()" oninput="textarea_auto_resize('email_link')">
+{% if user.about.email_link %}{{ user.about.email_link }}{% else %}Не указано{% endif %}</textarea>
+                                    {% else %}
+                                        <p class="form-control border-0 col text-muted mb-0 p-2">
+                                            {% if user.about.email_link %}
+                                                {{ user.about.email_link }}
+                                            {% else %}
+                                                Не указано
+                                            {% endif %}
+                                        </p>
+                                    {% endif %}
                                 </div>
                                 {% if current_user.username == user.username %}
                                     <p class="form-text mt-2">Указывайте полную ссылку без `http://` и `https://`, чтобы она отображалась корректно.</p>
@@ -155,7 +211,7 @@
                             <p class="mb-0">Образование</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0 p-2" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="education" onblur="change_values()"{% endif %}>{% if user.about.education %}{{ user.about.education }}{% else %}Не указано{% endif %}</p>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="education" oninput="textarea_auto_resize('education')" onblur="change_values()"{% else %}disabled{% endif %}>{% if user.about.education %}{{ user.about.education }}{% else %}Не указано{% endif %}</textarea>
                         </div>
                     </div>
                     <hr class="my-2">
@@ -164,7 +220,7 @@
                             <p class="mb-0">Технологические интересы, навыки</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0 p-2" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="skills" onblur="change_values()"{% endif %}>{% if user.about.skills %}{{ user.about.skills }}{% else %}Не указано{% endif %}</p>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="skills" oninput="textarea_auto_resize('skills')" onblur="change_values()"{% else %}disabled{% endif %}>{% if user.about.skills %}{{ user.about.skills }}{% else %}Не указано{% endif %}</textarea>
                         </div>
                     </div>
                     <hr class="my-2">
@@ -173,7 +229,7 @@
                             <p class="mb-0">Увлечения</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0 p-2" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="hobbies" onblur="change_values()"{% endif %}>{% if user.about.hobbies %}{{ user.about.hobbies }}{% else %}Не указано{% endif %}</p>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="hobbies" oninput="textarea_auto_resize('hobbies')" onblur="change_values()"{% else %}disabled{% endif %}>{% if user.about.hobbies %}{{ user.about.hobbies }}{% else %}Не указано{% endif %}</textarea>
                         </div>
                     </div>
                     {% if current_user.username == user.username %}
@@ -181,7 +237,7 @@
                     <div class="row">
                         <div class="col-sm-3">Теги</div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0 p-2" {% if current_user.id == user.id %} spellcheck="false" contenteditable="true" id="tags" onblur="change_values()"{% endif %}>{% if user.about.tags %}{{ user.about.tags }}{% else %}Не указано{% endif %}</p>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %} spellcheck="false" contenteditable="true" id="tags" oninput="textarea_auto_resize('tags')" onblur="change_values()"{% else %}disabled{% endif %}>{% if user.about.tags %}{{ user.about.tags }}{% else %}Не указано{% endif %}</textarea>
                         </div>
                     </div>
                     {% endif %}

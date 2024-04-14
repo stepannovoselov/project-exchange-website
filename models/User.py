@@ -1,5 +1,7 @@
-from .alchemy import db
 import hashlib
+
+from .alchemy import db
+from config import SALT_FOR_USERS_COLOR_GENERATOR
 
 
 class User(db.Model):
@@ -24,7 +26,8 @@ class User(db.Model):
         "email_link": "",
         "education": "",
         "skills": "",
-        "hobbies": ""
+        "hobbies": "",
+        "tags": ""
     })
 
     projects = db.relationship('Project', back_populates='author')
@@ -45,7 +48,7 @@ class User(db.Model):
 
     @staticmethod
     def string_to_color(string):
-        salt = "get"  # 1 m 156 rct get
+        salt = SALT_FOR_USERS_COLOR_GENERATOR
 
         salted_string = salt + string
 

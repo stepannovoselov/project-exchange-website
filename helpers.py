@@ -7,13 +7,12 @@ from os import urandom
 from hashlib import pbkdf2_hmac
 from random import randint
 import json
+from g4f.Provider import *
+from g4f.client import Client
 
 from models import db, User, UserAction
 from schemas import *
 from config import DEFAULT_SESSION_TIME, LONG_SESSION_TIME
-
-from g4f.Provider import *
-from g4f.client import Client
 
 
 def login_required(f):
@@ -201,12 +200,12 @@ def ask_gpt(prompt):
             Llama2, PerplexityLabs, Pi, Vercel, You,
         ]), shuffle=True,
     )
-    print(prompt)
+
     response = client.chat.completions.create(
         model="",
         messages=[{"role": "user", "content": 'ВНИМАНИЕ, ЭТО АВТОМАТИЧЕСКОЕ СООБЩЕНИЕ КОТОРОЕ БУДЕТ ПАРСИТЬ РОБОТ, ОТВЕЧАЙ СТРОГО В ФОРМАТЕ JSON НАЧИНАЯ с { и ЗАКАНЧИВАЯ }. ПИШИ ОТВЕТ ТОЛЬКО НА РУССКОМ ЯЗЫКЕ ВКЛЮЧАЯ КЛЮЧИ В СЛОВАРЕ JSON. ЗАПРОС: ' + str(prompt)}],
     )
-    print(123)
+
     return response.choices[0].message.content
 
 

@@ -97,12 +97,12 @@ def make_project_action(current_user, project_id, action):
 def generate_project(current_user, ai_action):
     if ai_action == 'generate_project':
         return process_gpt_prompt(
-            'Придумай интересный и полезный проект и заполни о нем следующие поля: «Название», «Тема», «Цель», «Описание».'
+            'Придумай интересный и полезный проект и заполни о нем следующие поля: «Название», «Тема», «Цель», «Описание», «Теги» (теги через пробел).'
         )
 
     elif ai_action == 'generate_science':
         return process_gpt_prompt(
-            'Придумай интересное реальное исследование и заполни о нем следующие поля: «Название», «Тема», «Цель», «Описание».'
+            'Придумай интересное реальное исследование и заполни о нем следующие поля: «Название», «Тема», «Цель», «Описание», «Теги» (теги через пробел).'
         )
 
     elif ai_action == 'upgrade_text':
@@ -156,8 +156,6 @@ def edit_project(current_user, project_id):
         project.description = request.form.get('description', None)
         project.tags = request.form.get('tags', None)
         project.vacancies = [vacancy for vacancy in json.loads(request.form.get('vacancies')) if all(vacancy[key] for key in vacancy.keys() if key != 'VacancyTags')]
-
-        print(request.form)
 
         return jsonify({'status': 'ok', 'url': f'/project/{project.id}'}), 200
 

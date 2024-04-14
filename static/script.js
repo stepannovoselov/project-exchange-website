@@ -1,18 +1,42 @@
 function change_values(){  // for account-profile.html
     let form = new FormData()
 
-    let surname = document.getElementById('surname').innerHTML
-    let name = document.getElementById('name').innerHTML
-    let username = document.getElementById('username').innerHTML
-    let email = document.getElementById('email').innerHTML
-    let vk_link = document.getElementById('vk_link').innerHTML
-    let telegram_link = document.getElementById('telegram_link').innerHTML
-    let github_link = document.getElementById('github_link').innerHTML
-    let email_link = document.getElementById('email_link').innerHTML
-    let education = document.getElementById('education').innerHTML
-    let skills = document.getElementById('skills').innerHTML
-    let hobbies = document.getElementById('hobbies').innerHTML
-    let tags = document.getElementById('tags').innerHTML
+    let surname = document.getElementById('surname').value
+    surname = surname !== undefined ? surname : ""
+
+    let name = document.getElementById('name').value
+    name = name !== undefined ? name : ""
+
+    let username = document.getElementById('username').value
+    username = username !== undefined ? username : ""
+
+    let email = document.getElementById('email').value
+    email = email !== undefined ? email : ""
+
+    let vk_link = document.getElementById('vk_link').value
+    vk_link = vk_link !== undefined ? vk_link : ""
+
+    let telegram_link = document.getElementById('telegram_link').value
+    telegram_link = telegram_link !== undefined ? telegram_link : ""
+
+    let github_link = document.getElementById('github_link').value
+    github_link = github_link !== undefined ? github_link : ""
+
+    let email_link = document.getElementById('email_link').value
+    email_link = email_link !== undefined ? email_link : ""
+
+    let education = document.getElementById('education').value
+    education = education !== undefined ? education : ""
+
+    let skills = document.getElementById('skills').value
+    skills = skills !== undefined ? skills : ""
+
+    let hobbies = document.getElementById('hobbies').value
+    hobbies = hobbies !== undefined ? hobbies : ""
+
+    let tags = document.getElementById('tags').value
+    tags = tags !== undefined ? tags : ""
+
 
     form.append('surname', surname)
     form.append('name', name)
@@ -211,7 +235,7 @@ function ai_generate_project(){  // for create-project-form.html
         }
         if (data['Описание']){
             document.getElementById('description').innerHTML = data['Описание']
-            textarea_auto_resize('theme')
+            textarea_auto_resize('description')
         }
         if (data['Цель']){
             document.getElementById('goal').innerHTML = data['Цель']
@@ -219,7 +243,11 @@ function ai_generate_project(){  // for create-project-form.html
         }
         if (data['Тема']){
             document.getElementById('theme').innerHTML = data['Тема']
-            textarea_auto_resize('description')
+            textarea_auto_resize('theme')
+        }
+        if (data['Теги']){
+            document.getElementById('tags').innerHTML = data['Теги']
+            textarea_auto_resize('tags')
         }
         document.getElementById('opt1').selected = true
 
@@ -244,7 +272,7 @@ function ai_generate_science(){  // for create-project-form.html
         }
         if (data['Описание']){
             document.getElementById('description').value = data['Описание']
-            textarea_auto_resize('theme')
+            textarea_auto_resize('description')
         }
         if (data['Цель']){
             document.getElementById('goal').value = data['Цель']
@@ -252,7 +280,11 @@ function ai_generate_science(){  // for create-project-form.html
         }
         if (data['Тема']){
             document.getElementById('theme').value = data['Тема']
-            textarea_auto_resize('description')
+            textarea_auto_resize('theme')
+        }
+        if (data['Теги']){
+            document.getElementById('tags').innerHTML = data['Теги']
+            textarea_auto_resize('tags')
         }
         document.getElementById('opt2').selected = true
 
