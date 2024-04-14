@@ -1,4 +1,5 @@
 from .alchemy import db
+import hashlib
 
 
 class User(db.Model):
@@ -16,7 +17,15 @@ class User(db.Model):
 
     auth_type = db.Column(db.String, default='1561PROJECTS')
     status = db.Column(db.String)
-    about = db.Column(db.JSON)
+    about = db.Column(db.JSON, default={
+        "vk_link": "",
+        "telegram_link": "",
+        "github_link": "",
+        "email_link": "",
+        "education": "",
+        "skills": "",
+        "hobbies": ""
+    })
 
     projects = db.relationship('Project', back_populates='author')
 
@@ -33,3 +42,14 @@ class User(db.Model):
             'status': self.status,
             'about': self.about
         }
+
+    @staticmethod
+    def string_to_color(string):
+        salt = "get"  # 1 m 156 rct get
+
+        salted_string = salt + string
+
+        hash_code = hashlib.sha256(salted_string.encode()).hexdigest()
+
+        hex_color = '#' + hash_code[:6]
+        return hex_color

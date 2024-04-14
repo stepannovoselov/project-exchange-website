@@ -70,7 +70,7 @@
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="search_author" name="search_author" checked>
+                                            <input class="form-check-input" type="checkbox" id="search_author" name="search_author" {% if (values is defined and values.get('search_author') in ['on']) or not values %}checked{% endif %}>
                                             <label class="form-check-label" for="search_author">
                                               Автору
                                             </label>
@@ -93,6 +93,12 @@
                                               Описанию
                                             </label>
                                         </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="search_tags" name="search_tags" {% if (values is defined and values.get('search_tags') in ['on']) or not values %}checked{% endif %}>
+                                            <label class="form-check-label" for="search_tags">
+                                              Тегам
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -102,15 +108,21 @@
             </div>
             <hr>
         </div>
+        {% if not projects %}
+            <div class="row">
+                <svg fill="#565656" class="mt-4" width="150px" height="150px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.035,18.069a7.981,7.981,0,0,0,3.938-1.035l3.332,3.332a2.164,2.164,0,0,0,3.061-3.061l-3.332-3.332A8.032,8.032,0,0,0,4.354,4.354a8.034,8.034,0,0,0,5.681,13.715ZM5.768,5.768A6.033,6.033,0,1,1,4,10.035,5.989,5.989,0,0,1,5.768,5.768Z"/></svg>
+                <p class="text-center text-muted mt-2">По вашему запросу ничего не нашлось.</p>
+            </div>
+        {% endif %}
         {% for project in projects %}
             <div class="card mb-3">
-                <div class="card-header fs-6">
+                <div class="card-header fs-6 bg-warning bg-gradient">
                     <div class="row">
                         <strong class="col fs-5 font-monospace">{{ project.type }}</strong>
                         <span class="text-muted col col-sm-auto" title="{{ project.public_date.strftime('%d.%m.%Y %H:%M:%S') }} GMT">{{ project.public_date.strftime('%d.%m.%Y') }}</span>
                     </div>
                 </div>
-                <div class="card-body pt-2  ">
+                <div class="card-body pt-2">
                     <div class="text-muted fs-6 mb-2">
                         Автор: <a href="/account/@{{ project.author.username }}">{{ project.author.surname }} {{ project.author.name }} <sup><i>(@{{ project.author.username }})</i></sup></a>
                     </div>
@@ -121,6 +133,15 @@
                         <p class="text-muted mt-0">
                             {{ project.theme }}
                         </p>
+                        <p>
+                            {% if project.tags and project.tags.split(' ') != [''] %}
+                                {% for tag in project.tags.split(' ') %}
+                                <a href="/search/projects?query={{ tag }}&project_type_project=on&project_type_science=on&project_type_idea=on&search_tags=on">
+                                    <span class="badge rounded-pill" style="background-color: {{ project.string_to_color(tag) }};">{{ tag }}</span>
+                                </a>
+                                {% endfor %}
+                            {% endif %}
+                        </p>
                         <p class="fs-6">
                             <strong>Цель:</strong> {{ project.goal }}
                         </p>
@@ -129,22 +150,44 @@
                             <span id="short_description {{ loop.index }}">{{ project.description | truncate(300, false, ' ...') }}</span>
                             <span id="all_description {{ loop.index }}" hidden>{{ project.description }}</span>
                         </p>
-                        <p>
-                            <small>
-                                {% if actions[project.id]['likes'] > 0 %}
-                                    <strong>Положительных оценок:</strong> <span class="badge bg-success">{{ actions[project.id]['likes'] }}</span><br>
-                                {% endif %}
-                                {% if actions[project.id]['mark'] > 0 %}
-                                    <strong>Добавили в избранное:</strong> <span class="badge bg-warning">{{ actions[project.id]['mark'] }}</span>
-                                {% endif %}
-                            </small>
-                        </p>
+                        {% if project.vacancies %}
+                            <p class="fs-6">
+                                <strong>Вакансии:</strong>
+                                <div class="row">
+                                    {% for vacancy in project.vacancies %}
+                                    <div class="col-4 mb-4">
+                                        <div class="card">
+                                            <div class="card-header bg-warning bg-gradient">
+                                                <strong>{{ vacancy.vacancyName }}</strong>
+                                            </div>
+                                            <div class="card-body">
+                                                <strong>Описание:</strong> <pre style="white-space: pre-wrap; word-wrap: break-word; ">{{ vacancy.vacancyDescription }}</pre>
+                                            </div>
+                                            <div class="card-body">
+                                                <strong>Требования:</strong> <pre style="white-space: pre-wrap; word-wrap: break-word; ">{{ vacancy.vacancyNeeds }}</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </p>
+                        {% endif %}
                     </div>
                     <div class="mt-5 mx-2">
                         <div class="row">
-                            <a class="btn btn-sm btn-primary col-2" href="/project/{{ project.id }}">
-                                Открыть
-                            </a>
+                            <div class="col">
+                                <a class="btn btn-sm btn-primary px-5" href="/project/{{ project.id }}">
+                                    Открыть
+                                </a>
+                            </div>
+                            <div class="col col-sm-auto fs-5">
+                                {% if actions_count[project.id]['likes'] > 0 %}
+                                    <span title="Отметки «нравится»" class="badge bg-success" role="button">{{ actions_count[project.id]['likes'] }}</span>
+                                {% endif %}
+                                {% if actions_count[project.id]['mark'] > 0 %}
+                                    <span title="Добавили в избранное" class="badge bg-warning" role="button">{{ actions_count[project.id]['mark'] }}</span>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>

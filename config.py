@@ -10,10 +10,10 @@ FLASK_DEBUG_MODE = getenv('FLASK_DEBUG_MODE')
 FLASK_APP_SECRET_KEY = getenv('FLASK_APP_SECRET_KEY')
 
 DEFAULT_SESSION_TIME = timedelta(
-    minutes=10
+    hours=1
 )
 LONG_SESSION_TIME = timedelta(
-    minutes=20
+    hours=2
 )  # Если пользователь при входе нажал "Запомнить меня"
 
 POSTGRES_USERNAME = getenv('POSTGRES_USERNAME')

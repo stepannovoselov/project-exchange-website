@@ -1,5 +1,7 @@
-from .alchemy import db
+import hashlib
 from datetime import datetime
+
+from .alchemy import db
 
 
 class Project(db.Model):
@@ -15,10 +17,20 @@ class Project(db.Model):
     rank = db.Column(db.FLOAT, default=0)
     vacancies = db.Column(db.JSON)
     public_date = db.Column(db.DateTime, default=datetime.utcnow)
-    todo_list = db.Column(db.JSON)
-    tags_json = db.Column(db.String)
+    tags = db.Column(db.String)
 
     actions = db.relationship('UserAction', back_populates='project')
 
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     author = db.relationship('User', back_populates='projects')
+
+    @staticmethod
+    def string_to_color(string):
+        salt = "pull"  # 1 m 156 rct get
+
+        salted_string = salt + string
+
+        hash_code = hashlib.sha256(salted_string.encode()).hexdigest()
+
+        hex_color = '#' + hash_code[:6]
+        return hex_color

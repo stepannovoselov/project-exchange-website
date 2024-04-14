@@ -10,7 +10,7 @@
             Просмотр проекта
         </div>
         <div class="card mt-4 p-0">
-            <div class="card-header fs-6">
+            <div class="card-header fs-6 bg-warning bg-gradient">
                 <div class="row">
                     <strong class="col fs-5 font-monospace">{{ project.type }}</strong>
                     <span class="text-muted col col-sm-auto" title="{{ project.public_date.strftime('%d.%m.%Y %H:%M:%S') }} GMT">{{ project.public_date.strftime('%d.%m.%Y') }}</span>
@@ -24,6 +24,13 @@
                     <p class="text-muted mt-0">
                         {{ project.theme }}
                     </p>
+                    <p>
+                        {% if project.tags and project.tags.split(' ') != [''] %}
+                            {% for tag in project.tags.split(' ') %}
+                                <span class="badge rounded-pill" style="background-color: {{ project.string_to_color(tag) }};">{{ tag }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </p>
                     <p class="fs-6">
                         <strong>Цель:</strong> {{ project.goal }}
                     </p>
@@ -31,19 +38,59 @@
                         <strong>Описание:</strong>
                         <span>{{ project.description }}</span>
                     </p>
+                    {% if project.vacancies %}
+                            <p class="fs-6 mt-5">
+                                <strong>Вакансии:</strong>
+                                <div class="row">
+                                    {% for vacancy in project.vacancies %}
+                                    <div class="col-4 mb-4">
+                                        <div class="card">
+                                            <div class="card-header bg-warning bg-gradient">
+                                                <strong>{{ vacancy.vacancyName }}</strong>
+                                            </div>
+                                            <div class="card-body">
+                                                <strong>Описание:</strong> <pre style="white-space: pre-wrap; word-wrap: break-word; ">{{ vacancy.vacancyDescription }}</pre>
+                                            </div>
+                                            <div class="card-body">
+                                                <strong>Требования:</strong> <pre style="white-space: pre-wrap; word-wrap: break-word; ">{{ vacancy.vacancyNeeds }}</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </p>
+                        {% endif %}
+                    <p>
+                        <small>
+                            {% if actions_count['likes'] > 0 %}
+                                <strong>Положительных оценок:</strong> <span class="badge bg-success">{{ actions_count['likes'] }}</span><br>
+                            {% endif %}
+                            {% if actions_count['mark'] > 0 %}
+                                <strong>Добавили в избранное:</strong> <span class="badge bg-warning">{{ actions_count['mark'] }}</span>
+                            {% endif %}
+                        </small>
+                    </p>
                 </div>
                 <strong>Автор:</strong> <a href="/account/@{{ project.author.username }}">{{ project.author.surname }} {{ project.author.name }} @{{ project.author.username }}</a>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <a type="button" class="btn btn-sm {% if 'mark' in actions %}btn-warning{% else %}btn-outline-warning{% endif %}" id="mark" onclick="make_project_action({{ project.id }}, 'mark')">{% if 'mark' in actions %}В избранном{% else %}Добавить в избранное{% endif %}</a>
+                        <a type="button" class="btn btn-sm {% if 'mark' in current_user_actions %}btn-warning{% else %}btn-outline-warning{% endif %}" id="mark" onclick="make_project_action({{ project.id }}, 'mark')">{% if 'mark' in current_user_actions %}В избранном{% else %}Добавить в избранное{% endif %}</a>
                     </div>
                     <div class="col col-sm-auto">
-                        <a type="button" class="btn btn-sm {% if 'like' in actions %}btn-success{% else %}btn-outline-success{% endif %}" id="like" onclick="make_project_action({{ project.id }}, 'like')">Нравится</a>
-                        <a type="button" class="btn btn-sm {% if 'dislike' in actions %}btn-danger{% else %}btn-outline-danger{% endif %}" id="dislike" onclick="make_project_action({{ project.id }}, 'dislike')">Не нравится</a>
+                        <a type="button" class="btn btn-sm {% if 'like' in current_user_actions %}btn-success{% else %}btn-outline-success{% endif %}" id="like" onclick="make_project_action({{ project.id }}, 'like')">Нравится</a>
+                        <a type="button" class="btn btn-sm {% if 'dislike' in current_user_actions %}btn-danger{% else %}btn-outline-danger{% endif %}" id="dislike" onclick="make_project_action({{ project.id }}, 'dislike')">Не нравится</a>
                     </div>
                 </div>
+                {% if current_user.username == project.author.username %}
+                    <div class="row mt-4">
+                        <div class="col col-sm-6">
+                            <a href="/project/{{ project.id }}/edit" class="btn btn-primary btn-sm">Редактировать</a>
+                            <a type="button" class="btn btn-outline-danger btn-sm" onclick="if(confirm('Подтвердите удаление проекта «{{ project.name }}»')){delelte_project_request({{ project.id }})}">Удалить</a>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

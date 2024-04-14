@@ -3,8 +3,8 @@ from .route_imports import *
 search_bp = Blueprint('search', __name__, url_prefix='/search')
 
 
-@search_bp.route('/')
-@search_bp.route('/projects')
+@search_bp.route('/', methods=['GET'])
+@search_bp.route('/projects', methods=['GET'])
 @login_required
 def search_projects(current_user):
     params = [key for key, param in request.values.items() if param == 'on' or key != 'query']
@@ -46,16 +46,13 @@ def search_projects(current_user):
         if or_conditions:
             q = q.filter(or_(*or_conditions))
 
-    return render_template('find-projects.html', current_user=current_user, projects=q.all(), values=request.values, actions={
-        project.id: {
-            'likes': UserAction.query.filter_by(project=project, action='like').count(),
-            'dislikes': UserAction.query.filter_by(project=project, action='dislike').count(),
-            'mark': UserAction.query.filter_by(project=project, action='mark').count()
-        } for project in q.all()
-    })
+    projects = q.all()
+    projects.sort(key=lambda e: len([i for i in e.actions if i.action == 'mark' or i.action == 'like']), reverse=True)
+
+    return render_template('find-projects.html', current_user=current_user, projects=projects, values=request.values, actions_count=get_project_actions_count(q.all(), one_project=False))
 
 
-@search_bp.route('/users')
+@search_bp.route('/users', methods=['GET'])
 @login_required
 def search_users(current_user):
     params = [key for key, param in request.values.items() if param == 'on' or key != 'query']
@@ -79,7 +76,7 @@ def search_users(current_user):
             column = getattr(User, column_name, None)
             if column is not None:
                 or_conditions.append(func.lower(column).contains(f'%{query.lower()}%'))
-            elif column_name in ['education', 'skills', 'hobbies']:
+            elif column_name in ['education', 'skills', 'hobbies', 'tags']:
                 or_conditions.append(func.lower(func.json_extract_path_text(User.about, column_name)).contains(f'{query.lower()}'))
 
         if or_conditions:

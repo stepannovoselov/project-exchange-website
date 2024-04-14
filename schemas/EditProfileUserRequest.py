@@ -10,5 +10,6 @@ class EditProfileUserRequest(RegisterUserRequest):
     education = fields.Str(required=True, allow_none=True)
     skills = fields.Str(required=True, allow_none=True)
     hobbies = fields.Str(required=True, allow_none=True)
+    tags = fields.Str(required=True, allow_none=True)
 
     password = fields.Str(required=False, allow_none=True)

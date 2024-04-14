@@ -64,6 +64,12 @@
                                               Увлечениям
                                             </label>
                                         </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="users_search_by_tags" name="users_search_by_tags" {% if (values is defined and values.get('users_search_by_tags') in ['on']) or not values %}checked{% endif %}>
+                                            <label class="form-check-label" for="users_search_by_tags">
+                                              Тегам
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -73,11 +79,26 @@
             </div>
             <hr>
         </div>
+        {% if not users %}
+            <div class="row">
+                <svg fill="#565656" class="mt-4" width="150px" height="150px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.035,18.069a7.981,7.981,0,0,0,3.938-1.035l3.332,3.332a2.164,2.164,0,0,0,3.061-3.061l-3.332-3.332A8.032,8.032,0,0,0,4.354,4.354a8.034,8.034,0,0,0,5.681,13.715ZM5.768,5.768A6.033,6.033,0,1,1,4,10.035,5.989,5.989,0,0,1,5.768,5.768Z"/></svg>
+                <p class="text-center text-muted mt-2">По вашему запросу ничего не нашлось.</p>
+            </div>
+        {% endif %}
         {% for user in users %}
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="fs-5">
                         <strong>{{ user.surname }} {{ user.name }}</strong> <a href="/account/@{{ user.username }}">@{{ user.username }}</a>
+                    </div>
+                    <div class="my-2">
+                        <small class="fs-6 font-monospace">
+                            {% if user.about.tags.split(' ') != [''] %}
+                                {% for tag in user.about.tags.split(' ') %}
+                                <a href="/search/users?query={{ tag }}&users_search_by_tags=on"><span class="badge rounded-pill" style="background-color: {{ user.string_to_color(tag) }};">{{ tag }}</span></a>
+                                {% endfor %}
+                            {% endif %}
+                        </small>
                     </div>
                     <div>
                         {% if user.projects | length > 0 %}

@@ -12,6 +12,7 @@ function change_values(){  // for account-profile.html
     let education = document.getElementById('education').innerHTML
     let skills = document.getElementById('skills').innerHTML
     let hobbies = document.getElementById('hobbies').innerHTML
+    let tags = document.getElementById('tags').innerHTML
 
     form.append('surname', surname)
     form.append('name', name)
@@ -24,6 +25,7 @@ function change_values(){  // for account-profile.html
     form.append('education', education)
     form.append('skills', skills)
     form.append('hobbies', hobbies)
+    form.append('tags', tags)
 
 
     fetch(window.location.href, {
@@ -134,8 +136,8 @@ function change_password_request(){  // for account-profile.html
 
 
 
-function textarea_auto_resize(){  // for create-project-form.html
-    const textarea = document.getElementById('description');
+function textarea_auto_resize(textarea_id){  // for create-project-form.html
+    let textarea = document.getElementById(textarea_id);
     textarea.style.height = 'auto';
     textarea.style.height = textarea.scrollHeight + 'px';
 }
@@ -192,3 +194,202 @@ function make_project_action(project_id, action){  // for project.html
         window.location.reload()
     })
 }
+
+
+function ai_generate_project(){  // for create-project-form.html
+    document.getElementById('spinner').style.display = 'flex';
+    document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+    
+    fetch('/project/ai/generate_project', {
+        method: 'GET'
+    })
+    .then(respone => {return respone.json()})
+    .then(data => {
+        if (data['Название']){
+            document.getElementById('name').innerHTML = data['Название']
+            textarea_auto_resize('name')
+        }
+        if (data['Описание']){
+            document.getElementById('description').innerHTML = data['Описание']
+            textarea_auto_resize('theme')
+        }
+        if (data['Цель']){
+            document.getElementById('goal').innerHTML = data['Цель']
+            textarea_auto_resize('goal')
+        }
+        if (data['Тема']){
+            document.getElementById('theme').innerHTML = data['Тема']
+            textarea_auto_resize('description')
+        }
+        document.getElementById('opt1').selected = true
+
+        document.getElementById('spinner').style.display = 'none';
+    document.getElementsByTagName('body')[0].style.overflow = 'auto'
+    })
+}
+
+
+function ai_generate_science(){  // for create-project-form.html
+    document.getElementById('spinner').style.display = 'flex';
+    document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+    
+    fetch('/project/ai/generate_science', {
+        method: 'GET'
+    })
+    .then(respone => {return respone.json()})
+    .then(data => {
+        if (data['Название']){
+            document.getElementById('name').value = data['Название']
+            textarea_auto_resize('name')
+        }
+        if (data['Описание']){
+            document.getElementById('description').value = data['Описание']
+            textarea_auto_resize('theme')
+        }
+        if (data['Цель']){
+            document.getElementById('goal').value = data['Цель']
+            textarea_auto_resize('goal')
+        }
+        if (data['Тема']){
+            document.getElementById('theme').value = data['Тема']
+            textarea_auto_resize('description')
+        }
+        document.getElementById('opt2').selected = true
+
+        document.getElementById('spinner').style.display = 'none';
+    document.getElementsByTagName('body')[0].style.overflow = 'auto'
+    })
+}
+
+
+function ai_upgrade_text(){  // for create-project-form.html
+    document.getElementById('spinner').style.display = 'flex';
+    document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+    
+    let selectElement = document.getElementById("upgrade_text_selector");
+    let selected_index = selectElement.selectedIndex
+    
+    fetch('/project/ai/upgrade_text?' + new URLSearchParams({
+        'edit': ['name', 'theme', 'goal', 'description'][selected_index],
+        'name': document.getElementById('name').value,
+        'theme': document.getElementById('theme').value,
+        'goal': document.getElementById('goal').value,
+        'description': document.getElementById('description').value
+    }), {
+        method: 'GET'
+    })
+    .then(respone => {return respone.json()})
+    .then(data => {
+        delete data['status']
+        console.log(['name', 'theme', 'goal', 'description'][selected_index])
+        console.log(document.getElementById(['name', 'theme', 'goal', 'description'][selected_index]))
+        console.log(document.getElementById(['name', 'theme', 'goal', 'description'][selected_index]).innerHTML)
+        if (data['response']){
+            data = data['response']
+        }
+        document.getElementById(['name', 'theme', 'goal', 'description'][selected_index]).value = Object.values(data)
+        textarea_auto_resize(['name', 'theme', 'goal', 'description'][selected_index])
+
+        document.getElementById('spinner').style.display = 'none';
+    document.getElementsByTagName('body')[0].style.overflow = 'auto'
+    })
+}
+
+
+function ai_fill_text(){  // for create-project-form.html
+    document.getElementById('spinner').style.display = 'flex';
+    document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+    
+    let selectElement = document.getElementById("fill_text_selector");
+    let selected_index = selectElement.selectedIndex
+    
+    fetch('/project/ai/fill_text?' + new URLSearchParams({
+        'fill': ['name', 'theme', 'goal', 'description'][selected_index],
+        'name': document.getElementById('name').value,
+        'theme': document.getElementById('theme').value,
+        'goal': document.getElementById('goal').value,
+        'description': document.getElementById('description').value
+    }), {
+        method: 'GET'
+    })
+    .then(respone => {return respone.json()})
+    .then(data => {
+        delete data['status']
+        console.log(['name', 'theme', 'goal', 'description'][selected_index])
+        console.log(document.getElementById(['name', 'theme', 'goal', 'description'][selected_index]))
+        console.log(document.getElementById(['name', 'theme', 'goal', 'description'][selected_index]).innerHTML)
+        if (data['response']){
+            data = data['response']
+        }
+        document.getElementById(['name', 'theme', 'goal', 'description'][selected_index]).value = Object.values(data)
+        textarea_auto_resize(['name', 'theme', 'goal', 'description'][selected_index])
+
+        document.getElementById('spinner').style.display = 'none';
+    document.getElementsByTagName('body')[0].style.overflow = 'auto'
+    })
+}
+
+
+
+
+document.getElementById('addVacancyBtn').addEventListener('click', function() {  // for create-project-form.html
+    let vacancyCards = document.getElementById('vacancyCards')
+    let newCard = vacancyCards.querySelector('.col-6').cloneNode(true)
+    let inputs = newCard.querySelectorAll('input[type=text], textarea')
+    
+    newCard.classList.remove('d-none')
+    
+    inputs.forEach(function(input) {
+      input.value = '';
+    })
+    
+    vacancyCards.appendChild(newCard)
+  });
+
+
+document.addEventListener('click', function(event) {  // for create-project-form.html
+if (event.target && event.target.classList.contains('delete-btn')) {
+    let elem = event.target.closest('.col-6').remove()
+}
+});
+
+
+
+
+document.getElementById('project_form').addEventListener('submit', function(event) {  // for create-project-form.html
+    event.preventDefault();
+    
+    let formData = new FormData(this);
+    let vacancies = [];
+    
+    document.querySelectorAll('.col-6').forEach(function(card) {
+    
+    let vacancy = {};
+    card.querySelectorAll('input[type=text], textarea').forEach(function(input) {
+        vacancy[input.name] = input.value;
+    });
+    vacancies.push(vacancy);
+    });
+
+    formData.append('vacancies', JSON.stringify(vacancies));
+
+    formData.delete('vacancyName')
+    formData.delete('vacancyDescription')
+    formData.delete('vacancyNeeds')
+    formData.delete('vacancyTags')
+
+    console.log(formData)
+    fetch(window.location.href, {
+        method: 'POST',
+        body: formData
+    })
+    .then(respone => {
+        if(respone.ok){
+            return respone.json()
+        }
+    })
+    .then(data => {
+        window.location.href = data.url
+    })
+
+})

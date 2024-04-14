@@ -7,5 +7,7 @@ class CreateProjectUserRequest(Schema):
     theme = fields.Str(allow_none=True)
     goal = fields.Str(allow_none=True)
     description = fields.Str(allow_none=True)
+    tags = fields.Str(allow_none=True)
+    vacancies = fields.Str(allow_none=True)
 
     unsuccessful_redirect_template = 'create-project-form.html'

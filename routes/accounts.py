@@ -4,9 +4,12 @@ from .route_imports import *
 accounts_bp = Blueprint('accounts', __name__, url_prefix='/account')
 
 
+@accounts_bp.route('/', methods=['GET'])
 @accounts_bp.route('/@<username>', methods=['GET'])
 @login_required
-def get_account(current_user, username):
+def get_account(current_user, username=None):
+    if username is None:
+        username = current_user.username
     user = User.query.filter_by(username=username).first_or_404()
 
     return render_template(
@@ -25,8 +28,8 @@ def edit_account(current_user, username):
         for key, value in request.form.items():
             if key in ['name', 'surname']:
                 value = value.capitalize()
-
-            if key in ["vk_link", "telegram_link", "github_link", "email_link", "education", "skills", "hobbies"]:
+            print(key)
+            if key in ["vk_link", "telegram_link", "github_link", "email_link", "education", "skills", "hobbies", 'tags']:
                 if not current_user.about:
                     current_user.about = {}
 
@@ -67,7 +70,7 @@ def get_account_projects(current_user, username):
         'account-projects.html',
         current_user=current_user,
         user=user,
-        projects=user.projects
+        projects=sorted(user.projects, key=attrgetter('public_date'), reverse=True)
     )
 
 
@@ -84,3 +87,4 @@ def get_account_bookmarks(current_user, username):
         return render_template('account-bookmarks.html', current_user=current_user, bookmarks=bookmarks)
 
     return redirect(f'/account/@{username}')
+

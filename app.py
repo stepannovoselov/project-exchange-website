@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import redirect
 
 from routes import *
 from config import FLASK_PORT, FLASK_DEBUG_MODE
@@ -15,7 +15,7 @@ app.register_blueprint(search_bp, url_prefil='/search')
 @app.route('/')
 @login_required
 def index(current_user):
-    return render_template('main.html', current_user=current_user)
+    return redirect('/search')
 
 
 if __name__ == '__main__':

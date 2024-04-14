@@ -6,10 +6,14 @@ from datetime import datetime, timezone
 from os import urandom
 from hashlib import pbkdf2_hmac
 from random import randint
+import json
 
-from models import db, User
+from models import db, User, UserAction
 from schemas import *
 from config import DEFAULT_SESSION_TIME, LONG_SESSION_TIME
+
+from g4f.Provider import *
+from g4f.client import Client
 
 
 def login_required(f):
@@ -170,3 +174,53 @@ def login_user(user_id: int, long_session: bool = False) -> None:
 def logout_user() -> None:
     session.pop('user_id', None)
     session.pop('expiry_time', None)
+
+
+def get_project_actions_count(project, one_project=True) -> dict:
+    if not one_project:
+        return {
+            project.id: {
+                'likes': UserAction.query.filter_by(project=project, action='like').count(),
+                'dislikes': UserAction.query.filter_by(project=project, action='dislike').count(),
+                'mark': UserAction.query.filter_by(project=project, action='mark').count()
+            } for project in project
+        }
+
+    return {
+                'likes': UserAction.query.filter_by(project=project, action='like').count(),
+                'dislikes': UserAction.query.filter_by(project=project, action='dislike').count(),
+                'mark': UserAction.query.filter_by(project=project, action='mark').count()
+            }
+
+
+def ask_gpt(prompt):
+    client = Client(
+        provider=RetryProvider(providers=[
+            Aura, ChatForAi, ChatgptAi, ChatgptFree, ChatgptNext, ChatgptX, DeepInfra, FlowGpt,
+            FreeChatgpt, FreeGpt, GeminiProChat, GptTalkRu, HuggingChat, HuggingFace, Koala, Liaobots,
+            Llama2, PerplexityLabs, Pi, Vercel, You,
+        ]), shuffle=True,
+    )
+    print(prompt)
+    response = client.chat.completions.create(
+        model="",
+        messages=[{"role": "user", "content": 'ВНИМАНИЕ, ЭТО АВТОМАТИЧЕСКОЕ СООБЩЕНИЕ КОТОРОЕ БУДЕТ ПАРСИТЬ РОБОТ, ОТВЕЧАЙ СТРОГО В ФОРМАТЕ JSON НАЧИНАЯ с { и ЗАКАНЧИВАЯ }. ПИШИ ОТВЕТ ТОЛЬКО НА РУССКОМ ЯЗЫКЕ ВКЛЮЧАЯ КЛЮЧИ В СЛОВАРЕ JSON. ЗАПРОС: ' + str(prompt)}],
+    )
+    print(123)
+    return response.choices[0].message.content
+
+
+def process_gpt_prompt(prompt):
+    times = 0
+    while True:
+        try:
+            answer = json.loads(ask_gpt(prompt))
+            break
+        except json.decoder.JSONDecodeError:
+            if times > 3:
+                return jsonify({'status': 'error'}), 504
+            times += 1
+
+    answer['status'] = 'ok'
+    return jsonify(answer), 200
+
