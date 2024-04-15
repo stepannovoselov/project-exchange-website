@@ -18,7 +18,7 @@ class User(db.Model):
     iterations = db.Column(db.Integer, nullable=False)
 
     auth_type = db.Column(db.String, default='1561PROJECTS')
-    status = db.Column(db.String)
+    status = db.Column(db.String, default='active')
     about = db.Column(db.JSON, default={
         "vk_link": "",
         "telegram_link": "",

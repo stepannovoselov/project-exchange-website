@@ -19,6 +19,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session or session['expiry_time'] < datetime.now(timezone.utc):
+            logout_user()
             return redirect(f'/login')
 
         user_id = session['user_id']
