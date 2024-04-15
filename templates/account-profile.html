@@ -89,7 +89,7 @@
                             <p class="mb-0">Имя пользователя</p>
                         </div>
                         <div class="col-sm-9">
-                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-username-symbol custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %} spellcheck="false" contenteditable="true" id="username" onblur="change_values()" oninput="textarea_auto_resize('username')"{% else %}disabled{% endif %}>{{ user.username }}</textarea>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-username-symbol custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %} spellcheck="false" contenteditable="true" id="username" onblur="change_values()" oninput="textarea_auto_resize('username')"{% else %}disabled style="background: white;"{% endif %}>{{ user.username }}</textarea>
                         </div>
                     </div>
                     {% if current_user.id == user.id %}
@@ -211,7 +211,7 @@
                             <p class="mb-0">Образование</p>
                         </div>
                         <div class="col-sm-9">
-                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="education" oninput="textarea_auto_resize('education')" onblur="change_values()"{% else %}disabled{% endif %}>{% if user.about.education %}{{ user.about.education }}{% else %}Не указано{% endif %}</textarea>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="education" oninput="textarea_auto_resize('education')" onblur="change_values()"{% else %}disabled style="background: white;"{% endif %}>{% if user.about.education %}{{ user.about.education }}{% else %}Не указано{% endif %}</textarea>
                         </div>
                     </div>
                     <hr class="my-2">
@@ -220,7 +220,7 @@
                             <p class="mb-0">Технологические интересы, навыки</p>
                         </div>
                         <div class="col-sm-9">
-                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="skills" oninput="textarea_auto_resize('skills')" onblur="change_values()"{% else %}disabled{% endif %}>{% if user.about.skills %}{{ user.about.skills }}{% else %}Не указано{% endif %}</textarea>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="skills" oninput="textarea_auto_resize('skills')" onblur="change_values()"{% else %}disabled style="background: white;"{% endif %}>{% if user.about.skills %}{{ user.about.skills }}{% else %}Не указано{% endif %}</textarea>
                         </div>
                     </div>
                     <hr class="my-2">
@@ -229,7 +229,7 @@
                             <p class="mb-0">Увлечения</p>
                         </div>
                         <div class="col-sm-9">
-                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="hobbies" oninput="textarea_auto_resize('hobbies')" onblur="change_values()"{% else %}disabled{% endif %}>{% if user.about.hobbies %}{{ user.about.hobbies }}{% else %}Не указано{% endif %}</textarea>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %}spellcheck="false" contenteditable="true" id="hobbies" oninput="textarea_auto_resize('hobbies')" onblur="change_values()"{% else %}disabled style="background: white;"{% endif %}>{% if user.about.hobbies %}{{ user.about.hobbies }}{% else %}Не указано{% endif %}</textarea>
                         </div>
                     </div>
                     {% if current_user.username == user.username %}
@@ -237,7 +237,7 @@
                     <div class="row">
                         <div class="col-sm-3">Теги</div>
                         <div class="col-sm-9">
-                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" {% if current_user.id == user.id %} spellcheck="false" contenteditable="true" id="tags" oninput="textarea_auto_resize('tags')" onblur="change_values()"{% else %}disabled{% endif %}>{% if user.about.tags %}{{ user.about.tags }}{% else %}Не указано{% endif %}</textarea>
+                            <textarea class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" spellcheck="false" contenteditable="true" id="tags" oninput="textarea_auto_resize('tags')" onblur="change_values()">{% if user.about.tags %}{{ user.about.tags }}{% else %}Не указано{% endif %}</textarea>
                         </div>
                     </div>
                     {% endif %}

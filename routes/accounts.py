@@ -19,11 +19,15 @@ def get_account(current_user, username=None):
     )
 
 
+@accounts_bp.route('/', methods=['POST'])
 @accounts_bp.route('/@<username>', methods=['POST'])
 @login_required
 @validate_request_data(schema=EditProfileUserRequest)
 @transaction
-def edit_account(current_user, username):
+def edit_account(current_user, username=None):
+    if username is None:
+        username = current_user.username
+
     if current_user.username == username:
         for key, value in request.form.items():
             if key in ['name', 'surname']:
