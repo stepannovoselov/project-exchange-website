@@ -1,6 +1,5 @@
 from .route_imports import *
 
-
 accounts_bp = Blueprint('accounts', __name__, url_prefix='/account')
 
 
@@ -24,6 +23,18 @@ def get_account(current_user, got_username=None):
     )
 
 
+@accounts_bp.route('/view', methods=['GET'])
+@login_required
+def view_user_account_from_side(current_user):
+    user = User.query.filter_by(username=current_user.username).first_or_404()
+
+    return render_template(
+        'account-profile.html',
+        current_user={'name': current_user.name, 'surname': current_user.surname},
+        user=user
+    )
+
+
 @accounts_bp.route('/', methods=['POST'])
 @accounts_bp.route('/@<username>', methods=['POST'])
 @login_required
@@ -37,8 +48,9 @@ def edit_account(current_user, username=None):
         for key, value in request.form.items():
             if key in ['name', 'surname']:
                 value = value.capitalize()
-                
-            if key in ["vk_link", "telegram_link", "github_link", "email_link", "education", "skills", "hobbies", 'tags']:
+
+            if key in ["vk_link", "telegram_link", "github_link", "email_link", "education", "skills", "hobbies",
+                       'tags']:
                 if not current_user.about:
                     current_user.about = {}
 
@@ -58,16 +70,13 @@ def edit_account(current_user, username=None):
     return jsonify({'status': 'error', 'errors': {''}}), 404
 
 
-@accounts_bp.route('/@<username>/password', methods=['POST'])
+@accounts_bp.route('/password', methods=['POST'])
 @login_required
 @validate_request_data(schema=ChangePasswordUserRequest)
 @transaction
-def change_password(current_user, username):
-    if current_user.username == username:
-        current_user.password, current_user.salt, current_user.iterations = hash_password(request.form['newPassword'])
-        return jsonify({'status': 'ok'}), 200
-
-    return jsonify({'status': 'error'}), 403
+def change_password(current_user):
+    current_user.password, current_user.salt, current_user.iterations = hash_password(request.form['newPassword'])
+    return jsonify({'status': 'ok'}), 200
 
 
 @accounts_bp.route('/@<username>/projects', methods=['GET'])
@@ -97,3 +106,37 @@ def get_account_bookmarks(current_user, username):
 
     return redirect(f'/account/@{username}')
 
+
+@accounts_bp.route('/users', methods=['GET'])
+@login_required
+def get_usernames_and_names(current_user):
+    query = request.values.get('query', None)
+    except_me = request.values.get('except_me', False)
+
+    if query:
+        if not except_me:
+            users = User.query.filter(
+                (func.lower(User.username).like(f'%{query.lower()}%')) |
+                (func.lower(User.name).like(f'%{query.lower()}%')) |
+                (func.lower(User.surname).like(f'%{query.lower()}%'))
+            ).all()
+
+        else:
+            users = User.query.filter(
+                    and_(func.lower(User.username) != current_user.username.lower()),
+                    ((func.lower(User.username).like(f'%{query.lower()}%')) |
+                     (func.lower(User.name).like(f'%{query.lower()}%')) |
+                     (func.lower(User.surname).like(f'%{query.lower()}%')))
+            ).all()
+
+    else:
+        if not except_me:
+            users = User.query.all()
+        else:
+            users = User.query.filter(func.lower(User.username) != current_user.username.lower()).all()
+
+    return jsonify([{
+        'surname': user.surname,
+        'name': user.name,
+        'username': user.username
+    } for user in users])

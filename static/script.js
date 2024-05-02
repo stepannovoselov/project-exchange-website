@@ -92,77 +92,16 @@ function change_values(){  // for account-profile.html
 }
 
 
-
-function throw_errors(data){  // for account-profile.html
-    let errors = data.errors
-    let values = data.current_values
-    
-    for (const key in errors) {
-        if (Object.hasOwnProperty.call(errors, key)) {
-          const errorMessages = errors[key];
-          
-          for (const errorMessage of errorMessages) {
-            create_toast(errorMessage)
-
-            document.getElementById(key).innerHTML = values[key]
-          }
-        }
-      }
-}
-
-
-let n = 0
-let toasts_to_delete = []
-function create_toast(message, type='error'){  // for account-profile.html
-    toast_container = document.getElementById('toast-container')
-
-    if (type=='error'){
-        toast_container.innerHTML += `<div class="toast my-2" role="alert" aria-live="assertive" aria-atomic="true" id='toast ` + (n+1) + `'>
-        <div class="alert alert-danger d-flex align-items-center m-0" role="alert">
-            <div>
-                <strong>Ошибка!</strong> ` + message + `
-            </div>
-        </div>
-        </div>`
-    }
-    else{
-        toast_container.innerHTML += `<div class="toast my-2" role="alert" aria-live="assertive" aria-atomic="true" id='toast ` + (n+1) + `'>
-        <div class="alert alert-success d-flex align-items-center m-0" role="alert">
-            <div>
-                <strong>Успех!</strong> ` + message + `
-            </div>
-        </div>
-        </div>`
-    }
-
-    var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-    var toastList = toastElList.map(function (toastEl) {
-        return new bootstrap.Toast(toastEl);
-    });
-    toastList.forEach(function (toast) {
-        toast.show();
-    });
-    
-    n++
-    toasts_to_delete.push('toast ' + n)
-    setTimeout(() => {
-        let elem = document.getElementById(toasts_to_delete[0])
-        toasts_to_delete.shift()
-        elem.remove()
-    }, 6000);
-}
-
-
 function change_password_request(){  // for account-profile.html
     let form = new FormData()
 
-    let oldPassword = document.getElementById('oldPassword').value
-    let newPassword = document.getElementById('newPassword').value
+    let oldPassword = document.getElementById('oldPassword')
+    let newPassword = document.getElementById('newPassword')
 
-    form.append('oldPassword', oldPassword)
-    form.append('newPassword', newPassword)
+    form.append('oldPassword', oldPassword.value)
+    form.append('newPassword', newPassword.value)
 
-    fetch(window.location.href + '/password', {
+    fetch(window.location.href + 'password', {
         method: 'POST',
         body: form
     })
@@ -171,11 +110,16 @@ function change_password_request(){  // for account-profile.html
     })
     .then(data => {
         if (data.errors){
-            throw_errors(data, undefined)
+            let errorMessages = Object.values(data.errors).flat();
+            let errorMessageString = '● ' + errorMessages.join('<br>● ');
+            showNotification('Ошибка при изменении пароля!<br>' + errorMessageString, 'danger')
         }
         else{
-            create_toast('Пароль изменён.', 'success')
+            oldPassword.value = ''
+            newPassword.value = ''
+            showNotification('Пароль успешно изменён.', 'success')
         }
+        close_password_modal()
     })
 }
 
@@ -272,7 +216,7 @@ function ai_generate_project(){  // for create-project-form.html
         document.getElementById('opt1').selected = true
     
         hide_spinner()
-        close_modal()
+        close_ai_modal()
     })
 }
 
@@ -308,7 +252,7 @@ function ai_generate_science(){  // for create-project-form.html
         document.getElementById('opt2').selected = true
         
         hide_spinner()
-        close_modal()
+        close_ai_modal()
     })
 }
 
@@ -341,7 +285,7 @@ function ai_upgrade_text(){  // for create-project-form.html
         textarea_auto_resize(['name', 'theme', 'goal', 'description'][selected_index])
     
         hide_spinner()
-        close_modal()
+        close_ai_modal()
     })
 }
 
@@ -374,16 +318,21 @@ function ai_fill_text(){  // for create-project-form.html
         textarea_auto_resize(['name', 'theme', 'goal', 'description'][selected_index])
     
         hide_spinner()
-        close_modal();
+        close_ai_modal();
     })
 }
 
 
-function close_modal() {
+function close_ai_modal() {
     let ai_tools_modal = document.getElementById('AI_tools')
 
     $(ai_tools_modal).modal('hide');
+}
 
+function close_password_modal(){
+    let password_modal = document.getElementById('changePasswordModal')
+
+    $(password_modal).modal('hide');
 }
 
 
@@ -417,13 +366,12 @@ document.getElementById('project_form').addEventListener('submit', function(even
     let formData = new FormData(this);
     let vacancies = [];
     
-    document.querySelectorAll('.col-6').forEach(function(card) {
-    
-    let vacancy = {};
-    card.querySelectorAll('input[type=text], textarea').forEach(function(input) {
-        vacancy[input.name] = input.value;
-    });
-    vacancies.push(vacancy);
+    document.getElementById('vacancyCards').querySelectorAll('.col-6').forEach(function(card) {
+        let vacancy = {};
+        card.querySelectorAll('input[type=text], textarea').forEach(function(input) {
+            vacancy[input.name] = input.value;
+        });
+        vacancies.push(vacancy);
     });
 
     formData.append('vacancies', JSON.stringify(vacancies));
@@ -432,6 +380,15 @@ document.getElementById('project_form').addEventListener('submit', function(even
     formData.delete('vacancyDescription')
     formData.delete('vacancyNeeds')
     formData.delete('vacancyTags')
+
+
+    let team_container = document.getElementById('team-container')
+    let teammate_usernames = []
+    team_container.querySelectorAll('li').forEach(function(teammate) {
+        teammate_usernames.push(teammate.id)
+    })
+
+    formData.append('teammates', JSON.stringify(teammate_usernames))
 
     console.log(formData)
     fetch(window.location.href, {
@@ -474,3 +431,34 @@ function hide_spinner(){
 
 }
 
+
+function search_users_request(){  // for create-project-form.html
+    let search_users = document.getElementById('search_users')
+    let users_list = document.getElementById('users_list')
+
+    fetch('/account/users?' + new URLSearchParams({
+        'query': search_users.value,
+        'except_me': true
+    }), {
+        method: 'GET',
+    })
+    .then((respone) => {
+        return respone.json()
+    })
+    .then((data) => {
+        while (users_list.firstChild) {
+            users_list.removeChild(users_list.firstChild);
+        }
+        data.forEach(user => {
+            users_list.innerHTML += '<li><a style="cursor: pointer" class="dropdown-item" onclick="add_user_to_project_team(\'' + user.username + '\', \'' +  user.surname + '\', \'' + user.name + '\')">' + user.surname + ' ' + user.name + ' ' + '(@' + user.username + ')' + '</a></li>'
+        });
+    })
+}
+search_users_request()
+
+
+function add_user_to_project_team(username, user_surname, user_name){
+    let team_container = document.getElementById('team-container')
+
+    team_container.innerHTML += '<li id=' + username + ' onclick="this.parentNode.removeChild(this)" style="cursor: pointer"><div>' + user_surname + ' ' + user_name + ' ' + '(@' + username + ')' + ' <svg width="30px" height="30px" viewBox="0 -0.5 25 25" stroke="#ff0000" xmlns="http://www.w3.org/2000/svg"><path d="M6.96967 16.4697C6.67678 16.7626 6.67678 17.2374 6.96967 17.5303C7.26256 17.8232 7.73744 17.8232 8.03033 17.5303L6.96967 16.4697ZM13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697L13.0303 12.5303ZM11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303L11.9697 11.4697ZM18.0303 7.53033C18.3232 7.23744 18.3232 6.76256 18.0303 6.46967C17.7374 6.17678 17.2626 6.17678 16.9697 6.46967L18.0303 7.53033ZM13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303L13.0303 11.4697ZM16.9697 17.5303C17.2626 17.8232 17.7374 17.8232 18.0303 17.5303C18.3232 17.2374 18.3232 16.7626 18.0303 16.4697L16.9697 17.5303ZM11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697L11.9697 12.5303ZM8.03033 6.46967C7.73744 6.17678 7.26256 6.17678 6.96967 6.46967C6.67678 6.76256 6.67678 7.23744 6.96967 7.53033L8.03033 6.46967ZM8.03033 17.5303L13.0303 12.5303L11.9697 11.4697L6.96967 16.4697L8.03033 17.5303ZM13.0303 12.5303L18.0303 7.53033L16.9697 6.46967L11.9697 11.4697L13.0303 12.5303ZM11.9697 12.5303L16.9697 17.5303L18.0303 16.4697L13.0303 11.4697L11.9697 12.5303ZM13.0303 11.4697L8.03033 6.46967L6.96967 7.53033L11.9697 12.5303L13.0303 11.4697Z" fill="#ff0000"/></svg></div></li>'
+}

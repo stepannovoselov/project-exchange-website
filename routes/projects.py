@@ -1,4 +1,5 @@
 from .route_imports import *
+import json
 
 project_bp = Blueprint('project', __name__, url_prefix='/project')
 
@@ -14,6 +15,8 @@ def create_project_page(current_user):
 @validate_request_data(schema=CreateProjectUserRequest)
 @transaction
 def create_project(current_user):
+    users_usernames = [user.username for user in User.query.all()]
+
     project = Project(
         name=request.form.get('name'),
         type=request.form.get('type'),
@@ -21,6 +24,7 @@ def create_project(current_user):
         goal=request.form.get('goal', None),
         description=request.form.get('description', None),
         tags=request.form.get('tags', None),
+        teammates=[username for username in json.loads(request.form.get('teammates')) if username in users_usernames],
         vacancies=[vacancy for vacancy in json.loads(request.form.get('vacancies')) if all(vacancy[key] for key in vacancy.keys() if key != 'VacancyTags')],
         author=current_user
     )

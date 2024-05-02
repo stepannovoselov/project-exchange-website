@@ -15,6 +15,7 @@ class Project(db.Model):
     goal = db.Column(db.String)
     description = db.Column(db.String)
     status = db.Column(db.String, default='open')
+    teammates = db.Column(db.JSON)
     vacancies = db.Column(db.JSON)
     public_date = db.Column(db.DateTime, default=datetime.utcnow)
     tags = db.Column(db.String)

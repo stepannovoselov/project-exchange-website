@@ -4,10 +4,6 @@
 
 {% block content %}
 
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-    <div class="toast-container position-absolute top-0 end-0 p-3" id="toast-container"></div>
-</div>
-
 {% if current_user.id == user.id %}
 <div class="modal fade" tabindex="-1" id="changePasswordModal">
     <div class="modal-dialog">
@@ -235,16 +231,18 @@
                         <div class="col-sm-3">Теги</div>
                         <div class="col-sm-9">
                             <textarea onfocus="this.select()" class="form-control border-0 text-muted mb-0 p-2 custom-textarea-resize-none-hidden-overflow" spellcheck="false" contenteditable="true" id="tags" oninput="textarea_auto_resize('tags')">{% if user.about.tags %}{{ user.about.tags }}{% else %}Не указано{% endif %}</textarea>
+                            <div class="form-text">Укажите теги через пробел.</div>
                         </div>
                     </div>
                     {% endif %}
                 {% if current_user.id == user.id %}
-                    <button class="btn btn-primary btn-sm mt-4" role="button" onclick="change_values()">Сохранить изменения </button>
+                    <button class="btn btn-primary btn-sm mt-4" role="button" onclick="change_values()">Сохранить изменения</button>
                 </form>
                 {% endif %}
             </div>
             {% if current_user.id == user.id %}
-                <p class="text-muted m-2 mt-4"><small>Здесь отображается больше полей, потому что вы просматриваете собственный аккаунт. Вы можете изменять данные своего аккаунта на этой странице.</small></p>
+                <span class="text-muted mx-2 mt-4"><small>Здесь отображается больше полей, потому что вы просматриваете собственный аккаунт. Вы можете изменять данные своего аккаунта на этой странице.</small></span>
+                <span class="text-muted mx-2 mb-2"><small><a href="/account/view">Посмотреть на свой профиль со стороны</a>.</small></span>
             {% endif %}
         </div>
     </div>
