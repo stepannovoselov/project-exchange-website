@@ -5,12 +5,17 @@ accounts_bp = Blueprint('accounts', __name__, url_prefix='/account')
 
 
 @accounts_bp.route('/', methods=['GET'])
-@accounts_bp.route('/@<username>', methods=['GET'])
+@accounts_bp.route('/@<got_username>', methods=['GET'])
 @login_required
-def get_account(current_user, username=None):
-    if username is None:
+def get_account(current_user, got_username=None):
+    username = got_username
+    if got_username is None:
         username = current_user.username
+
     user = User.query.filter_by(username=username).first_or_404()
+
+    if username == current_user.username and got_username is not None:
+        return redirect('/account')
 
     return render_template(
         'account-profile.html',

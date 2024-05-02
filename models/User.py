@@ -56,3 +56,15 @@ class User(db.Model):
 
         hex_color = '#' + hash_code[:6]
         return hex_color
+
+    @staticmethod
+    def add_https_if_needed(url):
+        if url == '':
+            return url
+
+        if url.startswith('http://'):
+            return 'https://' + url[7:]
+        elif url.startswith('https://'):
+            return url
+        else:
+            return 'https://' + url

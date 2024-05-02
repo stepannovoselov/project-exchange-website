@@ -1,55 +1,57 @@
 function change_values(){  // for account-profile.html
+    show_spinner()
+
     let form = new FormData()
 
-    let surname = document.getElementById('surname').value
-    surname = surname !== undefined ? surname : ""
+    let surname = document.getElementById('surname')
+    let surname_value = surname.value !== undefined ? surname.value : ""
 
-    let name = document.getElementById('name').value
-    name = name !== undefined ? name : ""
+    let name = document.getElementById('name')
+    let name_value = name.value !== undefined ? name.value : ""
 
-    let username = document.getElementById('username').value
-    username = username !== undefined ? username : ""
+    let username = document.getElementById('username')
+    let username_value = username.value !== undefined ? username.value : ""
 
-    let email = document.getElementById('email').value
-    email = email !== undefined ? email : ""
+    let email = document.getElementById('email')
+    let email_value = email.value !== undefined ? email.value : ""
 
-    let vk_link = document.getElementById('vk_link').value
-    vk_link = vk_link !== undefined ? vk_link : ""
+    let vk_link = document.getElementById('vk_link')
+    let vk_link_value = (vk_link.value !== undefined && vk_link.value !== 'Не указано') ? vk_link.value : ""
 
-    let telegram_link = document.getElementById('telegram_link').value
-    telegram_link = telegram_link !== undefined ? telegram_link : ""
+    let telegram_link = document.getElementById('telegram_link')
+    let telegram_link_value = (telegram_link.value !== undefined && telegram_link.value !== 'Не указано') ? telegram_link.value : ""
 
-    let github_link = document.getElementById('github_link').value
-    github_link = github_link !== undefined ? github_link : ""
+    let github_link = document.getElementById('github_link')
+    let github_link_value = (github_link.value !== undefined && github_link.value !== 'Не указано') ? github_link.value : ""
 
-    let email_link = document.getElementById('email_link').value
-    email_link = email_link !== undefined ? email_link : ""
+    let email_link = document.getElementById('email_link')
+    let email_link_value = (email_link.value !== undefined && email_link.value !== 'Не указано') ? email_link.value : ""
 
-    let education = document.getElementById('education').value
-    education = education !== undefined ? education : ""
+    let education = document.getElementById('education')
+    let education_value = education.value !== undefined ? education.value : ""
 
-    let skills = document.getElementById('skills').value
-    skills = skills !== undefined ? skills : ""
+    let skills = document.getElementById('skills')
+    let skills_value = skills.value !== undefined ? skills.value : ""
 
-    let hobbies = document.getElementById('hobbies').value
-    hobbies = hobbies !== undefined ? hobbies : ""
+    let hobbies = document.getElementById('hobbies')
+    let hobbies_value = hobbies.value !== undefined ? hobbies.value : ""
 
-    let tags = document.getElementById('tags').value
-    tags = tags !== undefined ? tags : ""
+    let tags = document.getElementById('tags')
+    let tags_value = tags.value !== undefined ? tags.value : ""
 
 
-    form.append('surname', surname)
-    form.append('name', name)
-    form.append('username', username)
-    form.append('email', email)
-    form.append('vk_link', vk_link)
-    form.append('telegram_link', telegram_link)
-    form.append('github_link', github_link)
-    form.append('email_link', email_link)
-    form.append('education', education)
-    form.append('skills', skills)
-    form.append('hobbies', hobbies)
-    form.append('tags', tags)
+    form.append('surname', surname_value)
+    form.append('name', name_value)
+    form.append('username', username_value)
+    form.append('email', email_value)
+    form.append('vk_link', vk_link_value)
+    form.append('telegram_link', telegram_link_value)
+    form.append('github_link', github_link_value)
+    form.append('email_link', email_link_value)
+    form.append('education', education_value)
+    form.append('skills', skills_value)
+    form.append('hobbies', hobbies_value)
+    form.append('tags', tags_value)
 
 
     fetch(window.location.href, {
@@ -61,11 +63,30 @@ function change_values(){  // for account-profile.html
     })
     .then(data => {
         if(data.errors){
-            throw_errors(data)
+            let errorMessages = Object.values(data.errors).flat();
+            let errorMessageString = '● ' + errorMessages.join('<br>● ');
+            showNotification('Ошибка при изменении данных!<br>' + errorMessageString, 'danger')
         }
         else{
-            window.location.replace('/account/@' + data.current_values['username'])
+            showNotification('Данные успешно изменены!<br><small>Для корректного отображения обновите страницу.</small>', 'success')
+            surname = data.current_values.surname
+            name = data.current_values.name
+            username = data.current_values.username
+            email = data.current_values.email
+            vk_link = data.current_values.about.vk_link
+            telegram_link = data.current_values.about.telegram_link
+            github_link = data.current_values.about.github_link
+            email_link = data.current_values.about.email_link
+            education = data.current_values.about.education
+            skills = data.current_values.about.skills
+            hobbies = data.current_values.about.hobbies
+            tags = data.current_values.about.tags
+
+            document.getElementById('link-projects').setAttribute('href', '/account/@' + data.current_values.username + '/projects')
+            document.getElementById('link-bookmarks').setAttribute('href', '/account/@' + data.current_values.username + '/bookmarks')
+            document.getElementById('main-surname-and-name').innerHTML = data.current_values.surname + ' ' + data.current_values.name
         }
+        hide_spinner()
     })
 
 }
@@ -221,8 +242,7 @@ function make_project_action(project_id, action){  // for project.html
 
 
 function ai_generate_project(){  // for create-project-form.html
-    document.getElementById('spinner').style.display = 'flex';
-    document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+    show_spinner()
     
     fetch('/project/ai/generate_project', {
         method: 'GET'
@@ -250,16 +270,15 @@ function ai_generate_project(){  // for create-project-form.html
             textarea_auto_resize('tags')
         }
         document.getElementById('opt1').selected = true
-
-        document.getElementById('spinner').style.display = 'none';
-    document.getElementsByTagName('body')[0].style.overflow = 'auto'
+    
+        hide_spinner()
+        close_modal()
     })
 }
 
 
 function ai_generate_science(){  // for create-project-form.html
-    document.getElementById('spinner').style.display = 'flex';
-    document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+    show_spinner()
     
     fetch('/project/ai/generate_science', {
         method: 'GET'
@@ -287,16 +306,15 @@ function ai_generate_science(){  // for create-project-form.html
             textarea_auto_resize('tags')
         }
         document.getElementById('opt2').selected = true
-
-        document.getElementById('spinner').style.display = 'none';
-    document.getElementsByTagName('body')[0].style.overflow = 'auto'
+        
+        hide_spinner()
+        close_modal()
     })
 }
 
 
 function ai_upgrade_text(){  // for create-project-form.html
-    document.getElementById('spinner').style.display = 'flex';
-    document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+    show_spinner()
     
     let selectElement = document.getElementById("upgrade_text_selector");
     let selected_index = selectElement.selectedIndex
@@ -321,16 +339,15 @@ function ai_upgrade_text(){  // for create-project-form.html
         }
         document.getElementById(['name', 'theme', 'goal', 'description'][selected_index]).value = Object.values(data)
         textarea_auto_resize(['name', 'theme', 'goal', 'description'][selected_index])
-
-        document.getElementById('spinner').style.display = 'none';
-    document.getElementsByTagName('body')[0].style.overflow = 'auto'
+    
+        hide_spinner()
+        close_modal()
     })
 }
 
 
 function ai_fill_text(){  // for create-project-form.html
-    document.getElementById('spinner').style.display = 'flex';
-    document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+    show_spinner()
     
     let selectElement = document.getElementById("fill_text_selector");
     let selected_index = selectElement.selectedIndex
@@ -355,13 +372,19 @@ function ai_fill_text(){  // for create-project-form.html
         }
         document.getElementById(['name', 'theme', 'goal', 'description'][selected_index]).value = Object.values(data)
         textarea_auto_resize(['name', 'theme', 'goal', 'description'][selected_index])
-
-        document.getElementById('spinner').style.display = 'none';
-    document.getElementsByTagName('body')[0].style.overflow = 'auto'
+    
+        hide_spinner()
+        close_modal();
     })
 }
 
 
+function close_modal() {
+    let ai_tools_modal = document.getElementById('AI_tools')
+
+    $(ai_tools_modal).modal('hide');
+
+}
 
 
 document.getElementById('addVacancyBtn').addEventListener('click', function() {  // for create-project-form.html
@@ -425,3 +448,29 @@ document.getElementById('project_form').addEventListener('submit', function(even
     })
 
 })
+
+
+function showNotification(message, color) {  // for base_template.html
+    var notification = $('<div class="alert alert-' + color + ' alert-dismissible fade show" role="alert">' +
+      message +
+      '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>' +
+      '</div>');
+
+    $('#notification-container').append(notification);
+
+    setTimeout(function() {
+      notification.alert('close');
+    }, 5000);
+  }
+
+function show_spinner(){
+    document.getElementById('spinner').style.display = 'flex';
+    document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+}
+
+function hide_spinner(){
+    document.getElementById('spinner').style.display = 'none';
+        document.getElementsByTagName('body')[0].style.overflow = 'auto'
+
+}
+
