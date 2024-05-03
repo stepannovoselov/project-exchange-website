@@ -435,6 +435,10 @@ function hide_spinner(){
 function search_users_request(){  // for create-project-form.html
     let search_users = document.getElementById('search_users')
     let users_list = document.getElementById('users_list')
+    let team_container = document.getElementById('team-container')
+    let search_users_loading_text = document.getElementById('search_users_loading_text')
+
+    search_users_loading_text.innerHTML = 'Загрузка...'
 
     fetch('/account/users?' + new URLSearchParams({
         'query': search_users.value,
@@ -450,15 +454,23 @@ function search_users_request(){  // for create-project-form.html
             users_list.removeChild(users_list.firstChild);
         }
         data.forEach(user => {
-            users_list.innerHTML += '<li><a style="cursor: pointer" class="dropdown-item" onclick="add_user_to_project_team(\'' + user.username + '\', \'' +  user.surname + '\', \'' + user.name + '\')">' + user.surname + ' ' + user.name + ' ' + '(@' + user.username + ')' + '</a></li>'
+            if (!team_container.innerHTML.includes('id="' + user.id + '"')){
+                users_list.innerHTML += '<li id="users_list_user_' + user.id + '"><a style="cursor: pointer" class="dropdown-item" onclick="add_user_to_project_team(\'' + user.id  + '\', \'' + user.username + '\', \'' +  user.surname + '\', \'' + user.name + '\')">' + user.surname + ' ' + user.name + ' ' + '(@' + user.username + ')' + '</a></li>'
+            }
         });
+        search_users_loading_text.innerHTML = ''
     })
+    
 }
 search_users_request()
 
 
-function add_user_to_project_team(username, user_surname, user_name){
+function add_user_to_project_team(user_id, username, user_surname, user_name){
     let team_container = document.getElementById('team-container')
+    let users_list = document.getElementById('users_list')
 
-    team_container.innerHTML += '<li id=' + username + ' onclick="this.parentNode.removeChild(this)" style="cursor: pointer"><div>' + user_surname + ' ' + user_name + ' ' + '(@' + username + ')' + ' <svg width="30px" height="30px" viewBox="0 -0.5 25 25" stroke="#ff0000" xmlns="http://www.w3.org/2000/svg"><path d="M6.96967 16.4697C6.67678 16.7626 6.67678 17.2374 6.96967 17.5303C7.26256 17.8232 7.73744 17.8232 8.03033 17.5303L6.96967 16.4697ZM13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697L13.0303 12.5303ZM11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303L11.9697 11.4697ZM18.0303 7.53033C18.3232 7.23744 18.3232 6.76256 18.0303 6.46967C17.7374 6.17678 17.2626 6.17678 16.9697 6.46967L18.0303 7.53033ZM13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303L13.0303 11.4697ZM16.9697 17.5303C17.2626 17.8232 17.7374 17.8232 18.0303 17.5303C18.3232 17.2374 18.3232 16.7626 18.0303 16.4697L16.9697 17.5303ZM11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697L11.9697 12.5303ZM8.03033 6.46967C7.73744 6.17678 7.26256 6.17678 6.96967 6.46967C6.67678 6.76256 6.67678 7.23744 6.96967 7.53033L8.03033 6.46967ZM8.03033 17.5303L13.0303 12.5303L11.9697 11.4697L6.96967 16.4697L8.03033 17.5303ZM13.0303 12.5303L18.0303 7.53033L16.9697 6.46967L11.9697 11.4697L13.0303 12.5303ZM11.9697 12.5303L16.9697 17.5303L18.0303 16.4697L13.0303 11.4697L11.9697 12.5303ZM13.0303 11.4697L8.03033 6.46967L6.96967 7.53033L11.9697 12.5303L13.0303 11.4697Z" fill="#ff0000"/></svg></div></li>'
+
+    team_container.innerHTML += '<li id="' + user_id + '" onclick="this.parentNode.removeChild(this);search_users_request()" style="cursor: pointer"><div>' + user_surname + ' ' + user_name + ' ' + '(@' + username + ')' + ' <svg width="30px" height="30px" viewBox="0 -0.5 25 25" stroke="#ff0000" xmlns="http://www.w3.org/2000/svg"><path d="M6.96967 16.4697C6.67678 16.7626 6.67678 17.2374 6.96967 17.5303C7.26256 17.8232 7.73744 17.8232 8.03033 17.5303L6.96967 16.4697ZM13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697L13.0303 12.5303ZM11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303L11.9697 11.4697ZM18.0303 7.53033C18.3232 7.23744 18.3232 6.76256 18.0303 6.46967C17.7374 6.17678 17.2626 6.17678 16.9697 6.46967L18.0303 7.53033ZM13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303L13.0303 11.4697ZM16.9697 17.5303C17.2626 17.8232 17.7374 17.8232 18.0303 17.5303C18.3232 17.2374 18.3232 16.7626 18.0303 16.4697L16.9697 17.5303ZM11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697L11.9697 12.5303ZM8.03033 6.46967C7.73744 6.17678 7.26256 6.17678 6.96967 6.46967C6.67678 6.76256 6.67678 7.23744 6.96967 7.53033L8.03033 6.46967ZM8.03033 17.5303L13.0303 12.5303L11.9697 11.4697L6.96967 16.4697L8.03033 17.5303ZM13.0303 12.5303L18.0303 7.53033L16.9697 6.46967L11.9697 11.4697L13.0303 12.5303ZM11.9697 12.5303L16.9697 17.5303L18.0303 16.4697L13.0303 11.4697L11.9697 12.5303ZM13.0303 11.4697L8.03033 6.46967L6.96967 7.53033L11.9697 12.5303L13.0303 11.4697Z" fill="#ff0000"/></svg></div></li>'
+
+    users_list.removeChild(document.getElementById('users_list_user_' + user_id))
 }

@@ -15,7 +15,7 @@ def create_project_page(current_user):
 @validate_request_data(schema=CreateProjectUserRequest)
 @transaction
 def create_project(current_user):
-    users_usernames = [user.username for user in User.query.all()]
+    users_ids = [str(user.id) for user in User.query.all()]
 
     project = Project(
         name=request.form.get('name'),
@@ -24,7 +24,7 @@ def create_project(current_user):
         goal=request.form.get('goal', None),
         description=request.form.get('description', None),
         tags=request.form.get('tags', None),
-        teammates=[username for username in json.loads(request.form.get('teammates')) if username in users_usernames],
+        teammates=[user_id for user_id in json.loads(request.form.get('teammates')) if user_id in users_ids],
         vacancies=[vacancy for vacancy in json.loads(request.form.get('vacancies')) if all(vacancy[key] for key in vacancy.keys() if key != 'VacancyTags')],
         author=current_user
     )

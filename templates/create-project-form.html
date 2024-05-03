@@ -135,11 +135,12 @@
                         <div class="row">
                             <label for="team" class="col-sm-2 col-form-label">Команда</label>
                             <div class="col-sm-10">
-                                <div class="mb-2">Найдите и выберите пользователя, чтобы добавить его в команду</div>
+                                <div class="mb-2">Найдите и выберите пользователя, чтобы добавить его в команду</div>        
                                 <input id="search_users" class="form-control" type="text" oninput="search_users_request()" placeholder="Поиск по имени и фамилии или имени пользователя.">
                                 <ul class="dropdown-menu show" id="users_list" style="position: relative; overflow: hidden scroll; max-height: 40%;">
                                     <li><a style="cursor: pointer" class="dropdown-item">@username</a></li>
                                 </ul>
+                                <p class="form-text" id="search_users_loading_text">Загрузка...</p>
                                 <div class="mt-4">
                                     <b>Добавлены:</b>
                                     <ol id="team-container">

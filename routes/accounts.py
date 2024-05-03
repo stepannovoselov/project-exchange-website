@@ -136,6 +136,7 @@ def get_usernames_and_names(current_user):
             users = User.query.filter(func.lower(User.username) != current_user.username.lower()).all()
 
     return jsonify([{
+        'id': user.id,
         'surname': user.surname,
         'name': user.name,
         'username': user.username
