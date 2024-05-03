@@ -15,12 +15,13 @@ class Project(db.Model):
     goal = db.Column(db.String)
     description = db.Column(db.String)
     status = db.Column(db.String, default='open')
-    teammates = db.Column(db.JSON)
     vacancies = db.Column(db.JSON)
     public_date = db.Column(db.DateTime, default=datetime.utcnow)
     tags = db.Column(db.String)
 
     actions = db.relationship('UserAction', back_populates='project')
+
+    teammates = db.relationship('User', secondary='project_teammates')
 
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     author = db.relationship('User', back_populates='projects')

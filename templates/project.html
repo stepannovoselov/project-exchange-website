@@ -72,6 +72,17 @@
                     </p>
                 </div>
                 <strong>Автор:</strong> <a href="/account/@{{ project.author.username }}">{{ project.author.surname }} {{ project.author.name }} @{{ project.author.username }}</a>
+                {% if project.teammates %}
+                <br>
+                <strong>Команда:</strong>
+                    {% for teammate in project.teammates %}
+                        <ul class="m-0">
+                            <li>
+                                <a href="/account/@{{ teammate.username }}">{{ teammate.surname }} {{ teammate.name }} @{{ teammate.username }}</a>
+                            </li>
+                        </ul>
+                    {% endfor %}
+                {% endif %}
             </div>
             <div class="card-body">
                 <div class="row">

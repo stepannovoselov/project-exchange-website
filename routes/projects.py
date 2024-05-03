@@ -15,8 +15,6 @@ def create_project_page(current_user):
 @validate_request_data(schema=CreateProjectUserRequest)
 @transaction
 def create_project(current_user):
-    users_ids = [str(user.id) for user in User.query.all()]
-
     project = Project(
         name=request.form.get('name'),
         type=request.form.get('type'),
@@ -24,10 +22,19 @@ def create_project(current_user):
         goal=request.form.get('goal', None),
         description=request.form.get('description', None),
         tags=request.form.get('tags', None),
-        teammates=[user_id for user_id in json.loads(request.form.get('teammates')) if user_id in users_ids],
         vacancies=[vacancy for vacancy in json.loads(request.form.get('vacancies')) if all(vacancy[key] for key in vacancy.keys() if key != 'VacancyTags')],
         author=current_user
     )
+
+    for user_id in request.form.get('teammates', []):
+        try:
+            user = User.query.filter_by(id=int(user_id)).first()
+            if user:
+                project.teammates.append(user)
+
+        except:
+            continue
+
     db.session.add(project)
 
     return jsonify({'status': 'ok', 'url': f'/account/@{current_user.username}'}), 200
@@ -160,6 +167,16 @@ def edit_project(current_user, project_id):
         project.description = request.form.get('description', None)
         project.tags = request.form.get('tags', None)
         project.vacancies = [vacancy for vacancy in json.loads(request.form.get('vacancies')) if all(vacancy[key] for key in vacancy.keys() if key != 'VacancyTags')]
+
+        project.teammates = []
+        for user_id in request.form.get('teammates', []):
+            try:
+                user = User.query.filter_by(id=int(user_id)).first()
+                if user:
+                    project.teammates.append(user)
+
+            except:
+                continue
 
         return jsonify({'status': 'ok', 'url': f'/project/{project.id}'}), 200
 
