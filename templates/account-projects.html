@@ -73,6 +73,11 @@
                                     <span id="short_description {{ loop.index }}">{{ project.description | truncate(300, false, ' ...') }}</span>
                                     <span id="all_description {{ loop.index }}" hidden>{{ project.description }}</span>
                                 </p>
+                                {% if project.teammates %}
+                                    <p class="fs-6" style="color: red;">
+                                        Людей в команде: {{ project.teammates | length }}
+                                    </p>
+                                {% endif %}
                                 {% if project.vacancies %}
                                     <p class="fs-6 mt-5">
                                         <strong>Вакансии:</strong>
@@ -96,7 +101,7 @@
                                     </p>
                                 {% endif %}
                             </div>
-                            <div class="mt-5 mx-2">
+                            <div class="mt-4 mx-2">
                                 <div class="row">
                                     <a class="btn btn-sm btn-primary col-2" href="/project/{{ project.id }}">
                                         Открыть

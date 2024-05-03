@@ -71,17 +71,18 @@
                         </small>
                     </p>
                 </div>
-                <strong>Автор:</strong> <a href="/account/@{{ project.author.username }}">{{ project.author.surname }} {{ project.author.name }} @{{ project.author.username }}</a>
+                <p>
+                    <strong>Автор:</strong> <a href="/account/@{{ project.author.username }}">{{ project.author.surname }} {{ project.author.name }} @{{ project.author.username }}</a>
+                </p>
                 {% if project.teammates %}
-                <br>
                 <strong>Команда:</strong>
+                <ol class="m-0">
                     {% for teammate in project.teammates %}
-                        <ul class="m-0">
-                            <li>
-                                <a href="/account/@{{ teammate.username }}">{{ teammate.surname }} {{ teammate.name }} @{{ teammate.username }}</a>
-                            </li>
-                        </ul>
+                        <li>
+                            <a href="/account/@{{ teammate.username }}">{{ teammate.surname }} {{ teammate.name }} @{{ teammate.username }}</a>
+                        </li>
                     {% endfor %}
+                </ol>
                 {% endif %}
             </div>
             <div class="card-body">
