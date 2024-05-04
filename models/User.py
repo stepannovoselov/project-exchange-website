@@ -7,7 +7,7 @@ from config import SALT_FOR_USERS_COLOR_GENERATOR
 class User(db.Model):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
 
     surname = db.Column(db.String, nullable=False)
     name = db.Column(db.String, nullable=False)

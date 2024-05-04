@@ -4,7 +4,7 @@ from .alchemy import *
 class UserAction(db.Model):
     __tablename__ = 'userActions'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
 
     userId = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User', back_populates='actions')
