@@ -47,15 +47,21 @@ Cервис для поиска единомышленников для совм
 6. **Создание файла .env.** Создайте файл ```.env``` в корневой директории проекта и заполните указанной ниже информацией.
 
     ```
-    POSTGRES_USERNAME = '<postgres username>'
-    POSTGRES_PASSWORD = '<postgres password>'
-    POSTGRES_HOST = '<postgres host>'
-    POSTGRES_PORT = '<postgres port>'
-    POSTGRES_DATABASE = '<postgres database name>'
+    POSTGRES_USERNAME='<postgres username>'
+    POSTGRES_PASSWORD='<postgres password>'
+    POSTGRES_HOST='<postgres host>'
+    POSTGRES_PORT='<postgres port>'
+    POSTGRES_DATABASE='<postgres database name>'
     
-    FLASK_APP_SECRET_KEY = '<app secret key>'
-    FLASK_DEBUG_MODE = False
-    FLASK_PORT = 5000
+    FLASK_APP_SECRET_KEY='<app secret key>'
+    FLASK_DEBUG_MODE=False
+    FLASK_PORT=5000
+   
+    DEFAULT_SESSION_TIME_SECONDS=3600
+    LONG_SESSION_TIME_SECONDS=7200
+    
+    SALT_FOR_USERS_COLOR_GENERATOR='get'
+    SALT_FOR_PROJECTS_COLOR_GENERATOR='pull'
     ```
     
     * Замените `<postgres username>`, `<postgres password>`, `<postgres host>`, `<postgres port>`, `<postgres database name>` на соответствующие значения вашей базы данных PostgreSQL.
@@ -79,45 +85,25 @@ Cервис для поиска единомышленников для совм
 
 9. **Дополнительная настройка.** Вы можете пропустить этот пункт, чтобы сохранить значения по умолчанию.
    * **Настройка времени сессии пользователя.**
-     * Откройте файл `config.py`.
-     * Найдите в файле значения `DEFAULT_SESSION_TIME` и `LONG_SESSION_TIME`.
-     * `DEFAULT_SESSION_TIME` - время обычной сессии; `LONG_SESSION_TIME` - время сессии, если пользователь нажал «Запомнить меня».
+     * Откройте ранее созданный вами файл `.env`.
+     * Найдите в файле значения `DEFAULT_SESSION_TIME_SECONDS` и `LONG_SESSION_TIME_SECONDS`.
+     * `DEFAULT_SESSION_TIME_SECONDS` - время обычной сессии; `LONG_SESSION_TIME_SECONDS` - время сессии, если пользователь нажал «Запомнить меня».
      * Измените значения по умолчанию на ваши.
-        ```python
-         DEFAULT_SESSION_TIME = timedelta(
-             seconds=0,
-             minutes=0,
-             hours=1,
-             days=0,
-             weeks=0
-         )
-         LONG_SESSION_TIME = timedelta(
-             seconds=0,
-             minutes=0,
-             hours=2,
-             days=0,
-             weeks=0
-         )  # Если пользователь при входе нажал "Запомнить меня"
-       ```
-     * По умолчанию время обычной сессии пользователя - 1 час, а для длинной - 2 часа. Изменяйте только указанные значения и оставляйте `0`, чтобы исключить какой-нибудь временной параметр.
+        > Время сессии указывайте в секундах. Введённые вами числа будут считаны как количество секунд, которое сессия пользователя будет активна.
    
    * **Настройка ключей (salt) генерации цвета из строк.**
-     * Откройте файл `config.py`.
+     * Откройте ранее созданный вами файл `.env`.
      * Найдите в файле значения `SALT_FOR_USERS_COLOR_GENERATOR` и `SALT_FOR_PROJECTS_COLOR_GENERATOR`.
      * `SALT_FOR_USERS_COLOR_GENERATOR` - ключ для генерации цвета для пользователей; `SALT_FOR_PROJECTS_COLOR_GENERATOR` - ключ для генерации цвета для проектов.
      * Измените значения по умолчанию на ваши.
-       ```python
-       SALT_FOR_USERS_COLOR_GENERATOR = "get"
-       SALT_FOR_PROJECTS_COLOR_GENERATOR = "pull"
-       ```
      * Изменяя ключи вы меняете входные данные для алгоритма генерирования цвета. За счёт этого вы получаете разные цвета элементов на странице при разных значениях ключей.
 
 
 10. **Запуск.** Теперь проект готов к запуску. Чтобы запустить сайт, запустите файл `app.py` или выполните следующую команду.
 
-   ```bash
-   python app.py
-   ```
+       ```bash
+       python app.py
+       ```
 
 11. **Просмотр результата.**
    

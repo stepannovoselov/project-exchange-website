@@ -1,3 +1,8 @@
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+
 function change_values(){  // for account-profile.html
     show_spinner()
 
@@ -165,7 +170,10 @@ function delelte_project_request(project_id){  // for account-projects.html
     })
     .then(data => {
         if (data.status == 'ok'){
-            window.location.reload()
+            window.location.replace('/projects/' + project_id)
+        }
+        else{
+            showNotification('Не удалось создать проект', 'danger')
         }
     })
 

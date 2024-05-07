@@ -77,7 +77,7 @@ def search_users(current_user):
             if column is not None:
                 or_conditions.append(func.lower(column).contains(f'%{query.lower()}%'))
             elif column_name in ['education', 'skills', 'hobbies', 'tags']:
-                or_conditions.append(func.lower(func.json_extract(User.about, f'$.{column_name}')).contains(f'{query.lower()}'))
+                or_conditions.append(func.lower(func.json_extract_path_text(User.about, column_name)).contains(f'{query.lower()}'))
 
         if or_conditions:
             q = q.filter(or_(*or_conditions))
