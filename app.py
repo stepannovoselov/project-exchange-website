@@ -1,10 +1,12 @@
 from flask import redirect
+from logging import basicConfig
 
 from routes import *
-from config import FLASK_PORT, FLASK_DEBUG_MODE
+from config import FLASK_PORT, FLASK_DEBUG_MODE, FLASK_HOST, LOG_FILE_PATH
 from manage import app
 from helpers import login_required
 
+basicConfig(filename=LOG_FILE_PATH)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(accounts_bp, url_prefix='/account')
@@ -20,6 +22,7 @@ def index(current_user):
 
 if __name__ == '__main__':
     app.run(
+        host=FLASK_HOST,
         port=FLASK_PORT,
         debug=FLASK_DEBUG_MODE
     )
