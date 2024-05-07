@@ -34,6 +34,8 @@ class User(db.Model):
 
     actions = db.relationship('UserAction', back_populates='user')
 
+    website_grade = db.Column(db.Integer)
+
     editable_values_by_user_except_password = ['surname', 'name', 'email', 'username', 'status', 'about']
 
     def json_editable_except_password(self):

@@ -1,3 +1,34 @@
+document.getElementById('rate_form').addEventListener('submit', function(event) {  // for create-project-form.html
+    event.preventDefault()
+
+    form = new FormData()
+
+    let selectedRate = document.querySelector('input[name="website_rate"]:checked');
+
+    if (selectedRate) {
+        let rateValue = selectedRate.value;
+
+        form.append('rate', rateValue);
+
+        fetch('/rate', {
+            method: 'POST',
+            body: form
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status == 'ok'){
+                showNotification('Спасибо за оценку!', 'success')
+                setTimeout(function() {
+                  window.location.reload()
+                }, 2000);
+            }
+            else{
+                showNotification('Не удалось поставить оценку. Попробуйте ещё раз.', 'danger')
+            }
+        })
+    }
+})
+
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
   return new bootstrap.Tooltip(tooltipTriggerEl)
@@ -344,19 +375,24 @@ function close_password_modal(){
 }
 
 
-document.getElementById('addVacancyBtn').addEventListener('click', function() {  // for create-project-form.html
+try{
+    document.getElementById('addVacancyBtn').addEventListener('click', function() {  // for create-project-form.html
     let vacancyCards = document.getElementById('vacancyCards')
     let newCard = vacancyCards.querySelector('.col-6').cloneNode(true)
     let inputs = newCard.querySelectorAll('input[type=text], textarea')
-    
+
     newCard.classList.remove('d-none')
-    
+
     inputs.forEach(function(input) {
       input.value = '';
     })
-    
+
     vacancyCards.appendChild(newCard)
   });
+}
+catch{
+
+}
 
 
 document.addEventListener('click', function(event) {  // for create-project-form.html
@@ -368,12 +404,13 @@ if (event.target && event.target.classList.contains('delete-btn')) {
 
 
 
+try{
 document.getElementById('project_form').addEventListener('submit', function(event) {  // for create-project-form.html
     event.preventDefault();
-    
+
     let formData = new FormData(this);
     let vacancies = [];
-    
+
     document.getElementById('vacancyCards').querySelectorAll('.col-6').forEach(function(card) {
         let vacancy = {};
         card.querySelectorAll('input[type=text], textarea').forEach(function(input) {
@@ -412,7 +449,9 @@ document.getElementById('project_form').addEventListener('submit', function(even
         window.location.href = data.url
     })
 
-})
+})}
+catch{
+}
 
 
 function showNotification(message, color) {  // for base_template.html
@@ -440,6 +479,7 @@ function hide_spinner(){
 }
 
 
+try{
 function search_users_request(){  // for create-project-form.html
     let search_users = document.getElementById('search_users')
     let users_list = document.getElementById('users_list')
@@ -468,9 +508,10 @@ function search_users_request(){  // for create-project-form.html
         });
         search_users_loading_text.innerHTML = ''
     })
-    
+
 }
-search_users_request()
+search_users_request()}
+catch{}
 
 
 function add_user_to_project_team(user_id, username, user_surname, user_name){
